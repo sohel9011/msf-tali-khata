@@ -4,18 +4,3828 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>এমএস ফ্যাশন — টালি খাতা ও ইনভয়েস</title>
-    <meta name="description" content="এমএস ফ্যাশন (MS Fashion)-এর ক্লাউড-সিঙ্কড ডিজিটাল টালি খাতা, সাপ্লায়ার ও কাস্টমার লেজার এবং অনলাইন ইনভয়েস সিস্টেম।" />
+    <meta
+      name="description"
+      content="এমএস ফ্যাশন (MS Fashion)-এর ক্লাউড-সিঙ্কড ডিজিটাল টালি খাতা, সাপ্লায়ার ও কাস্টমার লেজার এবং অনলাইন ইনভয়েস সিস্টেম।"
+    />
     <meta property="og:title" content="এমএস ফ্যাশন — টালি খাতা ও ইনভয়েস" />
-    <meta property="og:description" content="এমএস ফ্যাশন (MS Fashion)-এর ক্লাউড-সিঙ্কড ডিজিটাল টালি খাতা, সাপ্লায়ার ও কাস্টমার লেজার এবং অনলাইন ইনভয়েস সিস্টেম।" />
+    <meta
+      property="og:description"
+      content="এমএস ফ্যাশন (MS Fashion)-এর ক্লাউড-সিঙ্কড ডিজিটাল টালি খাতা, সাপ্লায়ার ও কাস্টমার লেজার এবং অনলাইন ইনভয়েস সিস্টেম।"
+    />
     <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f6f7f5;
+        --surface: #ffffff;
+        --surface-muted: #f8f9f7;
+        --surface-pill: #f2f4f0;
+        --border: #e5e8e3;
+        --border-strong: #d4dad2;
+        --text: #111815;
+        --text-muted: #4b554e;
+        --brand: #0d5c46;
+        --brand-hover: #094534;
+        --brand-soft: rgba(13, 92, 70, 0.1);
+        --green: #15803d;
+        --green-dot: #16a34a;
+        --red: #b91c1c;
+        --red-dot: #dc2626;
+        --red-bg: #fef2f2;
+        --red-border: #fecaca;
+        --amber: #b45309;
+        --amber-dot: #d97706;
+        --amber-bg: #fffbeb;
+        --amber-border: #fde68a;
+        --font-sans: 'Hind Siliguri', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        font-family: var(--font-sans);
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background-color: var(--bg);
+        color: var(--text);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.5;
+      }
+
+      button,
+      input,
+      select,
+      textarea {
+        font-family: inherit;
+      }
+
+      .mono {
+        font-family: var(--font-mono);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 16px;
+      }
+
+      @media (min-width: 640px) {
+        .container {
+          padding: 0 24px;
+        }
+      }
+
+      /* Header */
+      .app-header {
+        position: sticky;
+        top: 0;
+        z-index: 30;
+        background: #ffffff;
+        border-bottom: 1px solid #e5e5e5;
+      }
+
+      .header-inner {
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .brand-btn {
+        background: none;
+        border: none;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        text-align: left;
+      }
+
+      .brand-logo {
+        width: 120px;
+        height: auto;
+        max-height: 44px;
+        object-fit: contain;
+        display: block;
+      }
+
+      .brand-sub {
+        display: none;
+        font-size: 11px;
+        font-weight: 600;
+        color: #171717;
+        border-left: 1px solid #d4d4d4;
+        padding-left: 12px;
+      }
+
+      @media (min-width: 640px) {
+        .brand-sub {
+          display: inline-block;
+        }
+      }
+
+      .nav-tabs {
+        display: none;
+        align-items: center;
+        gap: 4px;
+        padding: 4px;
+        background: #f5f5f5;
+        border-radius: 12px;
+      }
+
+      @media (min-width: 768px) {
+        .nav-tabs {
+          display: inline-flex;
+        }
+      }
+
+      .nav-tab {
+        border: none;
+        background: transparent;
+        color: #525252;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 8px 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: background 0.15s, color 0.15s;
+      }
+
+      .nav-tab:hover {
+        color: #000000;
+      }
+
+      .nav-tab.active {
+        background: #ffffff;
+        color: #000000;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+      }
+
+      .mobile-nav {
+        display: flex;
+        gap: 4px;
+        padding-bottom: 10px;
+        overflow-x: auto;
+      }
+
+      @media (min-width: 768px) {
+        .mobile-nav {
+          display: none;
+        }
+      }
+
+      .mobile-tab {
+        flex: 1;
+        min-width: max-content;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 600;
+        background: #f5f5f5;
+        color: #404040;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      .mobile-tab.active {
+        background: #000000;
+        color: #ffffff;
+      }
+
+      /* Buttons */
+      .btn {
+        min-height: 42px;
+        padding: 8px 14px;
+        border-radius: 12px;
+        border: 1px solid transparent;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        white-space: nowrap;
+        flex-shrink: 0;
+        transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+      }
+
+      .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .btn-sm {
+        min-height: 36px;
+        padding: 6px 12px;
+        font-size: 12px;
+        border-radius: 10px;
+      }
+
+      .btn-icon {
+        min-height: 38px;
+        min-width: 38px;
+        padding: 6px;
+        border-radius: 10px;
+      }
+
+      .btn-primary {
+        background: var(--brand);
+        color: #ffffff;
+      }
+      .btn-primary:hover {
+        background: var(--brand-hover);
+      }
+
+      .btn-dark {
+        background: #111815;
+        color: #ffffff;
+      }
+      .btn-dark:hover {
+        background: #1e293b;
+      }
+
+      .btn-secondary {
+        background: #ffffff;
+        color: var(--text);
+        border-color: var(--border);
+      }
+      .btn-secondary:hover {
+        background: var(--surface-pill);
+      }
+
+      .btn-soft {
+        background: var(--surface-pill);
+        color: var(--text);
+      }
+      .btn-soft:hover {
+        background: var(--border);
+      }
+
+      .btn-brand-soft {
+        background: var(--brand-soft);
+        color: var(--brand);
+      }
+      .btn-brand-soft:hover {
+        background: rgba(13, 92, 70, 0.16);
+      }
+
+      .btn-danger-soft {
+        background: var(--red-bg);
+        color: var(--red);
+        border-color: var(--red-border);
+      }
+      .btn-danger-soft:hover {
+        background: #fee2e2;
+      }
+
+      .btn-danger {
+        background: var(--red);
+        color: #ffffff;
+      }
+
+      .btn-whatsapp {
+        background: #15803d;
+        color: #ffffff;
+      }
+      .btn-whatsapp:hover {
+        background: #166534;
+      }
+
+      /* Layout Cards & Grids */
+      .main-content {
+        padding: 24px 0 64px;
+      }
+
+      .stack-lg > * + * {
+        margin-top: 24px;
+      }
+
+      .stack-md > * + * {
+        margin-top: 16px;
+      }
+
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 20px;
+      }
+
+      .card-flush {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        overflow: hidden;
+      }
+
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 16px;
+      }
+
+      @media (min-width: 640px) {
+        .kpi-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .kpi-grid {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      @media (min-width: 768px) {
+        .grid-2 {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      @media (min-width: 640px) {
+        .grid-3 {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      .flex-between {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .flex-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .kpi-label {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin: 0;
+      }
+
+      .kpi-val {
+        font-size: 24px;
+        font-weight: 700;
+        margin: 8px 0 0;
+      }
+
+      .kpi-sub {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin: 6px 0 0;
+      }
+
+      .text-red {
+        color: var(--red);
+      }
+      .text-green {
+        color: var(--green);
+      }
+      .text-brand {
+        color: var(--brand);
+      }
+      .text-amber {
+        color: var(--amber);
+      }
+      .text-muted {
+        color: var(--text-muted);
+      }
+
+      /* Inputs & Forms */
+      .input,
+      .select,
+      .textarea {
+        width: 100%;
+        min-height: 42px;
+        padding: 9px 12px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--surface-muted);
+        color: var(--text);
+        font-size: 14px;
+        outline: none;
+        transition: border-color 0.15s, background 0.15s;
+      }
+
+      .input:focus,
+      .select:focus,
+      .textarea:focus {
+        border-color: var(--brand);
+        background: #ffffff;
+      }
+
+      .textarea {
+        min-height: 76px;
+        resize: vertical;
+      }
+
+      .field-label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+      }
+
+      .search-wrap {
+        position: relative;
+        width: 100%;
+        max-width: 360px;
+      }
+
+      .search-wrap svg {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        pointer-events: none;
+      }
+
+      .search-wrap .input {
+        padding-left: 36px;
+        background: #ffffff;
+      }
+
+      /* Lists & Tables */
+      .list-divide > * + * {
+        border-top: 1px solid var(--border);
+      }
+
+      .party-row {
+        padding: 16px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        transition: background 0.15s;
+      }
+
+      .party-row:hover {
+        background: var(--surface-muted);
+      }
+
+      @media (min-width: 640px) {
+        .party-row {
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+        }
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 999px;
+        display: inline-block;
+        flex-shrink: 0;
+      }
+
+      .table-wrap {
+        width: 100%;
+        overflow-x: auto;
+      }
+
+      table.ledger-table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: left;
+      }
+
+      table.ledger-table th {
+        padding: 10px 10px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-muted);
+        border-bottom: 1px solid var(--border);
+        white-space: nowrap;
+      }
+
+      table.ledger-table td {
+        padding: 12px 10px;
+        font-size: 13.5px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: top;
+      }
+
+      table.ledger-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      .num-col {
+        text-align: right !important;
+        white-space: nowrap;
+      }
+
+      .pill-group {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px;
+        background: var(--surface-pill);
+        border-radius: 12px;
+        overflow-x: auto;
+        max-width: 100%;
+      }
+
+      .pill-btn {
+        border: none;
+        background: transparent;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-muted);
+        cursor: pointer;
+        white-space: nowrap;
+      }
+
+      .pill-btn.active {
+        background: #ffffff;
+        color: var(--text);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+      }
+
+      /* Login Page */
+      .login-shell {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+      }
+
+      .login-card {
+        max-width: 960px;
+        width: 100%;
+        background: #ffffff;
+        border: 1px solid #e5e5e5;
+        border-radius: 20px;
+        overflow: hidden;
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      @media (min-width: 900px) {
+        .login-card {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      .login-left {
+        padding: 36px;
+        border-bottom: 1px solid #e5e5e5;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 28px;
+        min-height: 360px;
+      }
+
+      @media (min-width: 900px) {
+        .login-left {
+          border-bottom: none;
+          border-right: 1px solid #e5e5e5;
+          min-height: 520px;
+        }
+      }
+
+      .login-right {
+        padding: 36px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      /* Modals */
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        background: rgba(17, 24, 21, 0.55);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding: 0;
+      }
+
+      @media (min-width: 640px) {
+        .modal-backdrop {
+          align-items: center;
+          padding: 16px;
+        }
+      }
+
+      .modal-panel {
+        width: 100%;
+        max-width: 720px;
+        max-height: 92vh;
+        overflow-y: auto;
+        background: #ffffff;
+        border-radius: 20px 20px 0 0;
+        padding: 20px 24px 28px;
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+      }
+
+      @media (min-width: 640px) {
+        .modal-panel {
+          border-radius: 20px;
+        }
+      }
+
+      .modal-sm {
+        max-width: 480px;
+      }
+
+      /* Toast */
+      .toast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 70;
+        padding: 12px 18px;
+        border-radius: 12px;
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        max-width: calc(100vw - 40px);
+      }
+
+      .toast.success {
+        background: #111815;
+      }
+
+      .toast.error {
+        background: #b91c1c;
+      }
+
+      /* Chart */
+      .chart-wrap {
+        position: relative;
+        width: 100%;
+        overflow-x: auto;
+      }
+
+      .chart-tooltip {
+        position: absolute;
+        pointer-events: none;
+        z-index: 10;
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 10px 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        font-size: 12px;
+        min-width: 190px;
+        display: none;
+      }
+
+      .empty-box {
+        padding: 40px 16px;
+        text-align: center;
+        border: 1px dashed var(--border-strong);
+        border-radius: 14px;
+        color: var(--text-muted);
+        font-size: 14px;
+      }
+
+      .alert-error {
+        background: var(--red-bg);
+        border: 1px solid var(--red-border);
+        color: #991b1b;
+        border-radius: 12px;
+        padding: 12px 14px;
+        font-size: 12.5px;
+      }
+
+      .desktop-only {
+        display: none;
+      }
+
+      .mobile-only {
+        display: block;
+      }
+
+      @media (min-width: 768px) {
+        .desktop-only {
+          display: block;
+        }
+        .mobile-only {
+          display: none;
+        }
+      }
+
+      @media print {
+        @page {
+          size: A4;
+          margin: 12mm;
+        }
+        body {
+          background: #ffffff !important;
+          color: #000000 !important;
+        }
+        .no-print {
+          display: none !important;
+        }
+        .print-container {
+          border: none !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          max-width: 100% !important;
+        }
+      }
+    </style>
   </head>
-  <body class="bg-[#F6F7F5] text-[#111815] antialiased selection:bg-[#0D5C46]/15 selection:text-[#0D5C46]">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+  <body>
+    <div id="app">
+      <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;color:#4b554e;font-size:14px;">
+        লোড হচ্ছে...
+      </div>
+    </div>
+    <div id="modal-root"></div>
+    <div id="toast-root"></div>
+
+    <script type="module">
+      import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js';
+      import {
+        getAuth,
+        GoogleAuthProvider,
+        onAuthStateChanged,
+        signInWithPopup,
+        signOut,
+      } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js';
+      import {
+        collection,
+        deleteDoc,
+        doc,
+        getDoc,
+        getDocFromServer,
+        getFirestore,
+        onSnapshot,
+        serverTimestamp,
+        setDoc,
+        Timestamp,
+        updateDoc,
+        writeBatch,
+      } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
+
+      // --- Firebase Configuration ---
+      const firebaseConfig = {
+        projectId: 'turing-reducer-k5v9p',
+        appId: '1:692434569438:web:49b2e9124e3b066dc01a4f',
+        apiKey: 'AIzaSyDP2f62qisSy19OwzqKVsdDsDnhFcqvnSY',
+        authDomain: 'turing-reducer-k5v9p.firebaseapp.com',
+        firestoreDatabaseId: 'ai-studio-1fe073f6-7a8b-40d8-b74c-413b8b6ebb0f',
+        storageBucket: 'turing-reducer-k5v9p.firebasestorage.app',
+        messagingSenderId: '692434569438',
+      };
+
+      const ADMIN_EMAIL = 'sohel901190@gmail.com';
+      const LOGO_URL = 'https://imgur.com/Af1qii8.png';
+
+      const BLUEPRINT_LIMITS = {
+        ID_MAX: 128,
+        NAME_MAX: 120,
+        PHONE_MAX: 30,
+        ADDRESS_MAX: 240,
+        INVOICE_NO_MAX: 40,
+        DATE_MAX: 20,
+        TITLE_MAX: 160,
+        ROLE_MAX: 60,
+        PURPOSE_MAX: 200,
+        PAYMENT_METHOD_MAX: 60,
+        NOTE_MAX: 500,
+        ITEMS_MAX: 50,
+        ENTRIES_MAX: 250,
+      };
+
+      const BASE_PAYMENT_METHODS = [
+        'নগদ',
+        'ক্যাশ',
+        'বিকাশ',
+        'নগদ ও ব্যাংক',
+        'ব্যাংক ট্রান্সফার',
+        'নগদ ও বিকাশ',
+        'চেক',
+      ];
+
+      const EXPENSE_PAYMENT_METHODS = [
+        'নগদ',
+        'ক্যাশ',
+        'বিকাশ',
+        'নগদ ও ব্যাংক',
+        'ব্যাংক',
+        'ব্যাংক ট্রান্সফার',
+      ];
+
+      const LEDGER_PAYMENT_METHODS = [...BASE_PAYMENT_METHODS, 'পূর্বের বাকি'];
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+      const auth = getAuth(app);
+      const googleProvider = new GoogleAuthProvider();
+      googleProvider.setCustomParameters({ prompt: 'select_account' });
+
+      function handleFirestoreError(error, operationType, path) {
+        const info = {
+          error: error instanceof Error ? error.message : String(error),
+          operationType,
+          path,
+          authInfo: {
+            userId: auth.currentUser?.uid || null,
+            email: auth.currentUser?.email || null,
+            emailVerified: auth.currentUser?.emailVerified || null,
+          },
+        };
+        console.error('Firestore Error:', JSON.stringify(info));
+        throw new Error(info.error);
+      }
+
+      async function testConnection() {
+        try {
+          await getDocFromServer(doc(db, 'test', 'connection'));
+        } catch (err) {
+          if (err && String(err.message || err).includes('client is offline')) {
+            console.error('Please check your Firebase configuration.');
+          }
+        }
+      }
+      void testConnection();
+
+      // --- Helpers & Formatters ---
+      const BN_DIGITS = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+      const MONTHS_SHORT_BN = [
+        'জানু', 'ফেব্রু', 'মার্চ', 'এপ্রিল', 'মে', 'জুন',
+        'জুলাই', 'আগস্ট', 'সেপ্টে', 'অক্টো', 'নভে', 'ডিসে',
+      ];
+      const MONTHS_FULL_BN = [
+        'জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন',
+        'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর',
+      ];
+
+      function esc(val) {
+        return String(val ?? '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function toBn(val) {
+        return String(val ?? '').replace(/\d/g, (d) => BN_DIGITS[Number(d)] ?? d);
+      }
+
+      function formatTaka(amount) {
+        const safe = Number.isFinite(Number(amount)) ? Number(amount) : 0;
+        const neg = safe < 0;
+        const formatted = Math.abs(safe).toLocaleString('en-IN', {
+          maximumFractionDigits: 0,
+        });
+        return `${neg ? '-' : ''}৳ ${formatted}`;
+      }
+
+      function formatDateBn(isoDate) {
+        if (!isoDate) return '';
+        const parts = isoDate.split('-');
+        if (parts.length !== 3) return isoDate;
+        const [y, m, d] = parts;
+        const mLabel = MONTHS_SHORT_BN[Number(m) - 1] || m;
+        return `${toBn(Number(d))} ${mLabel} ${toBn(y)}`;
+      }
+
+      function formatMonthBn(monthKey) {
+        if (!monthKey) return '';
+        const [y, m] = monthKey.split('-');
+        const mLabel = MONTHS_FULL_BN[Number(m) - 1] || m;
+        return `${mLabel} ${toBn(y)}`;
+      }
+
+      function formatShortMonthBn(monthKey) {
+        const [y, m] = monthKey.split('-');
+        const mLabel = MONTHS_SHORT_BN[Number(m) - 1] || m;
+        return `${mLabel} '${toBn((y || '').slice(-2))}`;
+      }
+
+      function getTodayIsoDate() {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = String(now.getMonth() + 1).padStart(2, '0');
+        const d = String(now.getDate()).padStart(2, '0');
+        return `${y}-${m}-${d}`;
+      }
+
+      function getCurrentMonthKey() {
+        return getTodayIsoDate().slice(0, 7);
+      }
+
+      function clampString(value, maxLen) {
+        return String(value ?? '').trim().slice(0, maxLen);
+      }
+
+      function getTxTypeLabel(type) {
+        switch (type) {
+          case 'supplier_purchase':
+            return 'সাপ্লায়ার মাল ক্রয়';
+          case 'supplier_payment':
+            return 'সাপ্লায়ার পেমেন্ট';
+          case 'supplier_due_add':
+            return 'আগের বাকি / নগদ নেওয়া';
+          case 'customer_sale':
+            return 'কাস্টমার বিক্রি / ইনভয়েস';
+          case 'customer_payment':
+            return 'কাস্টমার টাকা আদায়';
+          case 'customer_due_add':
+            return 'আগের বাকি / নগদ পাওনা';
+          default:
+            return type;
+        }
+      }
+
+      function buildPublicUrl(param, id) {
+        const url = new URL(window.location.origin + window.location.pathname);
+        url.searchParams.set(param, id);
+        return url.toString();
+      }
+
+      function buildWhatsAppShareUrl(phone, msg) {
+        const digits = String(phone || '').replace(/\D/g, '');
+        let clean = digits;
+        if (digits.startsWith('01') && digits.length === 11) {
+          clean = `88${digits}`;
+        }
+        const encoded = encodeURIComponent(msg);
+        return clean ? `https://wa.me/${clean}?text=${encoded}` : `https://wa.me/?text=${encoded}`;
+      }
+
+      function readQueryParams() {
+        const p = new URLSearchParams(window.location.search);
+        return {
+          customer: p.get('customer'),
+          supplier: p.get('supplier'),
+          invoice: p.get('invoice'),
+          person: p.get('person'),
+        };
+      }
+
+      // --- Inline SVG Icons ---
+      const ICONS = {
+        plus: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>`,
+        search: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>`,
+        copy: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`,
+        edit: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`,
+        trash: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>`,
+        logout: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>`,
+        back: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>`,
+        pdf: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M12 18v-6"/><path d="m9 15 3 3 3-3"/></svg>`,
+        print: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>`,
+        wa: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>`,
+        chevron: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>`,
+      };
+
+      // --- Application State ---
+      const state = {
+        queryParams: readQueryParams(),
+        authReady: false,
+        user: null,
+        isAdmin: false,
+        authLoading: false,
+        authError: null,
+        dataLoading: true,
+        suppliers: [],
+        customers: [],
+        transactions: [],
+        homeExpenses: [],
+        persons: [],
+        personTransactions: [],
+        activeTab: 'dashboard',
+        customerSubTab: 'customers',
+        selectedParty: null, // { id, type: 'supplier'|'customer' }
+        selectedPersonId: null,
+        activeInvoiceId: null,
+        txTypeFilter: 'all',
+        searchQuery: '',
+        expenseMonthFilter: getCurrentMonthKey(),
+        chartRangeMonths: 6,
+        pdfExporting: false,
+        publicDoc: null,
+        publicLoading: false,
+        publicError: null,
+        seededPersonsChecked: false,
+        unsubs: [],
+      };
+
+      // --- Toast ---
+      let toastTimer = null;
+      function showToast(text, kind = 'success') {
+        const root = document.getElementById('toast-root');
+        if (!root) return;
+        root.innerHTML = `<div class="toast ${kind === 'error' ? 'error' : 'success'}">${esc(text)}</div>`;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          root.innerHTML = '';
+        }, 3200);
+      }
+
+      async function copyText(text, successMsg) {
+        try {
+          await navigator.clipboard.writeText(text);
+          showToast(successMsg);
+        } catch {
+          showToast('কপি করা যায়নি।', 'error');
+        }
+      }
+
+      // --- Firestore Computations & Writes ---
+      function generateDocId(col) {
+        return doc(collection(db, col)).id;
+      }
+
+      function generateInvoiceNo(type) {
+        const prefix =
+          type === 'customer_sale'
+            ? 'MSF'
+            : type === 'supplier_purchase'
+              ? 'PUR'
+              : type === 'supplier_due_add' || type === 'customer_due_add'
+                ? 'DUE'
+                : 'PAY';
+        let maxNum = 1000;
+        for (const tx of state.transactions) {
+          const m = String(tx.invoiceNo || '').match(/(\d+)$/);
+          if (m) {
+            const n = Number(m[1]);
+            if (Number.isFinite(n) && n >= maxNum) maxNum = n;
+          }
+        }
+        return `${prefix}-${maxNum + 1}`;
+      }
+
+      function buildEntrySummary(tx) {
+        if (tx.type === 'supplier_payment') {
+          return `পেমেন্ট পরিশোধ (${tx.paymentMethod || 'নগদ'})${tx.note ? ` · ${tx.note}` : ''}`;
+        }
+        if (tx.type === 'supplier_due_add') {
+          return `${tx.note || 'আগের বাকি / প্রোডাক্ট ছাড়া টাকা নেওয়া'} (${tx.paymentMethod || 'নগদ'})`;
+        }
+        if (tx.type === 'customer_due_add') {
+          return `${tx.note || 'আগের বাকি / সরাসরি পাওনা যোগ'} (${tx.paymentMethod || 'নগদ'})`;
+        }
+        if (tx.type === 'customer_payment') {
+          return `টাকা আদায় (${tx.paymentMethod || 'নগদ'})${tx.note ? ` · ${tx.note}` : ''}`;
+        }
+        if (!tx.items || tx.items.length === 0) {
+          return tx.note || (tx.type === 'customer_sale' ? 'বিক্রি ইনভয়েস' : 'মাল ক্রয়');
+        }
+        return tx.items
+          .map((it) => `${it.name} (${it.qty} পিস × ৳${it.unitPrice})`)
+          .join(', ')
+          .slice(0, 220);
+      }
+
+      function computePartyLedger(partyTxs) {
+        const sorted = [...partyTxs].sort((a, b) => {
+          const d = (a.date || '').localeCompare(b.date || '');
+          if (d !== 0) return d;
+          const aMs = a.createdAt instanceof Timestamp ? a.createdAt.toMillis() : 0;
+          const bMs = b.createdAt instanceof Timestamp ? b.createdAt.toMillis() : 0;
+          if (aMs !== bMs) return aMs - bMs;
+          return (a.id || '').localeCompare(b.id || '');
+        });
+
+        let totalBilled = 0;
+        let totalPaid = 0;
+        let runningBalance = 0;
+        const entries = [];
+
+        for (const tx of sorted) {
+          const isBill =
+            tx.type === 'supplier_purchase' ||
+            tx.type === 'customer_sale' ||
+            tx.type === 'supplier_due_add' ||
+            tx.type === 'customer_due_add';
+          const debit = isBill ? Number(tx.totalAmount || 0) : 0;
+          const credit = Number(tx.paidAmount || 0);
+          totalBilled += debit;
+          totalPaid += credit;
+          runningBalance += debit - credit;
+
+          entries.push({
+            txId: tx.id,
+            date: tx.date,
+            type: tx.type,
+            invoiceNo: tx.invoiceNo,
+            summary: buildEntrySummary(tx),
+            items: tx.items || [],
+            subtotal: tx.subtotal || 0,
+            discount: tx.discount || 0,
+            totalAmount: tx.totalAmount || 0,
+            paidAmount: tx.paidAmount || 0,
+            dueAmount: tx.dueAmount || 0,
+            paymentMethod: tx.paymentMethod || 'নগদ',
+            note: tx.note || '',
+            debit,
+            credit,
+            runningBalance,
+          });
+        }
+
+        return {
+          totalBilled,
+          totalPaid,
+          currentDue: totalBilled - totalPaid,
+          entries: entries.slice(-BLUEPRINT_LIMITS.ENTRIES_MAX),
+        };
+      }
+
+      function computePersonLedger(personTxs) {
+        const sorted = [...personTxs].sort((a, b) => {
+          const d = (a.date || '').localeCompare(b.date || '');
+          if (d !== 0) return d;
+          const aMs = a.createdAt instanceof Timestamp ? a.createdAt.toMillis() : 0;
+          const bMs = b.createdAt instanceof Timestamp ? b.createdAt.toMillis() : 0;
+          if (aMs !== bMs) return aMs - bMs;
+          return (a.id || '').localeCompare(b.id || '');
+        });
+
+        let totalPayable = 0;
+        let totalGiven = 0;
+        let runningBalance = 0;
+        const entries = [];
+
+        for (const tx of sorted) {
+          const payableAmount = tx.type === 'payable_add' ? Number(tx.amount || 0) : 0;
+          const givenAmount = tx.type === 'payment_given' ? Number(tx.amount || 0) : 0;
+          totalPayable += payableAmount;
+          totalGiven += givenAmount;
+          runningBalance += payableAmount - givenAmount;
+
+          entries.push({
+            ptxId: tx.id,
+            date: tx.date,
+            type: tx.type,
+            purpose: tx.purpose,
+            paymentMethod: tx.paymentMethod || 'নগদ',
+            note: tx.note || '',
+            payableAmount,
+            givenAmount,
+            runningBalance,
+          });
+        }
+
+        return {
+          totalPayable,
+          totalGiven,
+          currentBalance: totalPayable - totalGiven,
+          entries: entries.slice(-BLUEPRINT_LIMITS.ENTRIES_MAX),
+        };
+      }
+
+      async function seedDefaultPersonsIfEmpty() {
+        const uid = auth.currentUser?.uid;
+        if (!uid) return;
+        const defaults = [
+          {
+            id: 'mainu_mama',
+            name: 'মাইনু মামা',
+            phone: '',
+            role: 'বাসার সাথী / মামা',
+            note: 'বাসার যৌথ খরচ ও মামাকে দেওয়া টাকার হিসাব',
+          },
+          {
+            id: 'himel_moderator',
+            name: 'হিমেল',
+            phone: '',
+            role: 'মডারেটর',
+            note: 'মডারেটর বেতন, কমিশন ও প্রদেয় টাকার হিসাব',
+          },
+        ];
+        const batch = writeBatch(db);
+        for (const person of defaults) {
+          batch.set(doc(db, 'persons', person.id), {
+            ...person,
+            totalPayable: 0,
+            totalGiven: 0,
+            currentBalance: 0,
+            ownerUid: uid,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+          });
+          batch.set(doc(db, 'publicPersonLedgers', person.id), {
+            id: person.id,
+            name: person.name,
+            phone: person.phone,
+            role: person.role,
+            totalPayable: 0,
+            totalGiven: 0,
+            currentBalance: 0,
+            shareEnabled: true,
+            entries: [],
+            ownerUid: uid,
+            updatedAt: serverTimestamp(),
+          });
+        }
+        try {
+          await batch.commit();
+        } catch (err) {
+          handleFirestoreError(err, 'write', 'persons/seed');
+        }
+      }
+
+      // --- Data Listeners ---
+      function clearListeners() {
+        for (const unsub of state.unsubs) {
+          try {
+            unsub();
+          } catch {}
+        }
+        state.unsubs = [];
+      }
+
+      function attachAdminListeners() {
+        clearListeners();
+        state.dataLoading = true;
+        let loaded = 0;
+        const mark = () => {
+          loaded += 1;
+          if (loaded >= 6) {
+            state.dataLoading = false;
+            if (!state.seededPersonsChecked && state.persons.length === 0) {
+              state.seededPersonsChecked = true;
+              void seedDefaultPersonsIfEmpty();
+            }
+            render();
+          }
+        };
+
+        state.unsubs.push(
+          onSnapshot(
+            collection(db, 'suppliers'),
+            (snap) => {
+              state.suppliers = snap.docs
+                .map((d) => d.data())
+                .sort((a, b) => (a.name || '').localeCompare(b.name || '', 'bn'));
+              mark();
+              if (!state.dataLoading) render();
+            },
+            (err) => handleFirestoreError(err, 'list', 'suppliers'),
+          ),
+        );
+
+        state.unsubs.push(
+          onSnapshot(
+            collection(db, 'customers'),
+            (snap) => {
+              state.customers = snap.docs
+                .map((d) => d.data())
+                .sort((a, b) => (a.name || '').localeCompare(b.name || '', 'bn'));
+              mark();
+              if (!state.dataLoading) render();
+            },
+            (err) => handleFirestoreError(err, 'list', 'customers'),
+          ),
+        );
+
+        state.unsubs.push(
+          onSnapshot(
+            collection(db, 'transactions'),
+            (snap) => {
+              state.transactions = snap.docs
+                .map((d) => d.data())
+                .sort((a, b) => {
+                  const dCmp = (b.date || '').localeCompare(a.date || '');
+                  if (dCmp !== 0) return dCmp;
+                  const aMs = a.createdAt instanceof Timestamp ? a.createdAt.toMillis() : 0;
+                  const bMs = b.createdAt instanceof Timestamp ? b.createdAt.toMillis() : 0;
+                  return bMs - aMs;
+                });
+              mark();
+              if (!state.dataLoading) render();
+            },
+            (err) => handleFirestoreError(err, 'list', 'transactions'),
+          ),
+        );
+
+        state.unsubs.push(
+          onSnapshot(
+            collection(db, 'homeExpenses'),
+            (snap) => {
+              state.homeExpenses = snap.docs
+                .map((d) => d.data())
+                .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+              mark();
+              if (!state.dataLoading) render();
+            },
+            (err) => handleFirestoreError(err, 'list', 'homeExpenses'),
+          ),
+        );
+
+        state.unsubs.push(
+          onSnapshot(
+            collection(db, 'persons'),
+            (snap) => {
+              state.persons = snap.docs
+                .map((d) => d.data())
+                .sort((a, b) => (a.name || '').localeCompare(b.name || '', 'bn'));
+              mark();
+              if (!state.dataLoading) render();
+            },
+            (err) => handleFirestoreError(err, 'list', 'persons'),
+          ),
+        );
+
+        state.unsubs.push(
+          onSnapshot(
+            collection(db, 'personTransactions'),
+            (snap) => {
+              state.personTransactions = snap.docs
+                .map((d) => d.data())
+                .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+              mark();
+              if (!state.dataLoading) render();
+            },
+            (err) => handleFirestoreError(err, 'list', 'personTransactions'),
+          ),
+        );
+      }
+
+      async function loadPublicPortalData() {
+        const q = state.queryParams;
+        const target = q.customer
+          ? { col: 'publicCustomerLedgers', id: q.customer, kind: 'ledger' }
+          : q.supplier
+            ? { col: 'publicSupplierLedgers', id: q.supplier, kind: 'ledger' }
+            : q.invoice
+              ? { col: 'publicInvoices', id: q.invoice, kind: 'invoice' }
+              : q.person
+                ? { col: 'publicPersonLedgers', id: q.person, kind: 'person' }
+                : null;
+        if (!target) return;
+
+        state.publicLoading = true;
+        state.publicError = null;
+        render();
+
+        try {
+          const snap = await getDoc(doc(db, target.col, target.id));
+          if (!snap.exists()) {
+            state.publicError = 'দুঃখিত, এই হিসাব বা ইনভয়েসটি খুঁজে পাওয়া যায়নি।';
+            state.publicDoc = null;
+          } else {
+            state.publicDoc = { kind: target.kind, data: snap.data() };
+          }
+        } catch (err) {
+          console.error(err);
+          state.publicError = 'তথ্য লোড করতে সমস্যা হয়েছে।';
+        } finally {
+          state.publicLoading = false;
+          render();
+        }
+      }
+
+      function isPublicRoute() {
+        const q = state.queryParams;
+        return Boolean(q.customer || q.supplier || q.invoice || q.person);
+      }
+
+      // --- Auth Listener ---
+      onAuthStateChanged(auth, async (currentUser) => {
+        state.user = currentUser;
+        if (!currentUser) {
+          state.isAdmin = false;
+          state.authReady = true;
+          clearListeners();
+          render();
+          return;
+        }
+
+        if (
+          currentUser.emailVerified &&
+          currentUser.email &&
+          currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()
+        ) {
+          state.isAdmin = true;
+          state.authReady = true;
+          if (!isPublicRoute()) attachAdminListeners();
+          render();
+          return;
+        }
+
+        try {
+          const adminDoc = await getDoc(doc(db, 'admins', currentUser.uid));
+          state.isAdmin = Boolean(currentUser.emailVerified && adminDoc.exists());
+        } catch {
+          state.isAdmin = false;
+        } finally {
+          state.authReady = true;
+          if (state.isAdmin && !isPublicRoute()) attachAdminListeners();
+          render();
+        }
+      });
+
+      if (isPublicRoute()) {
+        void loadPublicPortalData();
+      }
+
+      // --- Derived Summary ---
+      function getSummary() {
+        const totalSupplierDue = state.suppliers.reduce((s, x) => s + Number(x.currentDue || 0), 0);
+        const totalCustomerDue = state.customers.reduce((s, x) => s + Number(x.currentDue || 0), 0);
+        const totalPurchases = state.transactions
+          .filter((t) => t.type === 'supplier_purchase')
+          .reduce((s, t) => s + Number(t.totalAmount || 0), 0);
+        const totalSales = state.transactions
+          .filter((t) => t.type === 'customer_sale')
+          .reduce((s, t) => s + Number(t.totalAmount || 0), 0);
+        const currentMonth = getCurrentMonthKey();
+        const monthlyHomeExpense = state.homeExpenses
+          .filter((h) => h.monthKey === currentMonth)
+          .reduce((s, h) => s + Number(h.totalAmount || 0), 0);
+        const staffBalanceDue = state.persons.reduce(
+          (s, p) => s + Math.max(0, Number(p.currentBalance || 0)),
+          0,
+        );
+        return {
+          totalSupplierDue,
+          totalCustomerDue,
+          totalPurchases,
+          totalSales,
+          monthlyHomeExpense,
+          staffBalanceDue,
+          currentMonth,
+        };
+      }
+
+      // --- Chart Builder (Pure SVG) ---
+      function buildMonthlyChartHtml() {
+        const map = new Map();
+        let latestMonth = getCurrentMonthKey();
+
+        for (const tx of state.transactions) {
+          if (tx.type !== 'supplier_purchase' && tx.type !== 'customer_sale') continue;
+          const mk = String(tx.date || '').slice(0, 7);
+          if (mk.length !== 7) continue;
+          if (mk > latestMonth) latestMonth = mk;
+          const cur = map.get(mk) || { purchases: 0, sales: 0 };
+          if (tx.type === 'supplier_purchase') cur.purchases += Number(tx.totalAmount || 0);
+          else cur.sales += Number(tx.totalAmount || 0);
+          map.set(mk, cur);
+        }
+
+        const [yStr, mStr] = latestMonth.split('-');
+        const endYear = Number(yStr) || new Date().getFullYear();
+        const endMonth = Number(mStr) || new Date().getMonth() + 1;
+        const count = state.chartRangeMonths;
+        const keys = [];
+        for (let i = count - 1; i >= 0; i--) {
+          let tm = endMonth - i;
+          let ty = endYear;
+          while (tm <= 0) {
+            tm += 12;
+            ty -= 1;
+          }
+          keys.push(`${ty}-${String(tm).padStart(2, '0')}`);
+        }
+
+        let rangePurchases = 0;
+        let rangeSales = 0;
+        const data = keys.map((mk) => {
+          const e = map.get(mk) || { purchases: 0, sales: 0 };
+          rangePurchases += e.purchases;
+          rangeSales += e.sales;
+          return {
+            mk,
+            shortLabel: formatShortMonthBn(mk),
+            fullLabel: formatMonthBn(mk),
+            purchases: Math.round(e.purchases),
+            sales: Math.round(e.sales),
+          };
+        });
+
+        const hasData = rangePurchases > 0 || rangeSales > 0;
+        const maxVal = Math.max(1000, ...data.map((d) => Math.max(d.purchases, d.sales)));
+
+        let bodyHtml = '';
+        if (state.dataLoading) {
+          bodyHtml = `<div style="height:260px;background:#f8f9f7;border-radius:12px;"></div>`;
+        } else if (!hasData) {
+          bodyHtml = `
+            <div class="empty-box">
+              <strong>এই সময়ে এখনো কোনো মাল ক্রয় বা বিক্রির হিসাব পাওয়া যায়নি</strong>
+              <p style="margin:6px 0 0;font-size:12px;">নতুন সাপ্লায়ার ক্রয় বা কাস্টমার বিক্রি যোগ করলে এখানে মাসিক তুলনামূলক বার চার্ট দেখা যাবে।</p>
+            </div>
+          `;
+        } else {
+          const svgW = Math.max(620, count * 76);
+          const svgH = 260;
+          const padL = 56;
+          const padR = 16;
+          const padT = 16;
+          const padB = 34;
+          const plotW = svgW - padL - padR;
+          const plotH = svgH - padT - padB;
+          const groupW = plotW / data.length;
+          const barW = Math.min(26, Math.max(10, groupW * 0.28));
+
+          const gridLines = [0, 0.25, 0.5, 0.75, 1]
+            .map((ratio) => {
+              const y = padT + plotH * (1 - ratio);
+              const val = Math.round(maxVal * ratio);
+              const label =
+                val === 0
+                  ? '৳০'
+                  : val >= 100000
+                    ? `৳${toBn((val / 100000).toFixed(1).replace(/\.0$/, ''))}লাখ`
+                    : val >= 1000
+                      ? `৳${toBn((val / 1000).toFixed(1).replace(/\.0$/, ''))}হা`
+                      : `৳${toBn(val)}`;
+              return `
+                <line x1="${padL}" y1="${y}" x2="${svgW - padR}" y2="${y}" stroke="#e5e8e3" stroke-dasharray="3 3" />
+                <text x="${padL - 8}" y="${y + 4}" text-anchor="end" font-size="11" fill="#4b554e">${esc(label)}</text>
+              `;
+            })
+            .join('');
+
+          const bars = data
+            .map((d, idx) => {
+              const cx = padL + groupW * idx + groupW / 2;
+              const pH = Math.max(d.purchases > 0 ? 3 : 0, (d.purchases / maxVal) * plotH);
+              const sH = Math.max(d.sales > 0 ? 3 : 0, (d.sales / maxVal) * plotH);
+              const pX = cx - barW - 3;
+              const sX = cx + 3;
+              const pY = padT + plotH - pH;
+              const sY = padT + plotH - sH;
+              return `
+                <g class="chart-bar-group"
+                   data-month="${esc(d.fullLabel)}"
+                   data-purchases="${d.purchases}"
+                   data-sales="${d.sales}">
+                  <rect x="${cx - groupW / 2}" y="${padT}" width="${groupW}" height="${plotH}" fill="transparent" />
+                  <rect x="${pX}" y="${pY}" width="${barW}" height="${pH}" rx="4" fill="#1e293b" />
+                  <rect x="${sX}" y="${sY}" width="${barW}" height="${sH}" rx="4" fill="#0d5c46" />
+                  <text x="${cx}" y="${svgH - 10}" text-anchor="middle" font-size="11.5" font-weight="500" fill="#4b554e">${esc(d.shortLabel)}</text>
+                </g>
+              `;
+            })
+            .join('');
+
+          bodyHtml = `
+            <div class="chart-wrap" id="monthly-chart-wrap">
+              <div class="chart-tooltip" id="chart-tooltip"></div>
+              <svg viewBox="0 0 ${svgW} ${svgH}" style="width:100%;min-width:${count === 12 ? 680 : 480}px;height:270px;display:block;">
+                ${gridLines}
+                ${bars}
+              </svg>
+            </div>
+          `;
+        }
+
+        return `
+          <section class="card stack-md">
+            <div class="flex-between">
+              <div>
+                <h2 style="margin:0;font-size:18px;font-weight:700;">মাসিক কেনাকাটা ও বিক্রয়ের তুলনামূলক চিত্র</h2>
+                <p style="margin:4px 0 0;font-size:12px;color:var(--text-muted);">
+                  গত ${toBn(count)} মাসের মোট ক্রয় (<strong class="mono">${esc(formatTaka(rangePurchases))}</strong>) বনাম মোট বিক্রি (<strong class="mono text-brand">${esc(formatTaka(rangeSales))}</strong>)
+                </p>
+              </div>
+              <div class="flex-wrap">
+                <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;">
+                  <span style="width:10px;height:10px;border-radius:2px;background:#1e293b;display:inline-block;"></span> মোট কেনাকাটা
+                </span>
+                <span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;margin-right:8px;">
+                  <span style="width:10px;height:10px;border-radius:2px;background:#0d5c46;display:inline-block;"></span> মোট বিক্রি
+                </span>
+                <div class="pill-group">
+                  <button type="button" class="pill-btn ${count === 6 ? 'active' : ''}" data-action="chart-range" data-range="6">গত ৬ মাস</button>
+                  <button type="button" class="pill-btn ${count === 12 ? 'active' : ''}" data-action="chart-range" data-range="12">গত ১২ মাস</button>
+                </div>
+              </div>
+            </div>
+            ${bodyHtml}
+          </section>
+        `;
+      }
+
+      // --- Monthly PDF Export ---
+      async function exportMonthlyPdf() {
+        if (state.pdfExporting || state.dataLoading) return;
+        state.pdfExporting = true;
+        render();
+
+        try {
+          const [{ jsPDF }, html2canvasModule] = await Promise.all([
+            import('https://cdn.jsdelivr.net/npm/jspdf@2.5.2/+esm'),
+            import('https://cdn.jsdelivr.net/npm/html2canvas-pro@1.5.8/+esm'),
+          ]);
+          const html2canvas = html2canvasModule.default || html2canvasModule;
+
+          const monthKey = getCurrentMonthKey();
+          const monthTitle = formatMonthBn(monthKey);
+          const todayBn = formatDateBn(getTodayIsoDate());
+          const sum = getSummary();
+
+          const monthTxs = state.transactions
+            .filter((t) => String(t.date || '').startsWith(monthKey))
+            .sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+          const salesTxs = monthTxs.filter((t) => t.type === 'customer_sale');
+          const custPays = monthTxs.filter((t) => t.type === 'customer_payment');
+          const purTxs = monthTxs.filter((t) => t.type === 'supplier_purchase');
+          const supPays = monthTxs.filter((t) => t.type === 'supplier_payment');
+
+          const mHome = state.homeExpenses.filter(
+            (h) => h.monthKey === monthKey || String(h.date || '').startsWith(monthKey),
+          );
+          const mPerson = state.personTransactions.filter(
+            (p) => p.type === 'payment_given' && String(p.date || '').startsWith(monthKey),
+          );
+
+          const totalSales = salesTxs.reduce((s, t) => s + Number(t.totalAmount || 0), 0);
+          const totalPurchases = purTxs.reduce((s, t) => s + Number(t.totalAmount || 0), 0);
+          const totalHome = mHome.reduce((s, h) => s + Number(h.totalAmount || 0), 0);
+          const totalPerson = mPerson.reduce((s, p) => s + Number(p.amount || 0), 0);
+          const totalExpenses = totalHome + totalPerson;
+          const totalCollected =
+            salesTxs.reduce((s, t) => s + Number(t.paidAmount || 0), 0) +
+            custPays.reduce((s, t) => s + Number(t.paidAmount || 0), 0);
+          const totalSupPaid =
+            purTxs.reduce((s, t) => s + Number(t.paidAmount || 0), 0) +
+            supPays.reduce((s, t) => s + Number(t.paidAmount || 0), 0);
+          const net = totalSales - totalPurchases - totalExpenses;
+
+          const renderBlock = async (innerHtml) => {
+            const box = document.createElement('div');
+            box.style.cssText =
+              'position:fixed;left:-10000px;top:0;width:794px;background:#ffffff;color:#111815;padding:24px 32px;font-family:Hind Siliguri,sans-serif;';
+            box.innerHTML = innerHtml;
+            document.body.appendChild(box);
+            try {
+              if (document.fonts && document.fonts.ready) await document.fonts.ready;
+              return await html2canvas(box, {
+                scale: 2,
+                backgroundColor: '#ffffff',
+                logging: false,
+                useCORS: true,
+              });
+            } finally {
+              box.remove();
+            }
+          };
+
+          const blocks = [
+            `
+              <div style="border-bottom:2px solid #111815;padding-bottom:14px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:flex-start;">
+                <div>
+                  <div style="font-size:20px;font-weight:700;">এমএস ফ্যাশন (MS Fashion)</div>
+                  <div style="font-size:12px;color:#4b554e;">মাসিক ব্যবসার সারসংক্ষেপ রিপোর্ট</div>
+                </div>
+                <div style="text-align:right;">
+                  <div style="font-size:12px;font-weight:700;color:#0d5c46;">মাস: ${esc(monthTitle)}</div>
+                  <div style="font-size:11px;color:#4b554e;">তৈরির তারিখ: ${esc(todayBn)}</div>
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;">
+                <div style="border:1px solid #e5e8e3;border-radius:10px;padding:10px;">
+                  <div style="font-size:11px;color:#4b554e;">মোট বিক্রি</div>
+                  <div style="font-size:16px;font-weight:700;color:#0d5c46;">${esc(formatTaka(totalSales))}</div>
+                </div>
+                <div style="border:1px solid #e5e8e3;border-radius:10px;padding:10px;">
+                  <div style="font-size:11px;color:#4b554e;">মোট কেনাকাটা</div>
+                  <div style="font-size:16px;font-weight:700;">${esc(formatTaka(totalPurchases))}</div>
+                </div>
+                <div style="border:1px solid #e5e8e3;border-radius:10px;padding:10px;">
+                  <div style="font-size:11px;color:#4b554e;">মোট মাসিক খরচ</div>
+                  <div style="font-size:16px;font-weight:700;color:#b45309;">${esc(formatTaka(totalExpenses))}</div>
+                </div>
+                <div style="border:1px solid #e5e8e3;border-radius:10px;padding:10px;">
+                  <div style="font-size:11px;color:#4b554e;">নিট পার্থক্য</div>
+                  <div style="font-size:16px;font-weight:700;color:${net >= 0 ? '#15803d' : '#b91c1c'};">${net > 0 ? '+' : ''}${esc(formatTaka(net))}</div>
+                </div>
+              </div>
+              <div style="border:1px solid #e5e8e3;border-radius:10px;padding:12px;font-size:11.5px;display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <div>কাস্টমার আদায়: <strong>${esc(formatTaka(totalCollected))}</strong></div>
+                <div>সাপ্লায়ার পরিশোধ: <strong>${esc(formatTaka(totalSupPaid))}</strong></div>
+                <div>বাসার খরচ: <strong>${esc(formatTaka(totalHome))}</strong></div>
+                <div>মামা/স্টাফ প্রদান: <strong>${esc(formatTaka(totalPerson))}</strong></div>
+                <div>বর্তমান মোট কাস্টমার পাওনা: <strong>${esc(formatTaka(sum.totalCustomerDue))}</strong></div>
+                <div>বর্তমান মোট সাপ্লায়ার বাকি: <strong>${esc(formatTaka(sum.totalSupplierDue))}</strong></div>
+              </div>
+            `,
+          ];
+
+          const addTableBlock = (title, headers, rowsHtml, emptyMsg) => {
+            if (!rowsHtml) {
+              blocks.push(
+                `<div style="font-size:13px;font-weight:700;margin-bottom:6px;">${esc(title)}</div><div style="border:1px dashed #d4dad2;padding:12px;border-radius:8px;font-size:11px;color:#4b554e;text-align:center;">${esc(emptyMsg)}</div>`,
+              );
+              return;
+            }
+            blocks.push(`
+              <div style="font-size:13px;font-weight:700;margin-bottom:6px;">${esc(title)}</div>
+              <table style="width:100%;border-collapse:collapse;font-size:11px;border:1px solid #e5e8e3;">
+                <thead><tr style="background:#f2f4f0;">${headers}</tr></thead>
+                <tbody>${rowsHtml}</tbody>
+              </table>
+            `);
+          };
+
+          addTableBlock(
+            `১. চলতি মাসের বিক্রি (${monthTitle})`,
+            `<th style="padding:6px 8px;text-align:left;">তারিখ</th><th style="padding:6px 8px;text-align:left;">ইনভয়েস</th><th style="padding:6px 8px;text-align:left;">কাস্টমার</th><th style="padding:6px 8px;text-align:right;">মোট বিল</th><th style="padding:6px 8px;text-align:right;">জমা</th><th style="padding:6px 8px;text-align:right;">বাকি</th>`,
+            salesTxs
+              .slice(0, 25)
+              .map(
+                (t) =>
+                  `<tr style="border-top:1px solid #eef0ec;"><td style="padding:6px 8px;">${esc(formatDateBn(t.date))}</td><td style="padding:6px 8px;">${esc(t.invoiceNo)}</td><td style="padding:6px 8px;">${esc(t.partyName)}</td><td style="padding:6px 8px;text-align:right;">${esc(formatTaka(t.totalAmount))}</td><td style="padding:6px 8px;text-align:right;">${esc(formatTaka(t.paidAmount))}</td><td style="padding:6px 8px;text-align:right;">${esc(formatTaka(t.dueAmount))}</td></tr>`,
+              )
+              .join(''),
+            'এই মাসে এখনো কোনো বিক্রি হয়নি।',
+          );
+
+          addTableBlock(
+            `২. চলতি মাসের কেনাকাটা (${monthTitle})`,
+            `<th style="padding:6px 8px;text-align:left;">তারিখ</th><th style="padding:6px 8px;text-align:left;">চালান</th><th style="padding:6px 8px;text-align:left;">সাপ্লায়ার</th><th style="padding:6px 8px;text-align:right;">মোট বিল</th><th style="padding:6px 8px;text-align:right;">পরিশোধ</th><th style="padding:6px 8px;text-align:right;">বাকি</th>`,
+            purTxs
+              .slice(0, 25)
+              .map(
+                (t) =>
+                  `<tr style="border-top:1px solid #eef0ec;"><td style="padding:6px 8px;">${esc(formatDateBn(t.date))}</td><td style="padding:6px 8px;">${esc(t.invoiceNo)}</td><td style="padding:6px 8px;">${esc(t.partyName)}</td><td style="padding:6px 8px;text-align:right;">${esc(formatTaka(t.totalAmount))}</td><td style="padding:6px 8px;text-align:right;">${esc(formatTaka(t.paidAmount))}</td><td style="padding:6px 8px;text-align:right;">${esc(formatTaka(t.dueAmount))}</td></tr>`,
+              )
+              .join(''),
+            'এই মাসে এখনো কোনো কেনাকাটা হয়নি।',
+          );
+
+          const expRows = [
+            ...mHome.map((h) => ({
+              date: h.date,
+              cat: 'বাসার খরচ',
+              desc: h.title,
+              amt: h.totalAmount,
+            })),
+            ...mPerson.map((p) => ({
+              date: p.date,
+              cat: p.personName,
+              desc: p.purpose,
+              amt: p.amount,
+            })),
+          ]
+            .sort((a, b) => (a.date || '').localeCompare(b.date || ''))
+            .slice(0, 25)
+            .map(
+              (r) =>
+                `<tr style="border-top:1px solid #eef0ec;"><td style="padding:6px 8px;">${esc(formatDateBn(r.date))}</td><td style="padding:6px 8px;">${esc(r.cat)}</td><td style="padding:6px 8px;">${esc(r.desc)}</td><td style="padding:6px 8px;text-align:right;">${esc(formatTaka(r.amt))}</td></tr>`,
+            )
+            .join('');
+
+          addTableBlock(
+            `৩. চলতি মাসের বাসা ও অন্যান্য খরচ (${monthTitle})`,
+            `<th style="padding:6px 8px;text-align:left;">তারিখ</th><th style="padding:6px 8px;text-align:left;">খাত / ব্যক্তি</th><th style="padding:6px 8px;text-align:left;">বিবরণ</th><th style="padding:6px 8px;text-align:right;">পরিমাণ</th>`,
+            expRows,
+            'এই মাসে কোনো বাসা বা ব্যক্তিগত খরচ নেই।',
+          );
+
+          const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+          const pw = pdf.internal.pageSize.getWidth();
+          const ph = pdf.internal.pageSize.getHeight();
+          const margin = 8;
+          const uw = pw - margin * 2;
+          let cy = margin;
+
+          for (const html of blocks) {
+            const canvas = await renderBlock(html);
+            const bh = (canvas.height * uw) / canvas.width;
+            if (cy > margin && cy + bh > ph - margin) {
+              pdf.addPage();
+              cy = margin;
+            }
+            pdf.addImage(canvas.toDataURL('image/png'), 'PNG', margin, cy, uw, Math.min(bh, ph - margin * 2));
+            cy += bh - 3;
+          }
+
+          pdf.save(`MS-Fashion-Monthly-Report-${monthKey}.pdf`);
+          showToast(`${monthTitle} মাসের রিপোর্ট PDF ডাউনলোড হয়েছে!`);
+        } catch (err) {
+          console.error(err);
+          showToast('PDF তৈরি করতে সমস্যা হয়েছে।', 'error');
+        } finally {
+          state.pdfExporting = false;
+          render();
+        }
+      }
+
+      // --- Render Views ---
+      function renderLogin() {
+        const unauthorized =
+          state.user && !state.isAdmin ? state.user.email || 'অজানা অ্যাকাউন্ট' : null;
+        return `
+          <div class="login-shell">
+            <div class="login-card">
+              <div class="login-left">
+                <div style="flex:1;display:flex;align-items:center;justify-content:center;">
+                  <img src="${LOGO_URL}" alt="এমএস ফ্যাশন লোগো" referrerpolicy="no-referrer" style="width:100%;max-width:340px;max-height:240px;object-fit:contain;" />
+                </div>
+                <div style="border-top:1px solid #e5e5e5;padding-top:20px;color:#000000;">
+                  <p style="margin:0 0 6px;font-size:12px;font-weight:600;color:#262626;">ডিজিটাল হিসাবরক্ষণ ও ইনভয়েস পোর্টাল</p>
+                  <h2 style="margin:0;font-size:26px;font-weight:700;color:#000000;">এমএস ফ্যাশন (MS Fashion)</h2>
+                  <p style="margin:8px 0 0;font-size:14px;color:#262626;">সাপ্লায়ার বাকি, কাস্টমার পাওনা, বাসার খরচ, মাইনু মামা ও মডারেটর হিমেলের হিসাব — সবকিছু এক খাতায়।</p>
+                </div>
+              </div>
+              <div class="login-right">
+                <div style="max-width:360px;width:100%;margin:0 auto;">
+                  <img src="${LOGO_URL}" alt="এমএস ফ্যাশন" referrerpolicy="no-referrer" style="width:120px;height:auto;max-height:54px;object-fit:contain;margin-bottom:18px;display:block;" />
+                  <h1 style="margin:0;font-size:26px;font-weight:700;color:#000000;">টালি খাতায় স্বাগতম</h1>
+                  <p style="margin:8px 0 24px;font-size:14px;color:#525252;">মালিক হিসেবে আপনার ব্যবসা ও ব্যক্তিগত সব হিসাব নিরাপদে ক্লাউডে সংরক্ষণ করতে Google অ্যাকাউন্ট দিয়ে প্রবেশ করুন।</p>
+                  ${
+                    unauthorized
+                      ? `<div class="alert-error" style="margin-bottom:16px;">
+                          <strong>অনুমোদিত মালিক অ্যাকাউন্ট নয়</strong>
+                          <p style="margin:6px 0 12px;">আপনি <span class="mono">${esc(unauthorized)}</span> দিয়ে লগইন করেছেন। শুধুমাত্র <span class="mono">${esc(ADMIN_EMAIL)}</span> প্রবেশ করতে পারবেন।</p>
+                          <button type="button" class="btn btn-danger-soft" style="width:100%;" data-action="sign-out">${ICONS.logout} অন্য অ্যাকাউন্ট দিয়ে চেষ্টা করুন</button>
+                        </div>`
+                      : `<button type="button" class="btn btn-dark" style="width:100%;min-height:48px;background:#000000;font-size:15px;" data-action="sign-in" ${state.authLoading ? 'disabled' : ''}>
+                          <span>${state.authLoading ? 'লগইন হচ্ছে...' : 'Google দিয়ে লগইন করুন'}</span>
+                        </button>`
+                  }
+                  ${state.authError ? `<p style="margin:12px 0 0;font-size:12.5px;color:var(--red);">${esc(state.authError)}</p>` : ''}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderInvoiceView(inv, isPublic = false) {
+        const publicUrl = buildPublicUrl('invoice', inv.id);
+        const itemsHtml = (inv.items || [])
+          .map(
+            (it, idx) => `
+            <tr>
+              <td>${toBn(idx + 1)}</td>
+              <td><strong>${esc(it.name)}</strong>${it.details ? `<div style="font-size:12px;color:var(--text-muted);">${esc(it.details)}</div>` : ''}</td>
+              <td class="num-col mono">${toBn(it.qty)}</td>
+              <td class="num-col mono">${esc(formatTaka(it.unitPrice))}</td>
+              <td class="num-col mono"><strong>${esc(formatTaka(it.lineTotal))}</strong></td>
+            </tr>
+          `,
+          )
+          .join('');
+
+        return `
+          <div class="stack-md">
+            <div class="card flex-between no-print">
+              <div class="flex-wrap">
+                ${!isPublic ? `<button type="button" class="btn btn-soft" data-action="close-invoice">${ICONS.back} ফিরে যান</button>` : ''}
+                <span style="font-size:13px;font-weight:600;color:var(--text-muted);">ইনভয়েস #${esc(inv.invoiceNo)}</span>
+              </div>
+              <div class="flex-wrap">
+                <button type="button" class="btn btn-soft" data-action="copy-url" data-param="invoice" data-id="${esc(inv.id)}">${ICONS.copy} লিংক কপি</button>
+                ${!isPublic ? `<button type="button" class="btn btn-whatsapp" data-action="wa-invoice" data-id="${esc(inv.id)}">${ICONS.wa} WhatsApp-এ পাঠান</button>` : ''}
+                <button type="button" class="btn btn-primary" data-action="print">${ICONS.print} প্রিন্ট / PDF ডাউনলোড</button>
+              </div>
+            </div>
+
+            <div class="card print-container" style="max-width:860px;margin:0 auto;padding:32px;">
+              <div class="flex-between" style="border-bottom:2px solid #111815;padding-bottom:18px;margin-bottom:20px;">
+                <div>
+                  <h1 style="margin:0;font-size:22px;font-weight:700;">এমএস ফ্যাশন (MS Fashion)</h1>
+                  <p style="margin:2px 0 0;font-size:12.5px;color:var(--text-muted);">ডিজিটাল ইনভয়েস ও ক্যাশ মেমো</p>
+                </div>
+                <div style="text-align:right;">
+                  <div class="mono" style="font-size:14px;font-weight:700;color:var(--brand);">#${esc(inv.invoiceNo)}</div>
+                  <div style="font-size:12.5px;color:var(--text-muted);">তারিখ: ${esc(formatDateBn(inv.date))}</div>
+                </div>
+              </div>
+
+              <div class="grid-2" style="margin-bottom:20px;font-size:13.5px;">
+                <div>
+                  <div style="font-size:11px;font-weight:700;color:var(--text-muted);">${inv.partyType === 'supplier' ? 'সাপ্লায়ার' : 'কাস্টমার'}</div>
+                  <div style="font-size:16px;font-weight:700;">${esc(inv.partyName)}</div>
+                  ${inv.partyPhone ? `<div class="mono" style="font-size:12.5px;color:var(--text-muted);">${esc(inv.partyPhone)}</div>` : ''}
+                  ${inv.partyAddress ? `<div style="font-size:12.5px;color:var(--text-muted);">${esc(inv.partyAddress)}</div>` : ''}
+                </div>
+                <div style="text-align:right;">
+                  <div style="font-size:11px;font-weight:700;color:var(--text-muted);">পেমেন্ট মাধ্যম</div>
+                  <div style="font-weight:600;">${esc(inv.paymentMethod || 'নগদ')}</div>
+                  ${inv.note ? `<div style="font-size:12px;color:var(--text-muted);margin-top:4px;">নোট: ${esc(inv.note)}</div>` : ''}
+                </div>
+              </div>
+
+              <div class="table-wrap">
+                <table class="ledger-table">
+                  <thead>
+                    <tr style="background:var(--surface-pill);">
+                      <th>#</th>
+                      <th>পণ্য / বিবরণ</th>
+                      <th class="num-col">পরিমাণ</th>
+                      <th class="num-col">দর</th>
+                      <th class="num-col">মোট</th>
+                    </tr>
+                  </thead>
+                  <tbody>${itemsHtml}</tbody>
+                </table>
+              </div>
+
+              <div style="margin-top:20px;display:flex;justify-content:flex-end;">
+                <div style="width:100%;max-width:300px;font-size:13.5px;border-top:1px solid var(--border);padding-top:12px;">
+                  <div class="flex-between" style="padding:3px 0;"><span class="text-muted">সাবটোটাল</span><span class="mono">${esc(formatTaka(inv.subtotal))}</span></div>
+                  ${inv.discount > 0 ? `<div class="flex-between" style="padding:3px 0;"><span class="text-muted">ছাড়</span><span class="mono text-red">-${esc(formatTaka(inv.discount))}</span></div>` : ''}
+                  <div class="flex-between" style="padding:6px 0;font-size:15px;font-weight:700;border-top:1px solid var(--border);margin-top:4px;"><span>সর্বমোট বিল</span><span class="mono">${esc(formatTaka(inv.totalAmount))}</span></div>
+                  <div class="flex-between" style="padding:3px 0;"><span class="text-muted">জমা / পরিশোধ</span><span class="mono text-green">${esc(formatTaka(inv.paidAmount))}</span></div>
+                  <div class="flex-between" style="padding:3px 0;"><span class="text-muted">এই বিলের বাকি</span><span class="mono ${inv.dueAmount > 0 ? 'text-red' : 'text-green'}">${esc(formatTaka(inv.dueAmount))}</span></div>
+                  <div class="flex-between" style="padding:6px 0 0;border-top:1px dashed var(--border);margin-top:6px;font-weight:700;"><span>মোট বকেয়া</span><span class="mono ${inv.partyTotalDue > 0 ? 'text-red' : 'text-green'}">${esc(formatTaka(inv.partyTotalDue))}</span></div>
+                </div>
+              </div>
+              <p style="margin:24px 0 0;font-size:11px;color:var(--text-muted);text-align:center;">শেয়ার লিংক: ${esc(publicUrl)}</p>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderPublicPortal() {
+        const q = state.queryParams;
+        const backBtn = state.isAdmin
+          ? `<button type="button" class="btn btn-soft btn-sm" data-action="exit-public">${ICONS.back} অ্যাডমিন ড্যাশবোর্ডে ফিরুন</button>`
+          : '';
+
+        if (state.publicLoading) {
+          return `<div class="container main-content"><div class="card" style="text-align:center;padding:48px;">হিসাব লোড হচ্ছে...</div></div>`;
+        }
+        if (state.publicError || !state.publicDoc) {
+          return `<div class="container main-content"><div class="card" style="text-align:center;padding:48px;"><p class="text-red">${esc(state.publicError || 'পাওয়া যায়নি')}</p>${backBtn}</div></div>`;
+        }
+
+        const { kind, data } = state.publicDoc;
+        if (kind === 'invoice') {
+          return `<div class="container main-content">${backBtn ? `<div style="margin-bottom:12px;" class="no-print">${backBtn}</div>` : ''}${renderInvoiceView(data, true)}</div>`;
+        }
+
+        const isPerson = kind === 'person';
+        const entries = data.entries || [];
+        const rows = entries
+          .map((e) => {
+            const debit = isPerson ? e.payableAmount : e.debit;
+            const credit = isPerson ? e.givenAmount : e.credit;
+            return `
+              <tr>
+                <td>${esc(formatDateBn(e.date))}</td>
+                <td><strong>${esc(isPerson ? e.purpose : e.summary)}</strong>${e.note ? `<div style="font-size:12px;color:var(--text-muted);">${esc(e.note)}</div>` : ''}</td>
+                <td class="num-col mono">${debit > 0 ? esc(formatTaka(debit)) : '—'}</td>
+                <td class="num-col mono text-green">${credit > 0 ? esc(formatTaka(credit)) : '—'}</td>
+                <td class="num-col mono ${e.runningBalance > 0 ? 'text-red' : 'text-green'}"><strong>${esc(formatTaka(e.runningBalance))}</strong></td>
+              </tr>
+            `;
+          })
+          .join('');
+
+        const totalA = isPerson ? data.totalPayable : data.totalBilled;
+        const totalB = isPerson ? data.totalGiven : data.totalPaid;
+        const bal = isPerson ? data.currentBalance : data.currentDue;
+
+        return `
+          <div class="container main-content stack-md">
+            <div class="card flex-between no-print">
+              <div class="flex-wrap">
+                ${backBtn}
+                <img src="${LOGO_URL}" alt="এমএস ফ্যাশন" referrerpolicy="no-referrer" style="width:100px;object-fit:contain;" />
+              </div>
+              <button type="button" class="btn btn-primary" data-action="print">${ICONS.print} প্রিন্ট / PDF</button>
+            </div>
+            <div class="card print-container stack-md">
+              <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:14px;">
+                <div>
+                  <div style="font-size:12px;color:var(--text-muted);">এমএস ফ্যাশন — ডিজিটাল স্টেটমেন্ট</div>
+                  <h1 style="margin:2px 0 0;font-size:22px;font-weight:700;">${esc(data.name)}</h1>
+                  ${data.phone ? `<div class="mono" style="font-size:13px;color:var(--text-muted);">${esc(data.phone)}</div>` : ''}
+                </div>
+                <div style="text-align:right;">
+                  <div style="font-size:12px;color:var(--text-muted);">বর্তমান ব্যালেন্স / বাকি</div>
+                  <div class="mono ${bal > 0 ? 'text-red' : 'text-green'}" style="font-size:24px;font-weight:700;">${esc(formatTaka(bal))}</div>
+                </div>
+              </div>
+              <div class="grid-3">
+                <div class="card" style="background:var(--surface-muted);"><div class="kpi-label">${isPerson ? 'মোট প্রাপ্য' : 'মোট বিল'}</div><div class="kpi-val mono">${esc(formatTaka(totalA))}</div></div>
+                <div class="card" style="background:var(--surface-muted);"><div class="kpi-label">${isPerson ? 'মোট প্রদান' : 'মোট পরিশোধ'}</div><div class="kpi-val mono text-green">${esc(formatTaka(totalB))}</div></div>
+                <div class="card" style="background:var(--surface-muted);"><div class="kpi-label">বর্তমান বাকি</div><div class="kpi-val mono ${bal > 0 ? 'text-red' : 'text-green'}">${esc(formatTaka(bal))}</div></div>
+              </div>
+              <div class="table-wrap">
+                <table class="ledger-table">
+                  <thead>
+                    <tr>
+                      <th>তারিখ</th>
+                      <th>বিবরণ</th>
+                      <th class="num-col">${isPerson ? 'প্রাপ্য' : 'বিল'}</th>
+                      <th class="num-col">${isPerson ? 'প্রদান' : 'জমা'}</th>
+                      <th class="num-col">ব্যালেন্স</th>
+                    </tr>
+                  </thead>
+                  <tbody>${rows || `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);">কোনো লেনদেন নেই</td></tr>`}</tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderPartyProfile(party, partyType) {
+        const isSup = partyType === 'supplier';
+        const partyTxs = state.transactions.filter((t) => t.partyId === party.id);
+        const ledger = computePartyLedger(partyTxs);
+        const param = isSup ? 'supplier' : 'customer';
+
+        const rows = [...ledger.entries]
+          .reverse()
+          .map((e) => {
+            const tx = state.transactions.find((t) => t.id === e.txId);
+            const isBill = e.type === 'customer_sale' || e.type === 'supplier_purchase';
+            return `
+              <tr>
+                <td style="white-space:nowrap;">
+                  <div>${esc(formatDateBn(e.date))}</div>
+                  <div class="mono" style="font-size:11px;color:var(--text-muted);">${esc(e.invoiceNo)}</div>
+                </td>
+                <td>
+                  <div><strong>${esc(getTxTypeLabel(e.type))}</strong></div>
+                  <div style="font-size:12px;color:var(--text-muted);">${esc(e.summary)}</div>
+                </td>
+                <td class="num-col mono">${e.debit > 0 ? esc(formatTaka(e.debit)) : '—'}</td>
+                <td class="num-col mono text-green">${e.credit > 0 ? esc(formatTaka(e.credit)) : '—'}</td>
+                <td class="num-col mono ${e.runningBalance > 0 ? 'text-red' : 'text-green'}"><strong>${esc(formatTaka(e.runningBalance))}</strong></td>
+                <td class="num-col no-print">
+                  <div class="flex-wrap" style="justify-content:flex-end;">
+                    ${isBill ? `<button type="button" class="btn btn-brand-soft btn-sm" data-action="view-invoice" data-id="${esc(e.txId)}">ইনভয়েস</button>` : ''}
+                    ${tx ? `<button type="button" class="btn btn-soft btn-icon" data-action="edit-tx" data-id="${esc(e.txId)}">${ICONS.edit}</button>` : ''}
+                    ${tx ? `<button type="button" class="btn btn-danger-soft btn-icon" data-action="delete-tx" data-id="${esc(e.txId)}">${ICONS.trash}</button>` : ''}
+                  </div>
+                </td>
+              </tr>
+            `;
+          })
+          .join('');
+
+        return `
+          <div class="stack-md">
+            <div class="card flex-between no-print">
+              <button type="button" class="btn btn-soft" data-action="close-party">${ICONS.back} ফিরে যান</button>
+              <div class="flex-wrap">
+                <button type="button" class="btn btn-soft" data-action="copy-url" data-param="${param}" data-id="${esc(party.id)}">${ICONS.copy} শেয়ার লিংক</button>
+                <button type="button" class="btn btn-whatsapp" data-action="wa-party" data-type="${partyType}" data-id="${esc(party.id)}">${ICONS.wa} WhatsApp</button>
+                <button type="button" class="btn btn-secondary" data-action="print">${ICONS.print} প্রিন্ট</button>
+                <button type="button" class="btn btn-secondary" data-action="edit-party" data-type="${partyType}" data-id="${esc(party.id)}">${ICONS.edit} তথ্য</button>
+                <button type="button" class="btn btn-danger-soft" data-action="delete-party" data-type="${partyType}" data-id="${esc(party.id)}">${ICONS.trash}</button>
+              </div>
+            </div>
+
+            <div class="card print-container stack-md">
+              <div class="flex-between">
+                <div>
+                  <span style="font-size:12px;font-weight:600;color:var(--brand);">${isSup ? 'সাপ্লায়ার খাতা' : 'কাস্টমার খাতা'}</span>
+                  <h1 style="margin:2px 0 0;font-size:24px;font-weight:700;">${esc(party.name)}</h1>
+                  <div style="font-size:13px;color:var(--text-muted);margin-top:4px;">
+                    ${party.phone ? `<span class="mono">${esc(party.phone)}</span>` : ''}
+                    ${party.phone && party.address ? ' · ' : ''}
+                    ${party.address ? esc(party.address) : ''}
+                  </div>
+                </div>
+                <div class="flex-wrap no-print">
+                  ${
+                    isSup
+                      ? `
+                        <button type="button" class="btn btn-danger-soft" data-action="new-tx" data-type="supplier_due_add" data-party="${esc(party.id)}">${ICONS.plus} আগের বাকি</button>
+                        <button type="button" class="btn btn-brand-soft" data-action="new-tx" data-type="supplier_payment" data-party="${esc(party.id)}">${ICONS.plus} পেমেন্ট দিন</button>
+                        <button type="button" class="btn btn-primary" data-action="new-tx" data-type="supplier_purchase" data-party="${esc(party.id)}">${ICONS.plus} মাল ক্রয়</button>
+                      `
+                      : `
+                        <button type="button" class="btn btn-danger-soft" data-action="new-tx" data-type="customer_due_add" data-party="${esc(party.id)}">${ICONS.plus} আগের বাকি</button>
+                        <button type="button" class="btn btn-brand-soft" data-action="new-tx" data-type="customer_payment" data-party="${esc(party.id)}">${ICONS.plus} টাকা আদায়</button>
+                        <button type="button" class="btn btn-primary" data-action="new-tx" data-type="customer_sale" data-party="${esc(party.id)}">${ICONS.plus} নতুন ইনভয়েস</button>
+                      `
+                  }
+                </div>
+              </div>
+
+              <div class="grid-3">
+                <div class="card" style="background:var(--surface-muted);"><div class="kpi-label">${isSup ? 'মোট কেনাকাটা / বাকি' : 'মোট বিক্রি / বিল'}</div><div class="kpi-val mono">${esc(formatTaka(ledger.totalBilled))}</div></div>
+                <div class="card" style="background:var(--surface-muted);"><div class="kpi-label">${isSup ? 'মোট পরিশোধ' : 'মোট আদায়'}</div><div class="kpi-val mono text-green">${esc(formatTaka(ledger.totalPaid))}</div></div>
+                <div class="card" style="background:var(--surface-muted);"><div class="kpi-label">${isSup ? 'বর্তমান বাকি' : 'বর্তমান পাওনা'}</div><div class="kpi-val mono ${ledger.currentDue > 0 ? 'text-red' : 'text-green'}">${esc(formatTaka(ledger.currentDue))}</div></div>
+              </div>
+
+              <div class="table-wrap">
+                <table class="ledger-table">
+                  <thead>
+                    <tr>
+                      <th>তারিখ ও নং</th>
+                      <th>বিবরণ</th>
+                      <th class="num-col">${isSup ? 'বিল / বাকি' : 'বিক্রি / বিল'}</th>
+                      <th class="num-col">${isSup ? 'পরিশোধ' : 'আদায়'}</th>
+                      <th class="num-col">ব্যালেন্স</th>
+                      <th class="num-col no-print">অ্যাকশন</th>
+                    </tr>
+                  </thead>
+                  <tbody>${rows || `<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--text-muted);">কোনো লেনদেন পাওয়া যায়নি।</td></tr>`}</tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderDashboard() {
+        const sum = getSummary();
+        const q = state.searchQuery.trim().toLowerCase();
+        const filteredTxs = state.transactions.filter((tx) => {
+          if (state.txTypeFilter !== 'all' && tx.type !== state.txTypeFilter) return false;
+          if (!q) return true;
+          return (
+            String(tx.partyName || '').toLowerCase().includes(q) ||
+            String(tx.partyPhone || '').toLowerCase().includes(q) ||
+            String(tx.invoiceNo || '').toLowerCase().includes(q) ||
+            (tx.items || []).some((it) => String(it.name || '').toLowerCase().includes(q))
+          );
+        });
+
+        const filters = [
+          { id: 'all', label: 'সব' },
+          { id: 'customer_sale', label: 'বিক্রি' },
+          { id: 'customer_due_add', label: 'কাস্টমার বাকি' },
+          { id: 'customer_payment', label: 'আদায়' },
+          { id: 'supplier_purchase', label: 'মাল ক্রয়' },
+          { id: 'supplier_due_add', label: 'সাপ্লায়ার বাকি' },
+          { id: 'supplier_payment', label: 'পরিশোধ' },
+        ];
+
+        const rowsHtml = filteredTxs
+          .slice(0, 60)
+          .map((tx) => {
+            const isSup =
+              tx.type === 'supplier_purchase' ||
+              tx.type === 'supplier_payment' ||
+              tx.type === 'supplier_due_add';
+            const isBill = tx.type === 'customer_sale' || tx.type === 'supplier_purchase';
+            const isDueAdd = tx.type === 'supplier_due_add' || tx.type === 'customer_due_add';
+            const desc =
+              isBill && tx.items && tx.items.length > 0
+                ? tx.items.map((it) => `${it.name} (${toBn(it.qty)} পিস)`).join(', ')
+                : `${tx.paymentMethod || 'নগদ'}${tx.note ? ` · ${tx.note}` : ''}`;
+
+            return `
+              <tr>
+                <td style="white-space:nowrap;">
+                  <div>${esc(formatDateBn(tx.date))}</div>
+                  <div class="mono" style="font-size:11px;color:var(--text-muted);">${esc(tx.invoiceNo)}</div>
+                </td>
+                <td>
+                  <button type="button" style="background:none;border:none;padding:0;font-weight:700;font-size:14px;color:var(--text);cursor:pointer;text-align:left;" data-action="open-party" data-type="${isSup ? 'supplier' : 'customer'}" data-id="${esc(tx.partyId)}">${esc(tx.partyName)}</button>
+                  <div style="font-size:12px;color:var(--text-muted);">${esc(getTxTypeLabel(tx.type))}</div>
+                </td>
+                <td style="max-width:260px;font-size:12.5px;color:var(--text-muted);">${esc(desc)}</td>
+                <td class="num-col mono"><strong>${isBill || isDueAdd ? esc(formatTaka(tx.totalAmount)) : '—'}</strong></td>
+                <td class="num-col mono text-green"><strong>${isDueAdd ? '—' : esc(formatTaka(tx.paidAmount))}</strong></td>
+                <td class="num-col mono ${tx.dueAmount > 0 ? 'text-red' : 'text-green'}"><strong>${isBill || isDueAdd ? esc(formatTaka(tx.dueAmount)) : '—'}</strong></td>
+                <td class="num-col">
+                  <div class="flex-wrap" style="justify-content:flex-end;">
+                    ${isBill ? `<button type="button" class="btn btn-brand-soft btn-sm" data-action="view-invoice" data-id="${esc(tx.id)}">ইনভয়েস</button>` : ''}
+                    <button type="button" class="btn btn-soft btn-icon" data-action="edit-tx" data-id="${esc(tx.id)}">${ICONS.edit}</button>
+                    <button type="button" class="btn btn-danger-soft btn-icon" data-action="delete-tx" data-id="${esc(tx.id)}">${ICONS.trash}</button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          })
+          .join('');
+
+        return `
+          <div class="stack-lg">
+            <div class="flex-between">
+              <div>
+                <h1 style="margin:0;font-size:26px;font-weight:700;">ড্যাশবোর্ড ও সারসংক্ষেপ</h1>
+                <p style="margin:4px 0 0;font-size:13.5px;color:var(--text-muted);">এমএস ফ্যাশন ব্যবসা, বাসার খরচ এবং মামা ও মডারেটরের দৈনিক হিসাব</p>
+              </div>
+              <div class="flex-wrap">
+                <button type="button" class="btn btn-primary" data-action="new-tx" data-type="customer_sale">${ICONS.plus} নতুন হিসাব যোগ করুন</button>
+                <button type="button" class="btn btn-secondary" data-action="switch-tab" data-tab="suppliers">সাপ্লায়ার খাতা</button>
+                <button type="button" class="btn btn-secondary" data-action="switch-tab" data-tab="customers">কাস্টমার ও ইনভয়েস</button>
+                <button type="button" class="btn btn-secondary" data-action="switch-tab" data-tab="home_expenses">বাসার খরচ</button>
+                <button type="button" class="btn btn-secondary" data-action="switch-tab" data-tab="persons">মামা ও হিমেল</button>
+                <button type="button" class="btn btn-dark" data-action="download-pdf" ${state.pdfExporting || state.dataLoading ? 'disabled' : ''}>${ICONS.pdf} ${state.pdfExporting ? 'তৈরি হচ্ছে...' : 'মাসিক রিপোর্ট PDF'}</button>
+              </div>
+            </div>
+
+            <div class="kpi-grid">
+              <div class="card">
+                <p class="kpi-label">মোট সাপ্লায়ার বাকি</p>
+                <p class="kpi-val mono text-red">${esc(formatTaka(sum.totalSupplierDue))}</p>
+                <p class="kpi-sub">সাপ্লায়ারদের পরিশোধযোগ্য দেনা · ${toBn(state.suppliers.length)} জন</p>
+              </div>
+              <div class="card">
+                <p class="kpi-label">মোট কাস্টমার পাওনা</p>
+                <p class="kpi-val mono text-brand">${esc(formatTaka(sum.totalCustomerDue))}</p>
+                <p class="kpi-sub">কাস্টমারদের কাছ থেকে আদায়যোগ্য · ${toBn(state.customers.length)} জন</p>
+              </div>
+              <div class="card">
+                <p class="kpi-label">মোট কেনাকাটা</p>
+                <p class="kpi-val mono">${esc(formatTaka(sum.totalPurchases))}</p>
+                <p class="kpi-sub">সাপ্লায়ার থেকে মোট ক্রয়কৃত পণ্য</p>
+              </div>
+              <div class="card">
+                <p class="kpi-label">মোট বিক্রি</p>
+                <p class="kpi-val mono text-green">${esc(formatTaka(sum.totalSales))}</p>
+                <p class="kpi-sub">কাস্টমারদের কাছে মোট বিক্রয় মূল্য</p>
+              </div>
+            </div>
+
+            ${buildMonthlyChartHtml()}
+
+            <div class="grid-2">
+              <button type="button" class="card" style="text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;" data-action="switch-tab" data-tab="home_expenses">
+                <div>
+                  <p class="kpi-label">বাসার খরচ (${esc(formatMonthBn(sum.currentMonth))})</p>
+                  <p class="mono" style="margin:6px 0 0;font-size:20px;font-weight:700;">${esc(formatTaka(sum.monthlyHomeExpense))}</p>
+                  <p style="margin:4px 0 0;font-size:12px;color:var(--text-muted);">আমি ও মাইনু মামা — বাজার ও মাসিক খরচের তালিকা দেখুন</p>
+                </div>
+                <span class="text-brand" style="font-size:12.5px;font-weight:600;white-space:nowrap;">খাতা দেখুন →</span>
+              </button>
+
+              <button type="button" class="card" style="text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;" data-action="switch-tab" data-tab="persons">
+                <div>
+                  <p class="kpi-label">মাইনু মামা, হিমেল ও ব্যক্তিগত হিসাব</p>
+                  <p class="mono" style="margin:6px 0 0;font-size:20px;font-weight:700;">বাকি প্রাপ্য: ${esc(formatTaka(sum.staffBalanceDue))}</p>
+                  <p style="margin:4px 0 0;font-size:12px;color:var(--text-muted);">টাকা দেওয়া, মডারেটর প্রাপ্য ও নতুন ব্যক্তি যোগ করুন</p>
+                </div>
+                <span class="text-brand" style="font-size:12.5px;font-weight:600;white-space:nowrap;">হিসাব দেখুন →</span>
+              </button>
+            </div>
+
+            <div class="card stack-md">
+              <div class="flex-between">
+                <h2 style="margin:0;font-size:18px;font-weight:700;">সাম্প্রতিক ব্যবসায়িক লেনদেন (${toBn(filteredTxs.length)})</h2>
+                <div class="flex-wrap">
+                  <div class="pill-group">
+                    ${filters.map((f) => `<button type="button" class="pill-btn ${state.txTypeFilter === f.id ? 'active' : ''}" data-action="tx-filter" data-filter="${f.id}">${f.label}</button>`).join('')}
+                  </div>
+                  <div class="search-wrap" style="max-width:240px;">
+                    ${ICONS.search}
+                    <input type="search" class="input" id="global-search" value="${esc(state.searchQuery)}" placeholder="নাম, পণ্য বা ইনভয়েস খুঁজুন..." />
+                  </div>
+                </div>
+              </div>
+
+              ${
+                filteredTxs.length === 0
+                  ? `<div class="empty-box">কোনো লেনদেন পাওয়া যায়নি। নতুন হিসাব যোগ করে শুরু করুন।</div>`
+                  : `<div class="table-wrap"><table class="ledger-table">
+                      <thead>
+                        <tr>
+                          <th>তারিখ ও নং</th>
+                          <th>নাম ও ধরন</th>
+                          <th>বিবরণ</th>
+                          <th class="num-col">মোট বিল</th>
+                          <th class="num-col">জমা / পরিশোধ</th>
+                          <th class="num-col">বাকি</th>
+                          <th class="num-col">অ্যাকশন</th>
+                        </tr>
+                      </thead>
+                      <tbody>${rowsHtml}</tbody>
+                    </table></div>`
+              }
+            </div>
+          </div>
+        `;
+      }
+
+      function renderSuppliers() {
+        const sum = getSummary();
+        const q = state.searchQuery.trim().toLowerCase();
+        const list = q
+          ? state.suppliers.filter(
+              (s) =>
+                String(s.name || '').toLowerCase().includes(q) ||
+                String(s.phone || '').toLowerCase().includes(q) ||
+                String(s.address || '').toLowerCase().includes(q),
+            )
+          : state.suppliers;
+
+        const lastDateMap = {};
+        for (const tx of state.transactions) {
+          if (
+            tx.type === 'supplier_purchase' ||
+            tx.type === 'supplier_payment' ||
+            tx.type === 'supplier_due_add'
+          ) {
+            if (tx.partyId && tx.date && (!lastDateMap[tx.partyId] || tx.date > lastDateMap[tx.partyId])) {
+              lastDateMap[tx.partyId] = tx.date;
+            }
+          }
+        }
+
+        const cardsHtml = list
+          .map((sup) => {
+            const lastDate = lastDateMap[sup.id];
+            const dotColor =
+              sup.currentDue > 0 ? '#dc2626' : sup.currentDue < 0 ? '#d97706' : '#16a34a';
+            return `
+              <div class="party-row">
+                <button type="button" style="background:none;border:none;padding:0;text-align:left;flex:1;min-width:0;cursor:pointer;" data-action="open-party" data-type="supplier" data-id="${esc(sup.id)}">
+                  <div style="display:flex;align-items:center;gap:6px;">
+                    <strong style="font-size:16px;color:var(--text);">${esc(sup.name)}</strong>
+                    ${ICONS.chevron}
+                  </div>
+                  <div style="font-size:12px;color:var(--text-muted);margin-top:3px;display:flex;flex-wrap:wrap;gap:6px;">
+                    ${sup.phone ? `<span class="mono">${esc(sup.phone)}</span><span>·</span>` : ''}
+                    ${sup.address ? `<span>${esc(sup.address)}</span><span>·</span>` : ''}
+                    <span>মোট কেনাকাটা: <span class="mono">${esc(formatTaka(sup.totalBilled))}</span></span>
+                    <span>·</span>
+                    <span>সর্বশেষ লেনদেন: <strong style="color:var(--text);">${lastDate ? esc(formatDateBn(lastDate)) : 'নেই'}</strong></span>
+                  </div>
+                </button>
+                <div class="flex-wrap" style="justify-content:flex-end;gap:14px;">
+                  <div style="text-align:right;">
+                    <div style="font-size:11px;color:var(--text-muted);display:inline-flex;align-items:center;gap:6px;">
+                      <span class="status-dot" style="background:${dotColor};"></span> বর্তমান বাকি
+                    </div>
+                    <div class="mono ${sup.currentDue > 0 ? 'text-red' : 'text-green'}" style="font-size:16px;font-weight:700;">${esc(formatTaka(sup.currentDue))}</div>
+                  </div>
+                  <div class="flex-wrap">
+                    <button type="button" class="btn btn-soft btn-icon" title="শেয়ার লিংক কপি" data-action="copy-url" data-param="supplier" data-id="${esc(sup.id)}">${ICONS.copy}</button>
+                    <button type="button" class="btn btn-brand-soft btn-sm" data-action="open-party" data-type="supplier" data-id="${esc(sup.id)}">খাতা দেখুন</button>
+                  </div>
+                </div>
+              </div>
+            `;
+          })
+          .join('');
+
+        return `
+          <div class="stack-lg">
+            <div class="flex-between">
+              <div>
+                <h1 style="margin:0;font-size:24px;font-weight:700;">সাপ্লায়ার খাতা (${toBn(state.suppliers.length)})</h1>
+                <p style="margin:4px 0 0;font-size:13.5px;color:var(--text-muted);">মোট সাপ্লায়ার বাকি: <strong class="mono text-red">${esc(formatTaka(sum.totalSupplierDue))}</strong></p>
+              </div>
+              <div class="flex-wrap">
+                <button type="button" class="btn btn-secondary" data-action="new-party" data-type="supplier">${ICONS.plus} নতুন সাপ্লায়ার</button>
+                <button type="button" class="btn btn-danger-soft" data-action="new-tx" data-type="supplier_due_add">${ICONS.plus} আগের বাকি / টাকা নেওয়া</button>
+                <button type="button" class="btn btn-brand-soft" data-action="new-tx" data-type="supplier_payment">${ICONS.plus} পেমেন্ট পরিশোধ</button>
+                <button type="button" class="btn btn-primary" data-action="new-tx" data-type="supplier_purchase">${ICONS.plus} মাল ক্রয় এন্ট্রি</button>
+              </div>
+            </div>
+            <div class="search-wrap">
+              ${ICONS.search}
+              <input type="search" class="input" id="global-search" value="${esc(state.searchQuery)}" placeholder="সাপ্লায়ারের নাম বা মোবাইল নম্বর খুঁজুন..." />
+            </div>
+            <div class="card-flush">
+              ${list.length === 0 ? `<div class="empty-box" style="margin:16px;">কোনো সাপ্লায়ার পাওয়া যায়নি।</div>` : `<div class="list-divide">${cardsHtml}</div>`}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderCustomers() {
+        const sum = getSummary();
+        const q = state.searchQuery.trim().toLowerCase();
+        const custList = q
+          ? state.customers.filter(
+              (c) =>
+                String(c.name || '').toLowerCase().includes(q) ||
+                String(c.phone || '').toLowerCase().includes(q) ||
+                String(c.address || '').toLowerCase().includes(q),
+            )
+          : state.customers;
+
+        const invList = state.transactions.filter((tx) => {
+          if (tx.type !== 'customer_sale') return false;
+          if (!q) return true;
+          return (
+            String(tx.partyName || '').toLowerCase().includes(q) ||
+            String(tx.partyPhone || '').toLowerCase().includes(q) ||
+            String(tx.invoiceNo || '').toLowerCase().includes(q)
+          );
+        });
+
+        const content =
+          state.customerSubTab === 'customers'
+            ? custList.length === 0
+              ? `<div class="empty-box" style="margin:16px;">কোনো কাস্টমার পাওয়া যায়নি।</div>`
+              : `<div class="list-divide">${custList
+                  .map(
+                    (c) => `
+                  <div class="party-row">
+                    <button type="button" style="background:none;border:none;padding:0;text-align:left;flex:1;min-width:0;cursor:pointer;" data-action="open-party" data-type="customer" data-id="${esc(c.id)}">
+                      <div style="display:flex;align-items:center;gap:6px;"><strong style="font-size:16px;">${esc(c.name)}</strong>${ICONS.chevron}</div>
+                      <div style="font-size:12px;color:var(--text-muted);margin-top:3px;">
+                        ${c.phone ? `<span class="mono">${esc(c.phone)}</span> · ` : ''}
+                        মোট বিক্রি: <span class="mono">${esc(formatTaka(c.totalBilled))}</span>
+                      </div>
+                    </button>
+                    <div class="flex-wrap" style="justify-content:flex-end;gap:14px;">
+                      <div style="text-align:right;">
+                        <div style="font-size:11px;color:var(--text-muted);">বর্তমান পাওনা</div>
+                        <div class="mono ${c.currentDue > 0 ? 'text-red' : 'text-green'}" style="font-size:16px;font-weight:700;">${esc(formatTaka(c.currentDue))}</div>
+                      </div>
+                      <div class="flex-wrap">
+                        <button type="button" class="btn btn-soft btn-icon" data-action="copy-url" data-param="customer" data-id="${esc(c.id)}">${ICONS.copy}</button>
+                        <button type="button" class="btn btn-brand-soft btn-sm" data-action="open-party" data-type="customer" data-id="${esc(c.id)}">খাতা দেখুন</button>
+                      </div>
+                    </div>
+                  </div>
+                `,
+                  )
+                  .join('')}</div>`
+            : invList.length === 0
+              ? `<div class="empty-box" style="margin:16px;">কোনো ইনভয়েস পাওয়া যায়নি।</div>`
+              : `<div class="list-divide">${invList
+                  .map(
+                    (inv) => `
+                  <div class="party-row">
+                    <div>
+                      <div style="font-size:12px;color:var(--text-muted);"><span class="mono text-brand" style="font-weight:700;">${esc(inv.invoiceNo)}</span> · ${esc(formatDateBn(inv.date))} · ${toBn((inv.items || []).length)} টি আইটেম</div>
+                      <strong style="font-size:16px;">${esc(inv.partyName)}</strong>
+                    </div>
+                    <div class="flex-wrap" style="justify-content:flex-end;gap:14px;">
+                      <div style="text-align:right;font-size:12px;">
+                        <div class="mono" style="font-weight:700;font-size:14px;">মোট: ${esc(formatTaka(inv.totalAmount))}</div>
+                        <div class="mono ${inv.dueAmount > 0 ? 'text-red' : 'text-green'}">বাকি: ${esc(formatTaka(inv.dueAmount))}</div>
+                      </div>
+                      <div class="flex-wrap">
+                        <button type="button" class="btn btn-soft btn-icon" data-action="copy-url" data-param="invoice" data-id="${esc(inv.id)}">${ICONS.copy}</button>
+                        <button type="button" class="btn btn-brand-soft btn-sm" data-action="view-invoice" data-id="${esc(inv.id)}">ইনভয়েস দেখুন</button>
+                      </div>
+                    </div>
+                  </div>
+                `,
+                  )
+                  .join('')}</div>`;
+
+        return `
+          <div class="stack-lg">
+            <div class="flex-between">
+              <div>
+                <h1 style="margin:0;font-size:24px;font-weight:700;">কাস্টমার খাতা ও ইনভয়েস</h1>
+                <p style="margin:4px 0 0;font-size:13.5px;color:var(--text-muted);">মোট কাস্টমার পাওনা: <strong class="mono text-brand">${esc(formatTaka(sum.totalCustomerDue))}</strong></p>
+              </div>
+              <div class="flex-wrap">
+                <button type="button" class="btn btn-secondary" data-action="new-party" data-type="customer">${ICONS.plus} নতুন কাস্টমার</button>
+                <button type="button" class="btn btn-danger-soft" data-action="new-tx" data-type="customer_due_add">${ICONS.plus} আগের বাকি যোগ</button>
+                <button type="button" class="btn btn-primary" data-action="new-tx" data-type="customer_sale">${ICONS.plus} নতুন ইনভয়েস তৈরি</button>
+              </div>
+            </div>
+            <div class="flex-between">
+              <div class="pill-group">
+                <button type="button" class="pill-btn ${state.customerSubTab === 'customers' ? 'active' : ''}" data-action="cust-subtab" data-sub="customers">কাস্টমার তালিকা (${toBn(state.customers.length)})</button>
+                <button type="button" class="pill-btn ${state.customerSubTab === 'invoices' ? 'active' : ''}" data-action="cust-subtab" data-sub="invoices">সব ইনভয়েস (${toBn(state.transactions.filter((t) => t.type === 'customer_sale').length)})</button>
+              </div>
+              <div class="search-wrap" style="max-width:280px;">
+                ${ICONS.search}
+                <input type="search" class="input" id="global-search" value="${esc(state.searchQuery)}" placeholder="নাম, মোবাইল বা ইনভয়েস নং..." />
+              </div>
+            </div>
+            <div class="card-flush">${content}</div>
+          </div>
+        `;
+      }
+
+      function renderHomeExpenses() {
+        const months = Array.from(
+          new Set([getCurrentMonthKey(), ...state.homeExpenses.map((e) => e.monthKey).filter(Boolean)]),
+        ).sort((a, b) => b.localeCompare(a));
+
+        const list = state.homeExpenses.filter((e) => e.monthKey === state.expenseMonthFilter);
+        const total = list.reduce((s, e) => s + Number(e.totalAmount || 0), 0);
+        const byMe = list.filter((e) => e.paidBy === 'আমি').reduce((s, e) => s + Number(e.totalAmount || 0), 0);
+        const byMama = list.filter((e) => e.paidBy === 'মাইনু মামা').reduce((s, e) => s + Number(e.totalAmount || 0), 0);
+
+        const cardsHtml = list
+          .map((exp) => {
+            const itemsList = (exp.items || [])
+              .map((it) => `${it.name}${it.qtyText ? ` (${it.qtyText})` : ''} — ${formatTaka(it.amount)}`)
+              .join(' · ');
+            return `
+              <div class="party-row">
+                <div style="flex:1;min-width:0;">
+                  <div style="font-size:12px;color:var(--text-muted);">${esc(formatDateBn(exp.date))} · পরিশোধ: <strong style="color:var(--text);">${esc(exp.paidBy)}</strong> (${esc(exp.paymentMethod || 'নগদ')})</div>
+                  <div style="font-size:16px;font-weight:700;margin-top:2px;">${esc(exp.title)}</div>
+                  <div style="font-size:12.5px;color:var(--text-muted);margin-top:4px;">${esc(itemsList)}</div>
+                  ${exp.note ? `<div style="font-size:12px;color:var(--text-muted);margin-top:2px;">নোট: ${esc(exp.note)}</div>` : ''}
+                </div>
+                <div class="flex-wrap" style="justify-content:flex-end;">
+                  <strong class="mono" style="font-size:17px;margin-right:8px;">${esc(formatTaka(exp.totalAmount))}</strong>
+                  <button type="button" class="btn btn-soft btn-icon" data-action="edit-expense" data-id="${esc(exp.id)}">${ICONS.edit}</button>
+                  <button type="button" class="btn btn-danger-soft btn-icon" data-action="delete-expense" data-id="${esc(exp.id)}">${ICONS.trash}</button>
+                </div>
+              </div>
+            `;
+          })
+          .join('');
+
+        return `
+          <div class="stack-lg">
+            <div class="flex-between">
+              <div>
+                <h1 style="margin:0;font-size:24px;font-weight:700;">বাসার মাসিক খরচ</h1>
+                <p style="margin:4px 0 0;font-size:13.5px;color:var(--text-muted);">আমি ও মাইনু মামা — বাজার ও বাসার দৈনন্দিন খরচের হিসাব</p>
+              </div>
+              <div class="flex-wrap">
+                <select class="select" id="expense-month-select" style="width:auto;">
+                  ${months.map((m) => `<option value="${esc(m)}" ${m === state.expenseMonthFilter ? 'selected' : ''}>${esc(formatMonthBn(m))}</option>`).join('')}
+                </select>
+                <button type="button" class="btn btn-primary" data-action="new-expense">${ICONS.plus} নতুন খরচ যোগ</button>
+              </div>
+            </div>
+
+            <div class="grid-3">
+              <div class="card"><p class="kpi-label">মাসিক মোট খরচ</p><p class="kpi-val mono">${esc(formatTaka(total))}</p></div>
+              <div class="card"><p class="kpi-label">আমি পরিশোধ করেছি</p><p class="kpi-val mono text-brand">${esc(formatTaka(byMe))}</p></div>
+              <div class="card"><p class="kpi-label">মাইনু মামা পরিশোধ করেছেন</p><p class="kpi-val mono">${esc(formatTaka(byMama))}</p></div>
+            </div>
+
+            <div class="card-flush">
+              ${list.length === 0 ? `<div class="empty-box" style="margin:16px;">এই মাসে এখনো কোনো বাসার খরচ যোগ করা হয়নি।</div>` : `<div class="list-divide">${cardsHtml}</div>`}
+            </div>
+          </div>
+        `;
+      }
+
+      function renderPersons() {
+        const selected = state.selectedPersonId
+          ? state.persons.find((p) => p.id === state.selectedPersonId) || state.persons[0]
+          : state.persons[0];
+
+        if (!selected) {
+          return `
+            <div class="stack-lg">
+              <div class="flex-between">
+                <h1 style="margin:0;font-size:24px;font-weight:700;">মামা, মডারেটর ও ব্যক্তিগত হিসাব</h1>
+                <button type="button" class="btn btn-primary" data-action="new-person">${ICONS.plus} নতুন ব্যক্তি যোগ করুন</button>
+              </div>
+              <div class="empty-box">তালিকা লোড হচ্ছে অথবা নতুন ব্যক্তি যোগ করুন।</div>
+            </div>
+          `;
+        }
+
+        const txs = state.personTransactions.filter((t) => t.personId === selected.id);
+        const ledger = computePersonLedger(txs);
+
+        const tabs = state.persons
+          .map(
+            (p) => `
+          <button type="button" class="pill-btn ${p.id === selected.id ? 'active' : ''}" data-action="select-person" data-id="${esc(p.id)}">
+            ${esc(p.name)} (${esc(formatTaka(p.currentBalance))})
+          </button>
+        `,
+          )
+          .join('');
+
+        const rows = [...ledger.entries]
+          .reverse()
+          .map(
+            (e) => `
+          <tr>
+            <td style="white-space:nowrap;">${esc(formatDateBn(e.date))}</td>
+            <td>
+              <strong>${esc(e.purpose)}</strong>
+              <div style="font-size:12px;color:var(--text-muted);">${e.type === 'payable_add' ? 'প্রাপ্য যোগ' : 'টাকা প্রদান'} · ${esc(e.paymentMethod)}${e.note ? ` · ${esc(e.note)}` : ''}</div>
+            </td>
+            <td class="num-col mono">${e.payableAmount > 0 ? esc(formatTaka(e.payableAmount)) : '—'}</td>
+            <td class="num-col mono text-green">${e.givenAmount > 0 ? esc(formatTaka(e.givenAmount)) : '—'}</td>
+            <td class="num-col mono ${e.runningBalance > 0 ? 'text-red' : 'text-green'}"><strong>${esc(formatTaka(e.runningBalance))}</strong></td>
+            <td class="num-col">
+              <div class="flex-wrap" style="justify-content:flex-end;">
+                <button type="button" class="btn btn-soft btn-icon" data-action="edit-person-tx" data-id="${esc(e.ptxId)}">${ICONS.edit}</button>
+                <button type="button" class="btn btn-danger-soft btn-icon" data-action="delete-person-tx" data-id="${esc(e.ptxId)}">${ICONS.trash}</button>
+              </div>
+            </td>
+          </tr>
+        `,
+          )
+          .join('');
+
+        return `
+          <div class="stack-lg">
+            <div class="flex-between">
+              <div>
+                <h1 style="margin:0;font-size:24px;font-weight:700;">মামা, মডারেটর ও ব্যক্তিগত হিসাব</h1>
+                <p style="margin:4px 0 0;font-size:13.5px;color:var(--text-muted);">মাইনু মামা, মডারেটর হিমেল এবং অন্যান্য প্রাপকের হিসাব-নিকাশ</p>
+              </div>
+              <button type="button" class="btn btn-primary" data-action="new-person">${ICONS.plus} নতুন ব্যক্তি যোগ করুন</button>
+            </div>
+
+            <div class="pill-group">${tabs}</div>
+
+            <div class="card stack-md">
+              <div class="flex-between">
+                <div>
+                  <span style="font-size:12px;font-weight:600;color:var(--brand);">${esc(selected.role || 'ব্যক্তিগত')}</span>
+                  <h2 style="margin:2px 0 0;font-size:22px;font-weight:700;">${esc(selected.name)}</h2>
+                  ${selected.phone ? `<div class="mono" style="font-size:13px;color:var(--text-muted);">${esc(selected.phone)}</div>` : ''}
+                </div>
+                <div class="flex-wrap">
+                  <button type="button" class="btn btn-soft" data-action="copy-url" data-param="person" data-id="${esc(selected.id)}">${ICONS.copy} লিংক কপি</button>
+                  <button type="button" class="btn btn-whatsapp" data-action="wa-person" data-id="${esc(selected.id)}">${ICONS.wa} WhatsApp</button>
+                  <button type="button" class="btn btn-secondary" data-action="edit-person" data-id="${esc(selected.id)}">${ICONS.edit} তথ্য</button>
+                  <button type="button" class="btn btn-brand-soft" data-action="new-person-tx" data-person="${esc(selected.id)}" data-type="payable_add">${ICONS.plus} প্রাপ্য যোগ</button>
+                  <button type="button" class="btn btn-primary" data-action="new-person-tx" data-person="${esc(selected.id)}" data-type="payment_given">${ICONS.plus} টাকা দিন</button>
+                </div>
+              </div>
+
+              <div class="grid-3">
+                <div class="card" style="background:var(--surface-muted);"><div class="kpi-label">মোট প্রাপ্য</div><div class="kpi-val mono">${esc(formatTaka(ledger.totalPayable))}</div></div>
+                <div class="card" style="background:var(--surface-muted);"><div class="kpi-label">মোট দেওয়া হয়েছে</div><div class="kpi-val mono text-green">${esc(formatTaka(ledger.totalGiven))}</div></div>
+                <div class="card" style="background:var(--surface-muted);"><div class="kpi-label">বর্তমান বাকি প্রাপ্য</div><div class="kpi-val mono ${ledger.currentBalance > 0 ? 'text-red' : 'text-green'}">${esc(formatTaka(ledger.currentBalance))}</div></div>
+              </div>
+
+              <div class="table-wrap">
+                <table class="ledger-table">
+                  <thead>
+                    <tr>
+                      <th>তারিখ</th>
+                      <th>বিবরণ ও উদ্দেশ্য</th>
+                      <th class="num-col">প্রাপ্য</th>
+                      <th class="num-col">প্রদান</th>
+                      <th class="num-col">ব্যালেন্স</th>
+                      <th class="num-col">অ্যাকশন</th>
+                    </tr>
+                  </thead>
+                  <tbody>${rows || `<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-muted);">কোনো এন্ট্রি নেই।</td></tr>`}</tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // --- Main Render ---
+      function render() {
+        const root = document.getElementById('app');
+        if (!root) return;
+
+        if (isPublicRoute()) {
+          root.innerHTML = renderPublicPortal();
+          return;
+        }
+
+        if (!state.authReady) {
+          root.innerHTML = `<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;color:#4b554e;">অ্যাকাউন্ট যাচাই হচ্ছে...</div>`;
+          return;
+        }
+
+        if (!state.user || !state.isAdmin) {
+          root.innerHTML = renderLogin();
+          return;
+        }
+
+        const activeParty = state.selectedParty
+          ? (state.selectedParty.type === 'supplier' ? state.suppliers : state.customers).find(
+              (p) => p.id === state.selectedParty.id,
+            )
+          : null;
+
+        const activeInvoiceTx = state.activeInvoiceId
+          ? state.transactions.find((t) => t.id === state.activeInvoiceId)
+          : null;
+
+        let activeInvoice = null;
+        if (activeInvoiceTx) {
+          const isSup =
+            activeInvoiceTx.type === 'supplier_purchase' ||
+            activeInvoiceTx.type === 'supplier_payment' ||
+            activeInvoiceTx.type === 'supplier_due_add';
+          const p = (isSup ? state.suppliers : state.customers).find(
+            (x) => x.id === activeInvoiceTx.partyId,
+          );
+          activeInvoice = {
+            ...activeInvoiceTx,
+            partyType: isSup ? 'supplier' : 'customer',
+            partyName: p?.name || activeInvoiceTx.partyName,
+            partyPhone: p?.phone || activeInvoiceTx.partyPhone,
+            partyAddress: p?.address || activeInvoiceTx.partyAddress,
+            partyTotalDue: p?.currentDue ?? activeInvoiceTx.dueAmount,
+          };
+        }
+
+        const navItems = [
+          { id: 'dashboard', label: 'ড্যাশবোর্ড' },
+          { id: 'suppliers', label: 'সাপ্লায়ার' },
+          { id: 'customers', label: 'কাস্টমার' },
+          { id: 'home_expenses', label: 'বাসার খরচ' },
+          { id: 'persons', label: 'মামা ও হিমেল' },
+        ];
+
+        let mainHtml = '';
+        if (activeInvoice) mainHtml = renderInvoiceView(activeInvoice, false);
+        else if (activeParty && state.selectedParty) mainHtml = renderPartyProfile(activeParty, state.selectedParty.type);
+        else if (state.activeTab === 'suppliers') mainHtml = renderSuppliers();
+        else if (state.activeTab === 'customers') mainHtml = renderCustomers();
+        else if (state.activeTab === 'home_expenses') mainHtml = renderHomeExpenses();
+        else if (state.activeTab === 'persons') mainHtml = renderPersons();
+        else mainHtml = renderDashboard();
+
+        root.innerHTML = `
+          <header class="app-header no-print">
+            <div class="container">
+              <div class="header-inner">
+                <button type="button" class="brand-btn" data-action="switch-tab" data-tab="dashboard">
+                  <img src="${LOGO_URL}" alt="এমএস ফ্যাশন" referrerpolicy="no-referrer" class="brand-logo" />
+                  <span class="brand-sub">টালি খাতা ও ইনভয়েস</span>
+                </button>
+                <nav class="nav-tabs">
+                  ${navItems
+                    .map(
+                      (item) => `<button type="button" class="nav-tab ${state.activeTab === item.id && !activeParty && !activeInvoice ? 'active' : ''}" data-action="switch-tab" data-tab="${item.id}">${item.label}</button>`,
+                    )
+                    .join('')}
+                </nav>
+                <div class="flex-wrap">
+                  <button type="button" class="btn btn-primary btn-sm" data-action="new-tx" data-type="customer_sale">${ICONS.plus} নতুন হিসাব</button>
+                  <button type="button" class="btn btn-soft btn-icon" title="লগআউট" data-action="sign-out">${ICONS.logout}</button>
+                </div>
+              </div>
+              <div class="mobile-nav">
+                ${navItems
+                  .map(
+                    (item) => `<button type="button" class="mobile-tab ${state.activeTab === item.id && !activeParty && !activeInvoice ? 'active' : ''}" data-action="switch-tab" data-tab="${item.id}">${item.label}</button>`,
+                  )
+                  .join('')}
+              </div>
+            </div>
+          </header>
+          <main class="container main-content">${mainHtml}</main>
+        `;
+
+        bindChartTooltip();
+      }
+
+      function bindChartTooltip() {
+        const wrap = document.getElementById('monthly-chart-wrap');
+        const tip = document.getElementById('chart-tooltip');
+        if (!wrap || !tip) return;
+        wrap.querySelectorAll('.chart-bar-group').forEach((g) => {
+          const show = (ev) => {
+            const month = g.getAttribute('data-month');
+            const p = Number(g.getAttribute('data-purchases') || 0);
+            const s = Number(g.getAttribute('data-sales') || 0);
+            const diff = s - p;
+            tip.innerHTML = `
+              <div style="font-weight:700;border-bottom:1px solid #f2f4f0;padding-bottom:4px;margin-bottom:6px;">${esc(month)}</div>
+              <div class="flex-between"><span>মোট কেনাকাটা</span><strong class="mono">${esc(formatTaka(p))}</strong></div>
+              <div class="flex-between"><span>মোট বিক্রি</span><strong class="mono text-brand">${esc(formatTaka(s))}</strong></div>
+              <div class="flex-between" style="border-top:1px solid #f2f4f0;margin-top:6px;padding-top:4px;">
+                <span>বিক্রি - কেনাকাটা</span>
+                <strong class="mono ${diff >= 0 ? 'text-green' : 'text-red'}">${diff > 0 ? '+' : ''}${esc(formatTaka(diff))}</strong>
+              </div>
+            `;
+            tip.style.display = 'block';
+            const rect = wrap.getBoundingClientRect();
+            const x = Math.min(rect.width - 205, Math.max(8, ev.clientX - rect.left - 80));
+            tip.style.left = `${x}px`;
+            tip.style.top = '8px';
+          };
+          g.addEventListener('mouseenter', show);
+          g.addEventListener('mousemove', show);
+          g.addEventListener('click', show);
+          g.addEventListener('mouseleave', () => {
+            tip.style.display = 'none';
+          });
+        });
+      }
+
+      // --- Modals ---
+      function closeModal() {
+        const mr = document.getElementById('modal-root');
+        if (mr) mr.innerHTML = '';
+      }
+
+      function openPartyModal(partyType, editingId = null) {
+        const list = partyType === 'supplier' ? state.suppliers : state.customers;
+        const editing = editingId ? list.find((p) => p.id === editingId) : null;
+        const isSup = partyType === 'supplier';
+        const mr = document.getElementById('modal-root');
+        mr.innerHTML = `
+          <div class="modal-backdrop" data-action="modal-backdrop">
+            <div class="modal-panel modal-sm" onclick="event.stopPropagation()">
+              <div class="flex-between" style="margin-bottom:16px;">
+                <h2 style="margin:0;font-size:18px;font-weight:700;">${editing ? (isSup ? 'সাপ্লায়ার তথ্য সম্পাদনা' : 'কাস্টমার তথ্য সম্পাদনা') : (isSup ? 'নতুন সাপ্লায়ার যোগ করুন' : 'নতুন কাস্টমার যোগ করুন')}</h2>
+                <button type="button" class="btn btn-soft btn-sm" data-action="close-modal">বন্ধ</button>
+              </div>
+              <form id="party-form" class="stack-md">
+                <div><label class="field-label">নাম *</label><input class="input" id="pf-name" required value="${esc(editing?.name || '')}" /></div>
+                <div><label class="field-label">মোবাইল নম্বর</label><input class="input" id="pf-phone" value="${esc(editing?.phone || '')}" /></div>
+                <div><label class="field-label">ঠিকানা</label><input class="input" id="pf-address" value="${esc(editing?.address || '')}" /></div>
+                ${
+                  !editing
+                    ? `<div style="background:var(--surface-muted);border:1px solid var(--border);border-radius:12px;padding:12px;">
+                        <label class="field-label">শুরুতে আগের বাকি (যদি থাকে)</label>
+                        <input type="number" min="0" class="input" id="pf-opening" placeholder="0" />
+                      </div>`
+                    : ''
+                }
+                <div class="flex-wrap" style="justify-content:flex-end;">
+                  <button type="button" class="btn btn-soft" data-action="close-modal">বাতিল</button>
+                  <button type="submit" class="btn btn-primary" id="pf-submit">সংরক্ষণ করুন</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        `;
+        document.getElementById('party-form').onsubmit = async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById('pf-submit');
+          btn.disabled = true;
+          try {
+            const uid = auth.currentUser.uid;
+            const colName = isSup ? 'suppliers' : 'customers';
+            const pubCol = isSup ? 'publicSupplierLedgers' : 'publicCustomerLedgers';
+            const id = editing?.id || generateDocId(colName);
+            const name = clampString(document.getElementById('pf-name').value, BLUEPRINT_LIMITS.NAME_MAX);
+            const phone = clampString(document.getElementById('pf-phone').value, BLUEPRINT_LIMITS.PHONE_MAX);
+            const address = clampString(document.getElementById('pf-address').value, BLUEPRINT_LIMITS.ADDRESS_MAX);
+            const openingDue = !editing ? Math.max(0, Number(document.getElementById('pf-opening')?.value || 0)) : 0;
+
+            const existingTxs = state.transactions.filter((t) => t.partyId === id);
+            let openingTx = null;
+            if (!editing && openingDue > 0) {
+              openingTx = {
+                id: generateDocId('transactions'),
+                type: isSup ? 'supplier_due_add' : 'customer_due_add',
+                date: getTodayIsoDate(),
+                partyId: id,
+                partyName: name,
+                partyPhone: phone,
+                partyAddress: address,
+                invoiceNo: 'PREV-1001',
+                items: [],
+                subtotal: openingDue,
+                discount: 0,
+                totalAmount: openingDue,
+                paidAmount: 0,
+                dueAmount: openingDue,
+                paymentMethod: 'পূর্বের বাকি',
+                note: 'শুরুতে আগের বাকি যোগ',
+                ownerUid: uid,
+              };
+            }
+
+            const ledger = computePartyLedger(openingTx ? [...existingTxs, openingTx] : existingTxs);
+            const batch = writeBatch(db);
+            const partyRef = doc(db, colName, id);
+            if (editing) {
+              batch.update(partyRef, { name, phone, address, ...ledgerTotals(ledger), updatedAt: serverTimestamp() });
+            } else {
+              batch.set(partyRef, { id, name, phone, address, ...ledgerTotals(ledger), ownerUid: uid, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+            }
+            if (openingTx) {
+              batch.set(doc(db, 'transactions', openingTx.id), { ...openingTx, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+            }
+            batch.set(doc(db, pubCol, id), {
+              id,
+              partyType,
+              name,
+              phone,
+              address,
+              ...ledgerTotals(ledger),
+              shareEnabled: true,
+              entries: ledger.entries,
+              ownerUid: editing?.ownerUid || uid,
+              updatedAt: serverTimestamp(),
+            });
+            await batch.commit();
+            closeModal();
+            showToast('তথ্য সংরক্ষণ করা হয়েছে!');
+          } catch (err) {
+            showToast(err.message || 'সংরক্ষণ করা যায়নি।', 'error');
+            btn.disabled = false;
+          }
+        };
+      }
+
+      function ledgerTotals(l) {
+        return { totalBilled: l.totalBilled, totalPaid: l.totalPaid, currentDue: l.currentDue };
+      }
+
+      function openTxModal(initialType = 'customer_sale', prePartyId = null, editingTxId = null) {
+        const editing = editingTxId ? state.transactions.find((t) => t.id === editingTxId) : null;
+        let txType = editing?.type || initialType;
+        let partyId = editing?.partyId || prePartyId || '';
+        let items = editing?.items?.length
+          ? editing.items.map((it) => ({ ...it }))
+          : [{ name: '', details: '', qty: 1, unitPrice: 0, lineTotal: 0 }];
+
+        const renderModal = () => {
+          const isSup = txType.startsWith('supplier_');
+          const isBill = txType === 'customer_sale' || txType === 'supplier_purchase';
+          const isDueAdd = txType === 'customer_due_add' || txType === 'supplier_due_add';
+          const partyList = isSup ? state.suppliers : state.customers;
+          if (!partyId && partyList.length > 0 && !editing) partyId = partyList[0].id;
+          const selectedParty = partyList.find((p) => p.id === partyId);
+
+          const typeOptions = [
+            { id: 'customer_sale', label: 'কাস্টমার বিক্রি / ইনভয়েস' },
+            { id: 'customer_payment', label: 'কাস্টমার টাকা আদায়' },
+            { id: 'customer_due_add', label: 'কাস্টমার আগের বাকি যোগ' },
+            { id: 'supplier_purchase', label: 'সাপ্লায়ার থেকে মাল ক্রয়' },
+            { id: 'supplier_payment', label: 'সাপ্লায়ারকে টাকা পরিশোধ' },
+            { id: 'supplier_due_add', label: 'সাপ্লায়ার আগের বাকি / নগদ নেওয়া' },
+          ];
+
+          const mr = document.getElementById('modal-root');
+          mr.innerHTML = `
+            <div class="modal-backdrop" data-action="modal-backdrop">
+              <div class="modal-panel" onclick="event.stopPropagation()">
+                <div class="flex-between" style="margin-bottom:16px;">
+                  <h2 style="margin:0;font-size:18px;font-weight:700;">${editing ? 'হিসাব সম্পাদনা' : 'নতুন হিসাব এন্ট্রি'}</h2>
+                  <button type="button" class="btn btn-soft btn-sm" data-action="close-modal">বন্ধ</button>
+                </div>
+                <form id="tx-form" class="stack-md">
+                  <div class="grid-2">
+                    <div>
+                      <label class="field-label">লেনদেনের ধরন</label>
+                      <select class="select" id="tx-type" ${editing ? 'disabled' : ''}>
+                        ${typeOptions.map((o) => `<option value="${o.id}" ${o.id === txType ? 'selected' : ''}>${o.label}</option>`).join('')}
+                      </select>
+                    </div>
+                    <div>
+                      <label class="field-label">তারিখ</label>
+                      <input type="date" class="input" id="tx-date" value="${esc(editing?.date || getTodayIsoDate())}" required />
+                    </div>
+                  </div>
+
+                  <div style="background:var(--surface-muted);border:1px solid var(--border);border-radius:12px;padding:12px;">
+                    <div class="flex-between" style="margin-bottom:6px;">
+                      <label class="field-label" style="margin:0;">${isSup ? 'সাপ্লায়ার নির্বাচন করুন' : 'কাস্টমার নির্বাচন করুন'}</label>
+                      <label style="font-size:12px;cursor:pointer;"><input type="checkbox" id="tx-new-party-toggle" /> নতুন নাম যোগ করুন</label>
+                    </div>
+                    <div id="tx-existing-party-wrap">
+                      <select class="select" id="tx-party-id">
+                        <option value="">নির্বাচন করুন...</option>
+                        ${partyList.map((p) => `<option value="${esc(p.id)}" ${p.id === partyId ? 'selected' : ''}>${esc(p.name)} (বাকি: ${esc(formatTaka(p.currentDue))})</option>`).join('')}
+                      </select>
+                      ${selectedParty ? `<div style="font-size:12px;color:var(--text-muted);margin-top:6px;">বর্তমান বাকি: <strong class="mono ${selectedParty.currentDue > 0 ? 'text-red' : 'text-green'}">${esc(formatTaka(selectedParty.currentDue))}</strong></div>` : ''}
+                    </div>
+                    <div id="tx-new-party-wrap" style="display:none;margin-top:8px;" class="grid-2">
+                      <input class="input" id="tx-new-name" placeholder="নাম *" />
+                      <input class="input" id="tx-new-phone" placeholder="মোবাইল নম্বর" />
+                    </div>
+                  </div>
+
+                  ${
+                    isBill
+                      ? `
+                    <div>
+                      <div class="flex-between" style="margin-bottom:8px;">
+                        <label class="field-label" style="margin:0;">পণ্যের বিবরণ</label>
+                        <button type="button" class="btn btn-brand-soft btn-sm" id="tx-add-item">${ICONS.plus} আইটেম যোগ</button>
+                      </div>
+                      <div id="tx-items-list" class="stack-md">
+                        ${items
+                          .map(
+                            (it, i) => `
+                          <div class="grid-3" style="grid-template-columns:2fr 1fr 1fr auto;gap:8px;align-items:center;">
+                            <input class="input tx-item-name" data-i="${i}" placeholder="পণ্যের নাম *" value="${esc(it.name)}" required />
+                            <input type="number" min="1" class="input tx-item-qty" data-i="${i}" placeholder="পিস" value="${it.qty}" required />
+                            <input type="number" min="0" class="input tx-item-price" data-i="${i}" placeholder="দর ৳" value="${it.unitPrice}" required />
+                            ${items.length > 1 ? `<button type="button" class="btn btn-danger-soft btn-icon tx-rem-item" data-i="${i}">${ICONS.trash}</button>` : '<span></span>'}
+                          </div>
+                        `,
+                          )
+                          .join('')}
+                      </div>
+                    </div>
+                    <div class="grid-3">
+                      <div><label class="field-label">ছাড় / ডিসকাউন্ট (৳)</label><input type="number" min="0" class="input" id="tx-discount" value="${editing?.discount || 0}" /></div>
+                      <div><label class="field-label">নগদ জমা / পরিশোধ (৳)</label><input type="number" min="0" class="input" id="tx-paid" value="${editing?.paidAmount || 0}" /></div>
+                      <div><label class="field-label">মাধ্যম</label><select class="select" id="tx-method">${BASE_PAYMENT_METHODS.map((m) => `<option value="${m}" ${(editing?.paymentMethod || 'নগদ') === m ? 'selected' : ''}>${m}</option>`).join('')}</select></div>
+                    </div>
+                    <div id="tx-bill-summary" style="font-size:13px;font-weight:700;padding:10px 12px;background:var(--surface-pill);border-radius:10px;"></div>
+                  `
+                      : isDueAdd
+                        ? `
+                    <div class="grid-2">
+                      <div><label class="field-label">বাকি / টাকার পরিমাণ (৳) *</label><input type="number" min="1" class="input" id="tx-direct-amount" required value="${editing?.totalAmount || ''}" /></div>
+                      <div><label class="field-label">মাধ্যম</label><select class="select" id="tx-method">${LEDGER_PAYMENT_METHODS.map((m) => `<option value="${m}" ${(editing?.paymentMethod || 'নগদ') === m ? 'selected' : ''}>${m}</option>`).join('')}</select></div>
+                    </div>
+                  `
+                        : `
+                    <div class="grid-2">
+                      <div><label class="field-label">${isSup ? 'পরিশোধকৃত টাকা (৳) *' : 'আদায়কৃত টাকা (৳) *'}</label><input type="number" min="1" class="input" id="tx-paid" required value="${editing?.paidAmount || ''}" /></div>
+                      <div><label class="field-label">মাধ্যম</label><select class="select" id="tx-method">${BASE_PAYMENT_METHODS.map((m) => `<option value="${m}" ${(editing?.paymentMethod || 'নগদ') === m ? 'selected' : ''}>${m}</option>`).join('')}</select></div>
+                    </div>
+                  `
+                  }
+
+                  <div class="grid-2">
+                    <div><label class="field-label">ইনভয়েস / চালান নং</label><input class="input" id="tx-inv-no" value="${esc(editing?.invoiceNo || generateInvoiceNo(txType))}" /></div>
+                    <div><label class="field-label">নোট / মন্তব্য</label><input class="input" id="tx-note" value="${esc(editing?.note || '')}" placeholder="ঐচ্ছিক বিবরণ..." /></div>
+                  </div>
+
+                  <div class="flex-wrap" style="justify-content:flex-end;">
+                    <button type="button" class="btn btn-soft" data-action="close-modal">বাতিল</button>
+                    <button type="submit" class="btn btn-primary" id="tx-submit">সংরক্ষণ করুন</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          `;
+
+          const updateSummary = () => {
+            const sumBox = document.getElementById('tx-bill-summary');
+            if (!sumBox) return;
+            const sub = items.reduce((s, it) => s + (Number(it.qty) || 0) * (Number(it.unitPrice) || 0), 0);
+            const disc = Math.max(0, Number(document.getElementById('tx-discount')?.value || 0));
+            const tot = Math.max(0, sub - disc);
+            const paid = Math.max(0, Number(document.getElementById('tx-paid')?.value || 0));
+            sumBox.textContent = `মোট বিল: ${formatTaka(tot)} · জমা: ${formatTaka(paid)} · বাকি: ${formatTaka(tot - paid)}`;
+          };
+          updateSummary();
+
+          document.getElementById('tx-type')?.addEventListener('change', (e) => {
+            const next = e.target.value;
+            const wasSup = txType.startsWith('supplier_');
+            const nowSup = next.startsWith('supplier_');
+            if (wasSup !== nowSup) partyId = '';
+            txType = next;
+            renderModal();
+          });
+
+          document.getElementById('tx-party-id')?.addEventListener('change', (e) => {
+            partyId = e.target.value;
+          });
+
+          document.getElementById('tx-new-party-toggle')?.addEventListener('change', (e) => {
+            const checked = e.target.checked;
+            document.getElementById('tx-existing-party-wrap').style.display = checked ? 'none' : 'block';
+            document.getElementById('tx-new-party-wrap').style.display = checked ? 'grid' : 'none';
+          });
+
+          document.getElementById('tx-add-item')?.addEventListener('click', () => {
+            items.push({ name: '', details: '', qty: 1, unitPrice: 0, lineTotal: 0 });
+            renderModal();
+          });
+
+          document.querySelectorAll('.tx-rem-item').forEach((btn) => {
+            btn.addEventListener('click', () => {
+              items.splice(Number(btn.getAttribute('data-i')), 1);
+              renderModal();
+            });
+          });
+
+          document.querySelectorAll('.tx-item-name, .tx-item-qty, .tx-item-price').forEach((inp) => {
+            inp.addEventListener('input', () => {
+              const i = Number(inp.getAttribute('data-i'));
+              if (inp.classList.contains('tx-item-name')) items[i].name = inp.value;
+              if (inp.classList.contains('tx-item-qty')) items[i].qty = Number(inp.value) || 0;
+              if (inp.classList.contains('tx-item-price')) items[i].unitPrice = Number(inp.value) || 0;
+              updateSummary();
+            });
+          });
+
+          document.getElementById('tx-discount')?.addEventListener('input', updateSummary);
+          document.getElementById('tx-paid')?.addEventListener('input', updateSummary);
+
+          document.getElementById('tx-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('tx-submit');
+            btn.disabled = true;
+            try {
+              const uid = auth.currentUser.uid;
+              const isNew = document.getElementById('tx-new-party-toggle')?.checked;
+              const partyCol = isSup ? 'suppliers' : 'customers';
+              const pubCol = isSup ? 'publicSupplierLedgers' : 'publicCustomerLedgers';
+              let finalPartyId = partyId;
+              let partyName = selectedParty?.name || '';
+              let partyPhone = selectedParty?.phone || '';
+              let partyAddress = selectedParty?.address || '';
+              let existingParty = selectedParty;
+
+              if (isNew) {
+                partyName = clampString(document.getElementById('tx-new-name').value, BLUEPRINT_LIMITS.NAME_MAX);
+                partyPhone = clampString(document.getElementById('tx-new-phone').value, BLUEPRINT_LIMITS.PHONE_MAX);
+                partyAddress = '';
+                if (!partyName) throw new Error('নাম দিন।');
+                finalPartyId = generateDocId(partyCol);
+                existingParty = null;
+              } else if (!finalPartyId || !existingParty) {
+                throw new Error('কাস্টমার বা সাপ্লায়ার নির্বাচন করুন।');
+              }
+
+              const cleanItems = isBill
+                ? items
+                    .filter((it) => String(it.name || '').trim())
+                    .slice(0, BLUEPRINT_LIMITS.ITEMS_MAX)
+                    .map((it) => {
+                      const q = Math.max(0, Number(it.qty) || 0);
+                      const up = Math.max(0, Number(it.unitPrice) || 0);
+                      return { name: clampString(it.name, 120), details: '', qty: q, unitPrice: up, lineTotal: Math.round(q * up * 100) / 100 };
+                    })
+                : [];
+              if (isBill && cleanItems.length === 0) throw new Error('কমপক্ষে একটি পণ্যের নাম দিন।');
+
+              const directAmt = isDueAdd ? Math.max(0, Number(document.getElementById('tx-direct-amount').value || 0)) : 0;
+              if (isDueAdd && directAmt <= 0) throw new Error('সঠিক টাকার পরিমাণ দিন।');
+
+              const subtotal = isBill ? cleanItems.reduce((s, it) => s + it.lineTotal, 0) : isDueAdd ? directAmt : 0;
+              const discount = isBill ? Math.max(0, Number(document.getElementById('tx-discount')?.value || 0)) : 0;
+              const totalAmount = isBill ? Math.max(0, subtotal - discount) : isDueAdd ? directAmt : 0;
+              const paidAmount = isDueAdd ? 0 : Math.max(0, Number(document.getElementById('tx-paid')?.value || 0));
+              const dueAmount = isBill || isDueAdd ? totalAmount - paidAmount : 0;
+
+              const txId = editing?.id || generateDocId('transactions');
+              const txPayload = {
+                id: txId,
+                type: txType,
+                date: clampString(document.getElementById('tx-date').value, BLUEPRINT_LIMITS.DATE_MAX),
+                partyId: finalPartyId,
+                partyName,
+                partyPhone,
+                partyAddress,
+                invoiceNo: clampString(document.getElementById('tx-inv-no').value, BLUEPRINT_LIMITS.INVOICE_NO_MAX) || generateInvoiceNo(txType),
+                items: cleanItems,
+                subtotal,
+                discount,
+                totalAmount,
+                paidAmount,
+                dueAmount,
+                paymentMethod: clampString(document.getElementById('tx-method').value, BLUEPRINT_LIMITS.PAYMENT_METHOD_MAX),
+                note: clampString(document.getElementById('tx-note').value, BLUEPRINT_LIMITS.NOTE_MAX),
+                ownerUid: editing?.ownerUid || uid,
+              };
+
+              const partyTxs = state.transactions.filter((t) => t.partyId === finalPartyId);
+              const nextPartyTxs = editing ? partyTxs.map((t) => (t.id === txId ? txPayload : t)) : [...partyTxs, txPayload];
+              const ledger = computePartyLedger(nextPartyTxs);
+
+              const batch = writeBatch(db);
+              const partyRef = doc(db, partyCol, finalPartyId);
+              if (existingParty) {
+                batch.update(partyRef, { name: partyName, phone: partyPhone, address: partyAddress, ...ledgerTotals(ledger), updatedAt: serverTimestamp() });
+              } else {
+                batch.set(partyRef, { id: finalPartyId, name: partyName, phone: partyPhone, address: partyAddress, ...ledgerTotals(ledger), ownerUid: uid, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+              }
+
+              const txRef = doc(db, 'transactions', txId);
+              if (editing) {
+                batch.update(txRef, { ...txPayload, updatedAt: serverTimestamp() });
+              } else {
+                batch.set(txRef, { ...txPayload, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+              }
+
+              batch.set(doc(db, pubCol, finalPartyId), {
+                id: finalPartyId,
+                partyType: isSup ? 'supplier' : 'customer',
+                name: partyName,
+                phone: partyPhone,
+                address: partyAddress,
+                ...ledgerTotals(ledger),
+                shareEnabled: true,
+                entries: ledger.entries,
+                ownerUid: existingParty?.ownerUid || uid,
+                updatedAt: serverTimestamp(),
+              });
+
+              if (isBill) {
+                batch.set(doc(db, 'publicInvoices', txId), {
+                  id: txId,
+                  invoiceNo: txPayload.invoiceNo,
+                  date: txPayload.date,
+                  partyType: isSup ? 'supplier' : 'customer',
+                  partyId: finalPartyId,
+                  partyName,
+                  partyPhone,
+                  partyAddress,
+                  items: txPayload.items,
+                  subtotal: txPayload.subtotal,
+                  discount: txPayload.discount,
+                  totalAmount: txPayload.totalAmount,
+                  paidAmount: txPayload.paidAmount,
+                  dueAmount: txPayload.dueAmount,
+                  partyTotalDue: ledger.currentDue,
+                  paymentMethod: txPayload.paymentMethod,
+                  note: txPayload.note,
+                  shareEnabled: true,
+                  ownerUid: uid,
+                  createdAt: editing?.createdAt || serverTimestamp(),
+                  updatedAt: serverTimestamp(),
+                });
+              }
+
+              for (const otherTx of partyTxs.filter((t) => t.id !== txId && (t.type === 'customer_sale' || t.type === 'supplier_purchase')).slice(0, 50)) {
+                batch.update(doc(db, 'publicInvoices', otherTx.id), {
+                  partyName,
+                  partyPhone,
+                  partyAddress,
+                  partyTotalDue: ledger.currentDue,
+                  updatedAt: serverTimestamp(),
+                });
+              }
+
+              await batch.commit();
+              closeModal();
+              showToast('হিসাব সংরক্ষণ করা হয়েছে!');
+            } catch (err) {
+              showToast(err.message || 'সংরক্ষণ করা যায়নি।', 'error');
+              btn.disabled = false;
+            }
+          };
+        };
+
+        renderModal();
+      }
+
+      function openExpenseModal(editingId = null) {
+        const editing = editingId ? state.homeExpenses.find((e) => e.id === editingId) : null;
+        let items = editing?.items?.length ? editing.items.map((it) => ({ ...it })) : [{ name: '', qtyText: '', amount: 0 }];
+
+        const renderModal = () => {
+          const mr = document.getElementById('modal-root');
+          mr.innerHTML = `
+            <div class="modal-backdrop" data-action="modal-backdrop">
+              <div class="modal-panel" onclick="event.stopPropagation()">
+                <div class="flex-between" style="margin-bottom:16px;">
+                  <h2 style="margin:0;font-size:18px;font-weight:700;">${editing ? 'বাসার খরচ সম্পাদনা' : 'নতুন বাসার খরচ যোগ'}</h2>
+                  <button type="button" class="btn btn-soft btn-sm" data-action="close-modal">বন্ধ</button>
+                </div>
+                <form id="exp-form" class="stack-md">
+                  <div class="grid-2">
+                    <div><label class="field-label">তারিখ</label><input type="date" class="input" id="ef-date" required value="${esc(editing?.date || getTodayIsoDate())}" /></div>
+                    <div><label class="field-label">শিরোনাম *</label><input class="input" id="ef-title" required placeholder="যেমন: দৈনিক বাজার" value="${esc(editing?.title || '')}" /></div>
+                  </div>
+                  <div>
+                    <div class="flex-between" style="margin-bottom:8px;">
+                      <label class="field-label" style="margin:0;">কী কী কেনা হয়েছে</label>
+                      <button type="button" class="btn btn-brand-soft btn-sm" id="ef-add-item">${ICONS.plus} আইটেম যোগ</button>
+                    </div>
+                    <div class="stack-md">
+                      ${items
+                        .map(
+                          (it, i) => `
+                        <div class="grid-3" style="grid-template-columns:2fr 1fr 1fr auto;gap:8px;align-items:center;">
+                          <input class="input ef-name" data-i="${i}" placeholder="জিনিসের নাম *" value="${esc(it.name)}" required />
+                          <input class="input ef-qty" data-i="${i}" placeholder="পরিমাণ" value="${esc(it.qtyText)}" />
+                          <input type="number" min="0" class="input ef-amt" data-i="${i}" placeholder="টাকা ৳ *" value="${it.amount || ''}" required />
+                          ${items.length > 1 ? `<button type="button" class="btn btn-danger-soft btn-icon ef-rem" data-i="${i}">${ICONS.trash}</button>` : '<span></span>'}
+                        </div>
+                      `,
+                        )
+                        .join('')}
+                    </div>
+                  </div>
+                  <div class="grid-3">
+                    <div><label class="field-label">কে দিয়েছেন</label><select class="select" id="ef-paidby"><option value="আমি" ${(editing?.paidBy || 'আমি') === 'আমি' ? 'selected' : ''}>আমি</option><option value="মাইনু মামা" ${editing?.paidBy === 'মাইনু মামা' ? 'selected' : ''}>মাইনু মামা</option></select></div>
+                    <div><label class="field-label">মাধ্যম</label><select class="select" id="ef-method">${EXPENSE_PAYMENT_METHODS.map((m) => `<option value="${m}" ${(editing?.paymentMethod || 'নগদ') === m ? 'selected' : ''}>${m}</option>`).join('')}</select></div>
+                    <div><label class="field-label">নোট</label><input class="input" id="ef-note" value="${esc(editing?.note || '')}" /></div>
+                  </div>
+                  <div class="flex-wrap" style="justify-content:flex-end;">
+                    <button type="button" class="btn btn-soft" data-action="close-modal">বাতিল</button>
+                    <button type="submit" class="btn btn-primary" id="ef-submit">সংরক্ষণ করুন</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          `;
+          document.getElementById('ef-add-item').onclick = () => {
+            items.push({ name: '', qtyText: '', amount: 0 });
+            renderModal();
+          };
+          document.querySelectorAll('.ef-rem').forEach((b) => {
+            b.onclick = () => {
+              items.splice(Number(b.getAttribute('data-i')), 1);
+              renderModal();
+            };
+          });
+          document.querySelectorAll('.ef-name, .ef-qty, .ef-amt').forEach((inp) => {
+            inp.oninput = () => {
+              const i = Number(inp.getAttribute('data-i'));
+              if (inp.classList.contains('ef-name')) items[i].name = inp.value;
+              if (inp.classList.contains('ef-qty')) items[i].qtyText = inp.value;
+              if (inp.classList.contains('ef-amt')) items[i].amount = Math.max(0, Number(inp.value) || 0);
+            };
+          });
+          document.getElementById('exp-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('ef-submit');
+            btn.disabled = true;
+            try {
+              const uid = auth.currentUser.uid;
+              const id = editing?.id || generateDocId('homeExpenses');
+              const date = clampString(document.getElementById('ef-date').value, BLUEPRINT_LIMITS.DATE_MAX);
+              const cleanItems = items
+                .filter((it) => String(it.name || '').trim())
+                .slice(0, BLUEPRINT_LIMITS.ITEMS_MAX)
+                .map((it) => ({
+                  name: clampString(it.name, 120),
+                  qtyText: clampString(it.qtyText, 60),
+                  amount: Math.max(0, Number(it.amount) || 0),
+                }));
+              if (cleanItems.length === 0) throw new Error('কমপক্ষে একটি আইটেম দিন।');
+              const payload = {
+                id,
+                date,
+                monthKey: date.slice(0, 7),
+                title: clampString(document.getElementById('ef-title').value, BLUEPRINT_LIMITS.TITLE_MAX),
+                items: cleanItems,
+                totalAmount: cleanItems.reduce((s, it) => s + it.amount, 0),
+                paidBy: clampString(document.getElementById('ef-paidby').value, 60),
+                paymentMethod: clampString(document.getElementById('ef-method').value, BLUEPRINT_LIMITS.PAYMENT_METHOD_MAX),
+                note: clampString(document.getElementById('ef-note').value, BLUEPRINT_LIMITS.NOTE_MAX),
+              };
+              const ref = doc(db, 'homeExpenses', id);
+              if (editing) await updateDoc(ref, { ...payload, updatedAt: serverTimestamp() });
+              else await setDoc(ref, { ...payload, ownerUid: uid, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+              closeModal();
+              showToast('বাসার খরচ সংরক্ষণ করা হয়েছে!');
+            } catch (err) {
+              showToast(err.message || 'সংরক্ষণ করা যায়নি।', 'error');
+              btn.disabled = false;
+            }
+          };
+        };
+        renderModal();
+      }
+
+      function openPersonModal(editingId = null) {
+        const editing = editingId ? state.persons.find((p) => p.id === editingId) : null;
+        const mr = document.getElementById('modal-root');
+        mr.innerHTML = `
+          <div class="modal-backdrop" data-action="modal-backdrop">
+            <div class="modal-panel modal-sm" onclick="event.stopPropagation()">
+              <div class="flex-between" style="margin-bottom:16px;">
+                <h2 style="margin:0;font-size:18px;font-weight:700;">${editing ? 'ব্যক্তির তথ্য সম্পাদনা' : 'নতুন ব্যক্তি যোগ করুন'}</h2>
+                <button type="button" class="btn btn-soft btn-sm" data-action="close-modal">বন্ধ</button>
+              </div>
+              <form id="person-form" class="stack-md">
+                <div><label class="field-label">নাম *</label><input class="input" id="per-name" required value="${esc(editing?.name || '')}" /></div>
+                <div><label class="field-label">মোবাইল নম্বর</label><input class="input" id="per-phone" value="${esc(editing?.phone || '')}" /></div>
+                <div><label class="field-label">পরিচয় / পদবি</label><input class="input" id="per-role" value="${esc(editing?.role || 'ব্যক্তিগত')}" /></div>
+                ${
+                  !editing
+                    ? `<div style="background:var(--surface-muted);border:1px solid var(--border);border-radius:12px;padding:12px;" class="grid-2">
+                        <div><label class="field-label">পূর্বের হিসাবের ধরন</label><select class="select" id="per-open-type"><option value="payable_add">আগের বাকি (পাবেন)</option><option value="payment_given">আগে দেওয়া হয়েছে</option></select></div>
+                        <div><label class="field-label">টাকা (৳)</label><input type="number" min="0" class="input" id="per-open-amt" placeholder="0" /></div>
+                      </div>`
+                    : ''
+                }
+                <div class="flex-wrap" style="justify-content:flex-end;">
+                  <button type="button" class="btn btn-soft" data-action="close-modal">বাতিল</button>
+                  <button type="submit" class="btn btn-primary" id="per-submit">সংরক্ষণ করুন</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        `;
+        document.getElementById('person-form').onsubmit = async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById('per-submit');
+          btn.disabled = true;
+          try {
+            const uid = auth.currentUser.uid;
+            const id = editing?.id || generateDocId('persons');
+            const name = clampString(document.getElementById('per-name').value, BLUEPRINT_LIMITS.NAME_MAX);
+            const phone = clampString(document.getElementById('per-phone').value, BLUEPRINT_LIMITS.PHONE_MAX);
+            const role = clampString(document.getElementById('per-role').value, BLUEPRINT_LIMITS.ROLE_MAX);
+            const openAmt = !editing ? Math.max(0, Number(document.getElementById('per-open-amt')?.value || 0)) : 0;
+            const openType = document.getElementById('per-open-type')?.value || 'payable_add';
+
+            const existingTxs = state.personTransactions.filter((t) => t.personId === id);
+            let openPtx = null;
+            if (!editing && openAmt > 0) {
+              openPtx = {
+                id: generateDocId('personTransactions'),
+                personId: id,
+                personName: name,
+                type: openType,
+                date: getTodayIsoDate(),
+                amount: openAmt,
+                purpose: openType === 'payment_given' ? 'পূর্বের হিসাব (আগে দেওয়া)' : 'পূর্বের হিসাব (আগের বাকি)',
+                paymentMethod: 'পূর্বের বাকি',
+                note: '',
+                ownerUid: uid,
+              };
+            }
+            const ledger = computePersonLedger(openPtx ? [...existingTxs, openPtx] : existingTxs);
+            const batch = writeBatch(db);
+            const pref = doc(db, 'persons', id);
+            const base = { name, phone, role, note: editing?.note || '', totalPayable: ledger.totalPayable, totalGiven: ledger.totalGiven, currentBalance: ledger.currentBalance };
+            if (editing) batch.update(pref, { ...base, updatedAt: serverTimestamp() });
+            else batch.set(pref, { id, ...base, ownerUid: uid, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+            if (openPtx) batch.set(doc(db, 'personTransactions', openPtx.id), { ...openPtx, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+            batch.set(doc(db, 'publicPersonLedgers', id), {
+              id,
+              name,
+              phone,
+              role,
+              totalPayable: ledger.totalPayable,
+              totalGiven: ledger.totalGiven,
+              currentBalance: ledger.currentBalance,
+              shareEnabled: true,
+              entries: ledger.entries,
+              ownerUid: editing?.ownerUid || uid,
+              updatedAt: serverTimestamp(),
+            });
+            await batch.commit();
+            state.selectedPersonId = id;
+            closeModal();
+            showToast('তথ্য সংরক্ষণ করা হয়েছে!');
+          } catch (err) {
+            showToast(err.message || 'সংরক্ষণ করা যায়নি।', 'error');
+            btn.disabled = false;
+          }
+        };
+      }
+
+      function openPersonTxModal(personId, txType = 'payment_given', editingPtxId = null) {
+        const editing = editingPtxId ? state.personTransactions.find((t) => t.id === editingPtxId) : null;
+        const pid = editing?.personId || personId;
+        const person = state.persons.find((p) => p.id === pid);
+        if (!person) return;
+
+        const mr = document.getElementById('modal-root');
+        mr.innerHTML = `
+          <div class="modal-backdrop" data-action="modal-backdrop">
+            <div class="modal-panel modal-sm" onclick="event.stopPropagation()">
+              <div class="flex-between" style="margin-bottom:16px;">
+                <h2 style="margin:0;font-size:18px;font-weight:700;">${esc(person.name)} — ${editing ? 'হিসাব সম্পাদনা' : 'নতুন হিসাব'}</h2>
+                <button type="button" class="btn btn-soft btn-sm" data-action="close-modal">বন্ধ</button>
+              </div>
+              <form id="ptx-form" class="stack-md">
+                <div class="grid-2">
+                  <div>
+                    <label class="field-label">ধরন</label>
+                    <select class="select" id="ptx-type">
+                      <option value="payment_given" ${(editing?.type || txType) === 'payment_given' ? 'selected' : ''}>টাকা প্রদান</option>
+                      <option value="payable_add" ${(editing?.type || txType) === 'payable_add' ? 'selected' : ''}>প্রাপ্য যোগ (বেতন/কমিশন)</option>
+                    </select>
+                  </div>
+                  <div><label class="field-label">তারিখ</label><input type="date" class="input" id="ptx-date" required value="${esc(editing?.date || getTodayIsoDate())}" /></div>
+                </div>
+                <div class="grid-2">
+                  <div><label class="field-label">টাকার পরিমাণ (৳) *</label><input type="number" min="1" class="input" id="ptx-amt" required value="${editing?.amount || ''}" /></div>
+                  <div><label class="field-label">মাধ্যম</label><select class="select" id="ptx-method">${LEDGER_PAYMENT_METHODS.map((m) => `<option value="${m}" ${(editing?.paymentMethod || 'নগদ') === m ? 'selected' : ''}>${m}</option>`).join('')}</select></div>
+                </div>
+                <div><label class="field-label">কী জন্য / বিবরণ *</label><input class="input" id="ptx-purpose" required value="${esc(editing?.purpose || '')}" placeholder="যেমন: বাজার বাবদ / বেতন" /></div>
+                <div><label class="field-label">নোট</label><input class="input" id="ptx-note" value="${esc(editing?.note || '')}" /></div>
+                <div class="flex-wrap" style="justify-content:flex-end;">
+                  <button type="button" class="btn btn-soft" data-action="close-modal">বাতিল</button>
+                  <button type="submit" class="btn btn-primary" id="ptx-submit">সংরক্ষণ করুন</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        `;
+        document.getElementById('ptx-form').onsubmit = async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById('ptx-submit');
+          btn.disabled = true;
+          try {
+            const uid = auth.currentUser.uid;
+            const ptxId = editing?.id || generateDocId('personTransactions');
+            const nextTx = {
+              id: ptxId,
+              personId: person.id,
+              personName: person.name,
+              type: document.getElementById('ptx-type').value,
+              date: clampString(document.getElementById('ptx-date').value, BLUEPRINT_LIMITS.DATE_MAX),
+              amount: Math.max(0, Number(document.getElementById('ptx-amt').value || 0)),
+              purpose: clampString(document.getElementById('ptx-purpose').value, BLUEPRINT_LIMITS.PURPOSE_MAX),
+              paymentMethod: clampString(document.getElementById('ptx-method').value, BLUEPRINT_LIMITS.PAYMENT_METHOD_MAX),
+              note: clampString(document.getElementById('ptx-note').value, BLUEPRINT_LIMITS.NOTE_MAX),
+              ownerUid: editing?.ownerUid || uid,
+            };
+            const list = state.personTransactions.filter((t) => t.personId === person.id);
+            const nextList = editing ? list.map((t) => (t.id === ptxId ? nextTx : t)) : [...list, nextTx];
+            const ledger = computePersonLedger(nextList);
+
+            const batch = writeBatch(db);
+            const ref = doc(db, 'personTransactions', ptxId);
+            if (editing) batch.update(ref, { ...nextTx, updatedAt: serverTimestamp() });
+            else batch.set(ref, { ...nextTx, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+
+            batch.update(doc(db, 'persons', person.id), {
+              totalPayable: ledger.totalPayable,
+              totalGiven: ledger.totalGiven,
+              currentBalance: ledger.currentBalance,
+              updatedAt: serverTimestamp(),
+            });
+            batch.set(doc(db, 'publicPersonLedgers', person.id), {
+              id: person.id,
+              name: person.name,
+              phone: person.phone,
+              role: person.role,
+              totalPayable: ledger.totalPayable,
+              totalGiven: ledger.totalGiven,
+              currentBalance: ledger.currentBalance,
+              shareEnabled: true,
+              entries: ledger.entries,
+              ownerUid: person.ownerUid || uid,
+              updatedAt: serverTimestamp(),
+            });
+            await batch.commit();
+            closeModal();
+            showToast('হিসাব সংরক্ষণ করা হয়েছে!');
+          } catch (err) {
+            showToast(err.message || 'সংরক্ষণ করা যায়নি।', 'error');
+            btn.disabled = false;
+          }
+        };
+      }
+
+      function openConfirmModal(title, message, onConfirm) {
+        const mr = document.getElementById('modal-root');
+        mr.innerHTML = `
+          <div class="modal-backdrop" data-action="modal-backdrop">
+            <div class="modal-panel modal-sm" onclick="event.stopPropagation()">
+              <h2 style="margin:0 0 8px;font-size:18px;font-weight:700;">${esc(title)}</h2>
+              <p style="margin:0 0 18px;font-size:13.5px;color:var(--text-muted);">${esc(message)}</p>
+              <div class="flex-wrap" style="justify-content:flex-end;">
+                <button type="button" class="btn btn-soft" data-action="close-modal">বাতিল</button>
+                <button type="button" class="btn btn-danger" id="confirm-yes">হ্যাঁ, মুছে ফেলুন</button>
+              </div>
+            </div>
+          </div>
+        `;
+        document.getElementById('confirm-yes').onclick = async () => {
+          const b = document.getElementById('confirm-yes');
+          b.disabled = true;
+          try {
+            await onConfirm();
+            closeModal();
+          } catch (err) {
+            showToast(err?.message || 'মুছতে সমস্যা হয়েছে।', 'error');
+            b.disabled = false;
+          }
+        };
+      }
+
+      // --- Global Event Delegation ---
+      document.addEventListener('input', (e) => {
+        if (e.target && e.target.id === 'global-search') {
+          state.searchQuery = e.target.value;
+          const pos = e.target.selectionStart;
+          render();
+          const el = document.getElementById('global-search');
+          if (el) {
+            el.focus();
+            if (typeof pos === 'number') el.setSelectionRange(pos, pos);
+          }
+        }
+      });
+
+      document.addEventListener('change', (e) => {
+        if (e.target && e.target.id === 'expense-month-select') {
+          state.expenseMonthFilter = e.target.value;
+          render();
+        }
+      });
+
+      document.addEventListener('click', async (e) => {
+        const btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        const action = btn.getAttribute('data-action');
+
+        if (action === 'sign-in') {
+          state.authError = null;
+          state.authLoading = true;
+          render();
+          try {
+            await signInWithPopup(auth, googleProvider);
+          } catch (err) {
+            const msg = String(err?.message || '');
+            if (msg.includes('popup-closed-by-user')) {
+              state.authError = 'লগইন উইন্ডোটি বন্ধ করা হয়েছে।';
+            } else if (msg.includes('unauthorized-domain')) {
+              state.authError = `এই ডোমেইনটি (${window.location.hostname}) এখনো Firebase-এ অনুমোদিত নয়। Firebase Console > Authentication > Settings > Authorized domains-এ গিয়ে "${window.location.hostname}" যোগ করুন।`;
+            } else {
+              state.authError = 'লগইন করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।';
+            }
+          } finally {
+            state.authLoading = false;
+            render();
+          }
+        } else if (action === 'sign-out') {
+          await signOut(auth);
+          clearListeners();
+          state.selectedParty = null;
+          state.activeInvoiceId = null;
+          render();
+        } else if (action === 'switch-tab') {
+          state.activeTab = btn.getAttribute('data-tab') || 'dashboard';
+          state.selectedParty = null;
+          state.activeInvoiceId = null;
+          state.searchQuery = '';
+          render();
+        } else if (action === 'cust-subtab') {
+          state.customerSubTab = btn.getAttribute('data-sub') || 'customers';
+          render();
+        } else if (action === 'tx-filter') {
+          state.txTypeFilter = btn.getAttribute('data-filter') || 'all';
+          render();
+        } else if (action === 'chart-range') {
+          state.chartRangeMonths = Number(btn.getAttribute('data-range')) === 12 ? 12 : 6;
+          render();
+        } else if (action === 'open-party') {
+          state.selectedParty = { id: btn.getAttribute('data-id'), type: btn.getAttribute('data-type') };
+          state.activeInvoiceId = null;
+          render();
+        } else if (action === 'close-party') {
+          state.selectedParty = null;
+          render();
+        } else if (action === 'view-invoice') {
+          state.activeInvoiceId = btn.getAttribute('data-id');
+          render();
+        } else if (action === 'close-invoice') {
+          state.activeInvoiceId = null;
+          render();
+        } else if (action === 'print') {
+          window.print();
+        } else if (action === 'copy-url') {
+          const url = buildPublicUrl(btn.getAttribute('data-param'), btn.getAttribute('data-id'));
+          await copyText(url, 'শেয়ার লিংক কপি করা হয়েছে!');
+        } else if (action === 'wa-invoice') {
+          const tx = state.transactions.find((t) => t.id === btn.getAttribute('data-id'));
+          if (!tx) return;
+          const msg = `আসসালামু আলাইকুম ${tx.partyName},\nএমএস ফ্যাশন থেকে আপনার ইনভয়েস #${tx.invoiceNo} (${formatDateBn(tx.date)})\nমোট বিল: ${formatTaka(tx.totalAmount)}\nজমা: ${formatTaka(tx.paidAmount)}\nবাকি: ${formatTaka(tx.dueAmount)}\nলিংক: ${buildPublicUrl('invoice', tx.id)}`;
+          window.location.assign(buildWhatsAppShareUrl(tx.partyPhone, msg));
+        } else if (action === 'wa-party') {
+          const type = btn.getAttribute('data-type');
+          const id = btn.getAttribute('data-id');
+          const p = (type === 'supplier' ? state.suppliers : state.customers).find((x) => x.id === id);
+          if (!p) return;
+          const msg = `আসসালামু আলাইকুম ${p.name},\nএমএস ফ্যাশনে আপনার বর্তমান বাকি/ব্যালেন্স: ${formatTaka(p.currentDue)}\nবিস্তারিত খাতা দেখুন: ${buildPublicUrl(type, id)}`;
+          window.location.assign(buildWhatsAppShareUrl(p.phone, msg));
+        } else if (action === 'wa-person') {
+          const p = state.persons.find((x) => x.id === btn.getAttribute('data-id'));
+          if (!p) return;
+          const msg = `আসসালামু আলাইকুম ${p.name},\nএমএস ফ্যাশন থেকে আপনার হিসাবের বর্তমান ব্যালেন্স: ${formatTaka(p.currentBalance)}\nলিংক: ${buildPublicUrl('person', p.id)}`;
+          window.location.assign(buildWhatsAppShareUrl(p.phone, msg));
+        } else if (action === 'exit-public') {
+          window.history.pushState({}, '', window.location.origin + window.location.pathname);
+          state.queryParams = readQueryParams();
+          if (state.isAdmin) attachAdminListeners();
+          render();
+        } else if (action === 'download-pdf') {
+          await exportMonthlyPdf();
+        } else if (action === 'close-modal' || action === 'modal-backdrop') {
+          closeModal();
+        } else if (action === 'new-party') {
+          openPartyModal(btn.getAttribute('data-type'));
+        } else if (action === 'edit-party') {
+          openPartyModal(btn.getAttribute('data-type'), btn.getAttribute('data-id'));
+        } else if (action === 'new-tx') {
+          openTxModal(btn.getAttribute('data-type') || 'customer_sale', btn.getAttribute('data-party'));
+        } else if (action === 'edit-tx') {
+          openTxModal('customer_sale', null, btn.getAttribute('data-id'));
+        } else if (action === 'delete-tx') {
+          const tx = state.transactions.find((t) => t.id === btn.getAttribute('data-id'));
+          if (!tx) return;
+          openConfirmModal('লেনদেন মুছে ফেলবেন?', `${tx.partyName} — ${formatTaka(tx.totalAmount || tx.paidAmount)} এন্ট্রিটি স্থায়ীভাবে মুছে যাবে।`, async () => {
+            const isSup = tx.type.startsWith('supplier_');
+            const party = (isSup ? state.suppliers : state.customers).find((p) => p.id === tx.partyId);
+            const remaining = state.transactions.filter((t) => t.partyId === tx.partyId && t.id !== tx.id);
+            const ledger = computePartyLedger(remaining);
+            const batch = writeBatch(db);
+            batch.delete(doc(db, 'transactions', tx.id));
+            if (tx.type === 'customer_sale' || tx.type === 'supplier_purchase') {
+              batch.delete(doc(db, 'publicInvoices', tx.id));
+            }
+            if (party) {
+              batch.update(doc(db, isSup ? 'suppliers' : 'customers', party.id), { ...ledgerTotals(ledger), updatedAt: serverTimestamp() });
+              batch.set(doc(db, isSup ? 'publicSupplierLedgers' : 'publicCustomerLedgers', party.id), {
+                id: party.id,
+                partyType: isSup ? 'supplier' : 'customer',
+                name: party.name,
+                phone: party.phone,
+                address: party.address,
+                ...ledgerTotals(ledger),
+                shareEnabled: true,
+                entries: ledger.entries,
+                ownerUid: party.ownerUid || auth.currentUser.uid,
+                updatedAt: serverTimestamp(),
+              });
+              for (const otherTx of remaining.filter((t) => t.type === 'customer_sale' || t.type === 'supplier_purchase').slice(0, 50)) {
+                batch.update(doc(db, 'publicInvoices', otherTx.id), {
+                  partyTotalDue: ledger.currentDue,
+                  updatedAt: serverTimestamp(),
+                });
+              }
+            }
+            await batch.commit();
+            showToast('লেনদেন মুছে ফেলা হয়েছে।');
+          });
+        } else if (action === 'delete-party') {
+          const type = btn.getAttribute('data-type');
+          const id = btn.getAttribute('data-id');
+          const isSup = type === 'supplier';
+          const p = (isSup ? state.suppliers : state.customers).find((x) => x.id === id);
+          openConfirmModal('খাতা মুছে ফেলবেন?', `${p?.name || ''}-এর সম্পূর্ণ খাতা এবং সব লেনদেন স্থায়ীভাবে মুছে যাবে।`, async () => {
+            const batch = writeBatch(db);
+            batch.delete(doc(db, isSup ? 'suppliers' : 'customers', id));
+            batch.delete(doc(db, isSup ? 'publicSupplierLedgers' : 'publicCustomerLedgers', id));
+            for (const tx of state.transactions.filter((t) => t.partyId === id).slice(0, 200)) {
+              batch.delete(doc(db, 'transactions', tx.id));
+              if (tx.type === 'customer_sale' || tx.type === 'supplier_purchase') {
+                batch.delete(doc(db, 'publicInvoices', tx.id));
+              }
+            }
+            await batch.commit();
+            state.selectedParty = null;
+            showToast('খাতা ও লেনদেন মুছে ফেলা হয়েছে।');
+            render();
+          });
+        } else if (action === 'new-expense') {
+          openExpenseModal();
+        } else if (action === 'edit-expense') {
+          openExpenseModal(btn.getAttribute('data-id'));
+        } else if (action === 'delete-expense') {
+          const id = btn.getAttribute('data-id');
+          openConfirmModal('খরচ মুছে ফেলবেন?', 'এই বাসার খরচের হিসাবটি স্থায়ীভাবে মুছে যাবে।', async () => {
+            await deleteDoc(doc(db, 'homeExpenses', id));
+            showToast('খরচ মুছে ফেলা হয়েছে।');
+          });
+        } else if (action === 'select-person') {
+          state.selectedPersonId = btn.getAttribute('data-id');
+          render();
+        } else if (action === 'new-person') {
+          openPersonModal();
+        } else if (action === 'edit-person') {
+          openPersonModal(btn.getAttribute('data-id'));
+        } else if (action === 'new-person-tx') {
+          openPersonTxModal(btn.getAttribute('data-person'), btn.getAttribute('data-type'));
+        } else if (action === 'edit-person-tx') {
+          openPersonTxModal(null, 'payment_given', btn.getAttribute('data-id'));
+        } else if (action === 'delete-person-tx') {
+          const ptx = state.personTransactions.find((t) => t.id === btn.getAttribute('data-id'));
+          if (!ptx) return;
+          openConfirmModal('এন্ট্রি মুছে ফেলবেন?', `${ptx.purpose} (${formatTaka(ptx.amount)}) এন্ট্রিটি মুছে যাবে।`, async () => {
+            const person = state.persons.find((p) => p.id === ptx.personId);
+            const remaining = state.personTransactions.filter((t) => t.personId === ptx.personId && t.id !== ptx.id);
+            const ledger = computePersonLedger(remaining);
+            const batch = writeBatch(db);
+            batch.delete(doc(db, 'personTransactions', ptx.id));
+            if (person) {
+              batch.update(doc(db, 'persons', person.id), {
+                totalPayable: ledger.totalPayable,
+                totalGiven: ledger.totalGiven,
+                currentBalance: ledger.currentBalance,
+                updatedAt: serverTimestamp(),
+              });
+              batch.set(doc(db, 'publicPersonLedgers', person.id), {
+                id: person.id,
+                name: person.name,
+                phone: person.phone,
+                role: person.role,
+                totalPayable: ledger.totalPayable,
+                totalGiven: ledger.totalGiven,
+                currentBalance: ledger.currentBalance,
+                shareEnabled: true,
+                entries: ledger.entries,
+                ownerUid: person.ownerUid || auth.currentUser.uid,
+                updatedAt: serverTimestamp(),
+              });
+            }
+            await batch.commit();
+            showToast('এন্ট্রি মুছে ফেলা হয়েছে।');
+          });
+        }
+      });
+    </script>
   </body>
 </html>
-
