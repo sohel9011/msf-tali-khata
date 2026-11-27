@@ -2,8 +2,8 @@
 
 ## 1. Data Invariants
 1. **Owner-Only Mutations**: Only the verified business owner (`sohel901190@gmail.com` or an entry in `/admins/{uid}`) with `email_verified == true` may create, update, delete, or list any collection.
-2. **No Public List Scraping**: Unauthenticated visitors may NEVER execute `list` queries on any collection (`suppliers`, `customers`, `transactions`, `publicSupplierLedgers`, `publicCustomerLedgers`, `publicInvoices`, `admins`).
-3. **Scoped Public Shareable Statements (`get` only)**: Unauthenticated customers/suppliers opening `/?customer=ID`, `/?supplier=ID`, or `/?invoice=ID` may only perform single-document `get` reads against `/publicCustomerLedgers/{id}`, `/publicSupplierLedgers/{id}`, or `/publicInvoices/{id}` when `resource != null && resource.data.shareEnabled == true`.
+2. **No Public List Scraping**: Unauthenticated visitors may NEVER execute `list` queries on any collection (`suppliers`, `customers`, `transactions`, `homeExpenses`, `personalFinanceEntries`, `persons`, `personTransactions`, `publicSupplierLedgers`, `publicCustomerLedgers`, `publicPersonLedgers`, `publicHomeExpenseLedgers`, `publicInvoices`, `admins`).
+3. **Scoped Public Shareable Statements (`get` only)**: Unauthenticated visitors opening `/?customer=ID`, `/?supplier=ID`, `/?person=ID`, `/?home=ID`, or `/?invoice=ID` may only perform single-document `get` reads against `/publicCustomerLedgers/{id}`, `/publicSupplierLedgers/{id}`, `/publicPersonLedgers/{id}`, `/publicHomeExpenseLedgers/{id}`, or `/publicInvoices/{id}` when `resource != null && resource.data.shareEnabled == true`.
 4. **Immutable Ownership & Creation Timestamps**: `ownerUid` and `createdAt` must never change after document creation. `createdAt == request.time` on create and `updatedAt == request.time` on create/update.
 5. **Strict Schema & Size Bounds**: Every document enforces exact `hasAll` + `hasOnly` key allowlists, ID regex `^[a-zA-Z0-9_\-]+$`, string `.size()` bounds, and bounded list sizes (`items.size() <= 50`, `entries.size() <= 250`).
 

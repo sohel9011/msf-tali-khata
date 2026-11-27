@@ -193,6 +193,46 @@
       },
       "required": ["id", "invoiceNo", "date", "partyType", "partyId", "partyName", "partyPhone", "partyAddress", "items", "subtotal", "discount", "totalAmount", "paidAmount", "dueAmount", "partyTotalDue", "paymentMethod", "note", "shareEnabled", "ownerUid", "createdAt", "updatedAt"]
     },
+    "PublicHomeExpenseLedger": {
+      "title": "PublicHomeExpenseLedger",
+      "description": "Read-only shareable monthly or all-time home expense statement for I & Mainu Mama",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "monthKey": { "type": "string", "minLength": 3, "maxLength": 20 },
+        "monthLabel": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "totalAmount": { "type": "number" },
+        "totalByMe": { "type": "number" },
+        "totalByMama": { "type": "number" },
+        "totalShared": { "type": "number" },
+        "perPersonAvg": { "type": "number" },
+        "shareEnabled": { "type": "boolean" },
+        "entries": { "type": "array", "description": "Bounded home expense entries (max 250)" },
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "monthKey", "monthLabel", "totalAmount", "totalByMe", "totalByMama", "totalShared", "perPersonAvg", "shareEnabled", "entries", "ownerUid", "updatedAt"]
+    },
+    "PersonalFinanceEntry": {
+      "title": "PersonalFinanceEntry",
+      "description": "Owner personal expense and personal/sales/other income record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "type": { "type": "string", "enum": ["personal_expense", "personal_income"] },
+        "date": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "monthKey": { "type": "string", "minLength": 7, "maxLength": 10 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "category": { "type": "string", "maxLength": 80 },
+        "amount": { "type": "number" },
+        "paymentMethod": { "type": "string", "maxLength": 60 },
+        "note": { "type": "string", "maxLength": 500 },
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "type", "date", "monthKey", "title", "category", "amount", "paymentMethod", "note", "ownerUid", "createdAt", "updatedAt"]
+    },
     "AdminUser": {
       "title": "AdminUser",
       "description": "Authorized admin UID entry",
@@ -245,6 +285,14 @@
     "/publicInvoices/{invoiceId}": {
       "schema": { "$ref": "#/entities/PublicInvoice" },
       "description": "Shareable read-only digital invoices"
+    },
+    "/publicHomeExpenseLedgers/{ledgerId}": {
+      "schema": { "$ref": "#/entities/PublicHomeExpenseLedger" },
+      "description": "Shareable read-only home expense statements"
+    },
+    "/personalFinanceEntries/{entryId}": {
+      "schema": { "$ref": "#/entities/PersonalFinanceEntry" },
+      "description": "Personal expense and personal/other income entries"
     },
     "/admins/{uid}": {
       "schema": { "$ref": "#/entities/AdminUser" },

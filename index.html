@@ -234,7 +234,7 @@
 
       .bottom-nav-grid {
         display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
+        grid-template-columns: repeat(6, minmax(0, 1fr));
         height: 62px;
         align-items: center;
       }
@@ -243,7 +243,7 @@
         border: none;
         background: transparent;
         height: 100%;
-        padding: 4px 2px;
+        padding: 4px 1px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -251,7 +251,7 @@
         gap: 3px;
         color: var(--text-muted);
         cursor: pointer;
-        font-size: 10.5px;
+        font-size: 9.5px;
         font-weight: 600;
         transition: color 0.15s;
       }
@@ -1389,6 +1389,7 @@
           supplier: p.get('supplier'),
           invoice: p.get('invoice'),
           person: p.get('person'),
+          home: p.get('home'),
         };
       }
 
@@ -1410,6 +1411,7 @@
         navUsers: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
         navHome: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
         navStaff: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>`,
+        navWallet: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/></svg>`,
       };
 
       // --- Application State ---
@@ -1425,6 +1427,7 @@
         customers: [],
         transactions: [],
         homeExpenses: [],
+        personalFinanceEntries: [],
         persons: [],
         personTransactions: [],
         activeTab: 'dashboard',
@@ -1435,6 +1438,8 @@
         txTypeFilter: 'all',
         searchQuery: '',
         expenseMonthFilter: getCurrentMonthKey(),
+        personalMonthFilter: getCurrentMonthKey(),
+        personalTypeFilter: 'all',
         chartRangeMonths: 6,
         pdfExporting: false,
         publicDoc: null,
@@ -1677,7 +1682,7 @@
         let loaded = 0;
         const mark = () => {
           loaded += 1;
-          if (loaded >= 6) {
+          if (loaded >= 7) {
             state.dataLoading = false;
             if (!state.seededPersonsChecked && state.persons.length === 0) {
               state.seededPersonsChecked = true;
@@ -1776,6 +1781,20 @@
             (err) => handleFirestoreError(err, 'list', 'personTransactions'),
           ),
         );
+
+        state.unsubs.push(
+          onSnapshot(
+            collection(db, 'personalFinanceEntries'),
+            (snap) => {
+              state.personalFinanceEntries = snap.docs
+                .map((d) => d.data())
+                .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+              mark();
+              if (!state.dataLoading) render();
+            },
+            (err) => handleFirestoreError(err, 'list', 'personalFinanceEntries'),
+          ),
+        );
       }
 
       async function loadPublicPortalData() {
@@ -1788,7 +1807,9 @@
               ? { col: 'publicInvoices', id: q.invoice, kind: 'invoice' }
               : q.person
                 ? { col: 'publicPersonLedgers', id: q.person, kind: 'person' }
-                : null;
+                : q.home
+                  ? { col: 'publicHomeExpenseLedgers', id: q.home, kind: 'home' }
+                  : null;
         if (!target) return;
 
         state.publicLoading = true;
@@ -1814,7 +1835,7 @@
 
       function isPublicRoute() {
         const q = state.queryParams;
-        return Boolean(q.customer || q.supplier || q.invoice || q.person);
+        return Boolean(q.customer || q.supplier || q.invoice || q.person || q.home);
       }
 
       // --- Auth Listener ---
@@ -1874,6 +1895,18 @@
           (s, p) => s + Math.max(0, Number(p.currentBalance || 0)),
           0,
         );
+        const monthlyPersonalIncome = state.personalFinanceEntries
+          .filter((e) => e.monthKey === currentMonth && e.type === 'personal_income')
+          .reduce((s, e) => s + Number(e.amount || 0), 0);
+        const monthlyPersonalExpense = state.personalFinanceEntries
+          .filter((e) => e.monthKey === currentMonth && e.type === 'personal_expense')
+          .reduce((s, e) => s + Number(e.amount || 0), 0);
+        const totalPersonalIncome = state.personalFinanceEntries
+          .filter((e) => e.type === 'personal_income')
+          .reduce((s, e) => s + Number(e.amount || 0), 0);
+        const totalPersonalExpense = state.personalFinanceEntries
+          .filter((e) => e.type === 'personal_expense')
+          .reduce((s, e) => s + Number(e.amount || 0), 0);
         return {
           totalSupplierDue,
           totalCustomerDue,
@@ -1881,6 +1914,11 @@
           totalSales,
           monthlyHomeExpense,
           staffBalanceDue,
+          monthlyPersonalIncome,
+          monthlyPersonalExpense,
+          totalPersonalIncome,
+          totalPersonalExpense,
+          personalNetBalance: totalPersonalIncome - totalPersonalExpense,
           currentMonth,
         };
       }
@@ -2405,6 +2443,94 @@
         if (kind === 'invoice') {
           return `<div class="container main-content">${backBtn ? `<div style="margin-bottom:12px;" class="no-print">${backBtn}</div>` : ''}${renderInvoiceView(data, true)}</div>`;
         }
+        if (kind === 'home') {
+          const homeEntries = data.entries || [];
+          const homeRows = homeEntries
+            .map(
+              (e) => `
+              <tr>
+                <td style="white-space:nowrap;">${esc(formatDateBn(e.date))}</td>
+                <td>
+                  <strong>${esc(e.title)}</strong>
+                  ${e.itemsSummary ? `<div style="font-size:12px;color:var(--text-muted);margin-top:2px;">${esc(e.itemsSummary)}</div>` : ''}
+                  ${e.note ? `<div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">নোট: ${esc(e.note)}</div>` : ''}
+                </td>
+                <td>
+                  <div><strong>${esc(e.paidBy)}</strong></div>
+                  <div style="font-size:11.5px;color:var(--text-muted);">${esc(e.paymentMethod || 'নগদ')}</div>
+                </td>
+                <td class="num-col mono text-red"><strong>${esc(formatTaka(e.totalAmount))}</strong></td>
+              </tr>
+            `,
+            )
+            .join('');
+          const mobileHomeCards = homeEntries
+            .map(
+              (e) => `
+              <div class="mobile-tx-card">
+                <div class="flex-between" style="gap:8px;">
+                  <span style="font-size:12px;color:var(--text-muted);">${esc(formatDateBn(e.date))}</span>
+                  <strong class="mono text-red" style="font-size:14px;">${esc(formatTaka(e.totalAmount))}</strong>
+                </div>
+                <div>
+                  <div style="font-weight:700;font-size:14.5px;">${esc(e.title)}</div>
+                  ${e.itemsSummary ? `<div style="font-size:12px;color:var(--text-muted);margin-top:3px;">${esc(e.itemsSummary)}</div>` : ''}
+                  ${e.note ? `<div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">নোট: ${esc(e.note)}</div>` : ''}
+                </div>
+                <div style="font-size:12px;color:var(--text-muted);">
+                  পরিশোধ: <strong style="color:var(--text);">${esc(e.paidBy)}</strong> (${esc(e.paymentMethod || 'নগদ')})
+                </div>
+              </div>
+            `,
+            )
+            .join('');
+          return `
+            <div class="container main-content stack-md">
+              <div class="card flex-between no-print">
+                <div class="flex-wrap">
+                  ${backBtn}
+                  <img src="${LOGO_URL}" alt="এমএস ফ্যাশন" referrerpolicy="no-referrer" style="width:100px;object-fit:contain;" />
+                </div>
+                <button type="button" class="btn btn-primary" data-action="print">${ICONS.print} প্রিন্ট / PDF</button>
+              </div>
+              <div class="card print-container stack-md">
+                <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:14px;">
+                  <div>
+                    <div style="font-size:12px;color:var(--text-muted);">এমএস ফ্যাশন — বাসার খরচ স্টেটমেন্ট (আমি ও মাইনু মামা)</div>
+                    <h1 class="page-title" style="margin-top:2px;">${esc(data.monthLabel)}</h1>
+                    <div style="font-size:12.5px;color:var(--text-muted);margin-top:2px;">মোট এন্ট্রি: ${toBn(homeEntries.length)} টি</div>
+                  </div>
+                  <div class="party-due-box">
+                    <div style="font-size:12px;color:var(--text-muted);">সর্বমোট বাসার খরচ</div>
+                    <div class="mono text-red" style="font-size:22px;font-weight:700;">${esc(formatTaka(data.totalAmount))}</div>
+                  </div>
+                </div>
+                <div class="kpi-grid">
+                  <div class="card" style="background:var(--surface-muted);"><div class="kpi-label">মোট খরচ</div><div class="kpi-val mono text-red">${esc(formatTaka(data.totalAmount))}</div></div>
+                  <div class="card" style="background:var(--surface-muted);"><div class="kpi-label">আমার খরচ</div><div class="kpi-val mono">${esc(formatTaka(data.totalByMe))}</div></div>
+                  <div class="card" style="background:var(--surface-muted);"><div class="kpi-label">মাইনু মামার খরচ</div><div class="kpi-val mono text-brand">${esc(formatTaka(data.totalByMama))}</div></div>
+                  <div class="card" style="background:var(--surface-muted);"><div class="kpi-label">জনপ্রতি গড় (২ জন)</div><div class="kpi-val mono">${esc(formatTaka(data.perPersonAvg))}</div></div>
+                </div>
+                <div class="desktop-only table-wrap">
+                  <table class="ledger-table">
+                    <thead>
+                      <tr>
+                        <th>তারিখ</th>
+                        <th>বিবরণ ও বাজার</th>
+                        <th>পরিশোধ</th>
+                        <th class="num-col">টাকা</th>
+                      </tr>
+                    </thead>
+                    <tbody>${homeRows || `<tr><td colspan="4" style="text-align:center;color:var(--text-muted);">কোনো বাসার খরচ নেই</td></tr>`}</tbody>
+                  </table>
+                </div>
+                <div class="mobile-only">
+                  ${homeEntries.length === 0 ? `<div class="empty-box">কোনো বাসার খরচ নেই</div>` : `<div class="mobile-card-list">${mobileHomeCards}</div>`}
+                </div>
+              </div>
+            </div>
+          `;
+        }
 
         const isPerson = kind === 'person';
         const entries = data.entries || [];
@@ -2749,10 +2875,12 @@
               <div class="action-grid-mobile">
                 <button type="button" class="btn btn-primary" data-action="new-tx" data-type="customer_sale">${ICONS.plus} নতুন হিসাব</button>
                 <button type="button" class="btn btn-dark" data-action="download-pdf" ${state.pdfExporting || state.dataLoading ? 'disabled' : ''}>${ICONS.pdf} ${state.pdfExporting ? 'তৈরি হচ্ছে...' : 'মাসিক PDF'}</button>
+                <button type="button" class="btn btn-danger-soft" data-action="new-pf" data-type="personal_expense">${ICONS.plus} নিজের খরচ</button>
+                <button type="button" class="btn btn-brand-soft" data-action="new-pf" data-type="personal_income">${ICONS.plus} নিজের আয় / ইনকাম</button>
                 <button type="button" class="btn btn-secondary" data-action="switch-tab" data-tab="suppliers">সাপ্লায়ার খাতা</button>
                 <button type="button" class="btn btn-secondary" data-action="switch-tab" data-tab="customers">কাস্টমার ও ইনভয়েস</button>
                 <button type="button" class="btn btn-secondary" data-action="switch-tab" data-tab="home_expenses">বাসার খরচ</button>
-                <button type="button" class="btn btn-secondary" data-action="switch-tab" data-tab="persons">মামা ও হিমেল</button>
+                <button type="button" class="btn btn-secondary" data-action="switch-tab" data-tab="personal_finance">নিজের আয়-খরচ</button>
               </div>
             </div>
 
@@ -2781,12 +2909,12 @@
 
             ${buildMonthlyChartHtml()}
 
-            <div class="grid-2">
+            <div class="grid-3">
               <button type="button" class="card" style="text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;" data-action="switch-tab" data-tab="home_expenses">
                 <div>
                   <p class="kpi-label">বাসার খরচ (${esc(formatMonthBn(sum.currentMonth))})</p>
                   <p class="mono" style="margin:6px 0 0;font-size:20px;font-weight:700;">${esc(formatTaka(sum.monthlyHomeExpense))}</p>
-                  <p style="margin:4px 0 0;font-size:12px;color:var(--text-muted);">আমি ও মাইনু মামা — বাজার ও মাসিক খরচের তালিকা দেখুন</p>
+                  <p style="margin:4px 0 0;font-size:12px;color:var(--text-muted);">আমি ও মাইনু মামা — বাজার ও মাসিক খরচের তালিকা</p>
                 </div>
                 <span class="text-brand" style="font-size:12.5px;font-weight:600;white-space:nowrap;">খাতা দেখুন →</span>
               </button>
@@ -2795,9 +2923,18 @@
                 <div>
                   <p class="kpi-label">মাইনু মামা, হিমেল ও ব্যক্তিগত হিসাব</p>
                   <p class="mono" style="margin:6px 0 0;font-size:20px;font-weight:700;">বাকি প্রাপ্য: ${esc(formatTaka(sum.staffBalanceDue))}</p>
-                  <p style="margin:4px 0 0;font-size:12px;color:var(--text-muted);">টাকা দেওয়া, মডারেটর প্রাপ্য ও নতুন ব্যক্তি যোগ করুন</p>
+                  <p style="margin:4px 0 0;font-size:12px;color:var(--text-muted);">টাকা দেওয়া, মডারেটর প্রাপ্য ও নতুন ব্যক্তি যোগ</p>
                 </div>
                 <span class="text-brand" style="font-size:12.5px;font-weight:600;white-space:nowrap;">হিসাব দেখুন →</span>
+              </button>
+
+              <button type="button" class="card" style="text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;" data-action="switch-tab" data-tab="personal_finance">
+                <div>
+                  <p class="kpi-label">নিজের ব্যক্তিগত আয় ও খরচ (${esc(formatMonthBn(sum.currentMonth))})</p>
+                  <p class="mono ${sum.personalNetBalance >= 0 ? 'text-green' : 'text-red'}" style="margin:6px 0 0;font-size:20px;font-weight:700;">জমা: ${esc(formatTaka(sum.personalNetBalance))}</p>
+                  <p style="margin:4px 0 0;font-size:12px;color:var(--text-muted);">আয়: ${esc(formatTaka(sum.monthlyPersonalIncome))} · খরচ: ${esc(formatTaka(sum.monthlyPersonalExpense))}</p>
+                </div>
+                <span class="text-brand" style="font-size:12.5px;font-weight:600;white-space:nowrap;">নিজের খাতা →</span>
               </button>
             </div>
 
@@ -3098,8 +3235,11 @@
                 <p style="margin:4px 0 0;font-size:13.5px;color:var(--text-muted);">প্রতিদিনের বাজার, আগের বকেয়া ও মাসিক বাসার খরচের পূর্ণাঙ্গ হিসাব</p>
               </div>
               <div class="action-grid-mobile">
+                <button type="button" class="btn btn-soft" data-action="copy-home-url">${ICONS.copy} লিংক কপি</button>
+                <button type="button" class="btn btn-secondary" data-action="copy-home-text">${ICONS.copy} হিসাব কপি</button>
+                <button type="button" class="btn btn-whatsapp" data-action="wa-home">${ICONS.wa} মামাকে পাঠান</button>
                 <button type="button" class="btn btn-danger-soft" data-action="new-prev-expense">${ICONS.plus} আগের টাকা যোগ</button>
-                <button type="button" class="btn btn-primary" data-action="new-expense">${ICONS.plus} নতুন বাজার / খরচ</button>
+                <button type="button" class="btn btn-primary btn-span-2" data-action="new-expense">${ICONS.plus} নতুন বাজার / খরচ</button>
               </div>
             </div>
 
@@ -3294,6 +3434,189 @@
         `;
       }
 
+      function renderPersonalFinance() {
+        const months = Array.from(
+          new Set([
+            getCurrentMonthKey(),
+            ...state.personalFinanceEntries.map((e) => e.monthKey).filter(Boolean),
+          ]),
+        ).sort((a, b) => b.localeCompare(a));
+
+        const monthFiltered =
+          state.personalMonthFilter === 'all'
+            ? state.personalFinanceEntries
+            : state.personalFinanceEntries.filter((e) => e.monthKey === state.personalMonthFilter);
+
+        const typeFiltered =
+          state.personalTypeFilter === 'all'
+            ? monthFiltered
+            : monthFiltered.filter((e) => e.type === state.personalTypeFilter);
+
+        const q = state.searchQuery.trim().toLowerCase();
+        const list = q
+          ? typeFiltered.filter(
+              (e) =>
+                String(e.title || '').toLowerCase().includes(q) ||
+                String(e.category || '').toLowerCase().includes(q) ||
+                String(e.paymentMethod || '').toLowerCase().includes(q) ||
+                String(e.note || '').toLowerCase().includes(q),
+            )
+          : typeFiltered;
+
+        const incomeTotal = monthFiltered
+          .filter((e) => e.type === 'personal_income')
+          .reduce((s, e) => s + Number(e.amount || 0), 0);
+        const expenseTotal = monthFiltered
+          .filter((e) => e.type === 'personal_expense')
+          .reduce((s, e) => s + Number(e.amount || 0), 0);
+        const netBalance = incomeTotal - expenseTotal;
+
+        const rowsHtml = list
+          .map((e) => {
+            const isIncome = e.type === 'personal_income';
+            return `
+              <tr>
+                <td style="white-space:nowrap;">${esc(formatDateBn(e.date))}</td>
+                <td>
+                  <span class="status-badge ${isIncome ? 'status-badge--active' : 'status-badge--overdue'}">
+                    ${isIncome ? 'আয় / ইনকাম' : 'ব্যক্তিগত খরচ'}
+                  </span>
+                </td>
+                <td>
+                  <strong>${esc(e.title)}</strong>
+                  <div style="font-size:12px;color:var(--text-muted);">${esc(e.category || 'সাধারণ')} · ${esc(e.paymentMethod || 'ক্যাশ')}${e.note ? ` · ${esc(e.note)}` : ''}</div>
+                </td>
+                <td class="num-col mono ${isIncome ? 'text-green' : 'text-red'}">
+                  <strong>${isIncome ? '+' : '-'}${esc(formatTaka(e.amount))}</strong>
+                </td>
+                <td class="num-col">
+                  <div class="flex-wrap" style="justify-content:flex-end;">
+                    <button type="button" class="btn btn-soft btn-icon" data-action="edit-pf" data-id="${esc(e.id)}">${ICONS.edit}</button>
+                    <button type="button" class="btn btn-danger-soft btn-icon" data-action="delete-pf" data-id="${esc(e.id)}">${ICONS.trash}</button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          })
+          .join('');
+
+        const mobileCards = list
+          .map((e) => {
+            const isIncome = e.type === 'personal_income';
+            return `
+              <div class="mobile-tx-card">
+                <div class="flex-between" style="gap:8px;">
+                  <span style="font-size:12px;color:var(--text-muted);">${esc(formatDateBn(e.date))}</span>
+                  <span class="status-badge ${isIncome ? 'status-badge--active' : 'status-badge--overdue'}">
+                    ${isIncome ? 'আয় / ইনকাম' : 'ব্যক্তিগত খরচ'}
+                  </span>
+                </div>
+                <div class="flex-between" style="align-items:flex-start;gap:10px;">
+                  <div style="min-width:0;flex:1;">
+                    <div style="font-weight:700;font-size:15px;">${esc(e.title)}</div>
+                    <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">${esc(e.category || 'সাধারণ')} · ${esc(e.paymentMethod || 'ক্যাশ')}</div>
+                    ${e.note ? `<div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">নোট: ${esc(e.note)}</div>` : ''}
+                  </div>
+                  <strong class="mono ${isIncome ? 'text-green' : 'text-red'}" style="font-size:16px;white-space:nowrap;">${isIncome ? '+' : '-'}${esc(formatTaka(e.amount))}</strong>
+                </div>
+                <div class="flex-wrap" style="justify-content:flex-end;">
+                  <button type="button" class="btn btn-soft btn-icon" data-action="edit-pf" data-id="${esc(e.id)}">${ICONS.edit}</button>
+                  <button type="button" class="btn btn-danger-soft btn-icon" data-action="delete-pf" data-id="${esc(e.id)}">${ICONS.trash}</button>
+                </div>
+              </div>
+            `;
+          })
+          .join('');
+
+        const pfFilters = [
+          { id: 'all', label: 'সবগুলো' },
+          { id: 'personal_income', label: 'আয় / ইনকাম' },
+          { id: 'personal_expense', label: 'ব্যক্তিগত খরচ' },
+        ];
+
+        return `
+          <div class="stack-lg">
+            <div class="flex-between">
+              <div>
+                <h1 class="page-title">আমার ব্যক্তিগত আয় ও খরচ</h1>
+                <p style="margin:4px 0 0;font-size:13.5px;color:var(--text-muted);">নিজের ব্যক্তিগত খরচ এবং বিক্রি বা যেকোনো মাধ্যম থেকে পাওয়া ইনকামের আলাদা হিসাব</p>
+              </div>
+              <div class="action-grid-mobile">
+                <button type="button" class="btn btn-danger-soft" data-action="new-pf" data-type="personal_expense">${ICONS.plus} নিজের খরচ যোগ</button>
+                <button type="button" class="btn btn-primary" data-action="new-pf" data-type="personal_income">${ICONS.plus} ইনকাম / আয় যোগ</button>
+              </div>
+            </div>
+
+            <div class="kpi-grid">
+              <div class="card">
+                <p class="kpi-label">${state.personalMonthFilter === 'all' ? 'মোট আয় / ইনকাম' : `${esc(formatMonthBn(state.personalMonthFilter))}-এর আয়`}</p>
+                <p class="kpi-val mono text-green">${esc(formatTaka(incomeTotal))}</p>
+                <p class="kpi-sub">বিক্রি ও অন্যান্য ইনকাম</p>
+              </div>
+              <div class="card">
+                <p class="kpi-label">${state.personalMonthFilter === 'all' ? 'মোট ব্যক্তিগত খরচ' : `${esc(formatMonthBn(state.personalMonthFilter))}-এর খরচ`}</p>
+                <p class="kpi-val mono text-red">${esc(formatTaka(expenseTotal))}</p>
+                <p class="kpi-sub">নিজস্ব ব্যয়</p>
+              </div>
+              <div class="card">
+                <p class="kpi-label">নিট ব্যালেন্স (আয় - খরচ)</p>
+                <p class="kpi-val mono ${netBalance >= 0 ? 'text-green' : 'text-red'}">${esc(formatTaka(netBalance))}</p>
+                <p class="kpi-sub">${netBalance >= 0 ? 'হাতে জমা / উদ্বৃত্ত' : 'আয়ের চেয়ে খরচ বেশি'}</p>
+              </div>
+              <div class="card">
+                <p class="kpi-label">মোট এন্ট্রি</p>
+                <p class="kpi-val mono">${toBn(monthFiltered.length)} টি</p>
+                <p class="kpi-sub">আয়: ${toBn(monthFiltered.filter((x) => x.type === 'personal_income').length)} · খরচ: ${toBn(monthFiltered.filter((x) => x.type === 'personal_expense').length)}</p>
+              </div>
+            </div>
+
+            <div class="flex-between">
+              <div class="flex-wrap" style="gap:10px;">
+                <div class="pill-group">
+                  ${pfFilters.map((f) => `<button type="button" class="pill-btn ${state.personalTypeFilter === f.id ? 'active' : ''}" data-action="pf-filter" data-filter="${f.id}">${f.label}</button>`).join('')}
+                </div>
+                <select class="select" id="personal-month-select" style="width:auto;min-width:140px;">
+                  <option value="all" ${state.personalMonthFilter === 'all' ? 'selected' : ''}>সব মাস</option>
+                  ${months.map((m) => `<option value="${esc(m)}" ${m === state.personalMonthFilter ? 'selected' : ''}>${esc(formatMonthBn(m))}</option>`).join('')}
+                </select>
+              </div>
+              <div class="search-wrap search-compact-desktop">
+                ${ICONS.search}
+                <input type="search" class="input" id="global-search" value="${esc(state.searchQuery)}" placeholder="খাত, বিবরণ বা মাধ্যম খুঁজুন..." />
+              </div>
+            </div>
+
+            <div class="card">
+              ${
+                list.length === 0
+                  ? `<div class="empty-box">
+                      <p style="margin:0 0 12px;">এখনো কোনো ব্যক্তিগত আয় বা খরচের হিসাব তোলা হয়নি।</p>
+                      <div class="flex-wrap" style="justify-content:center;">
+                        <button type="button" class="btn btn-danger-soft btn-sm" data-action="new-pf" data-type="personal_expense">${ICONS.plus} নিজের খরচ যোগ</button>
+                        <button type="button" class="btn btn-primary btn-sm" data-action="new-pf" data-type="personal_income">${ICONS.plus} ইনকাম / আয় যোগ</button>
+                      </div>
+                    </div>`
+                  : `<div class="desktop-only table-wrap">
+                      <table class="ledger-table">
+                        <thead>
+                          <tr>
+                            <th>তারিখ</th>
+                            <th>ধরন</th>
+                            <th>বিবরণ ও খাত</th>
+                            <th class="num-col">টাকা</th>
+                            <th class="num-col">অ্যাকশন</th>
+                          </tr>
+                        </thead>
+                        <tbody>${rowsHtml}</tbody>
+                      </table>
+                    </div>
+                    <div class="mobile-only mobile-card-list">${mobileCards}</div>`
+              }
+            </div>
+          </div>
+        `;
+      }
+
       // --- Main Render ---
       function render() {
         const root = document.getElementById('app');
@@ -3348,7 +3671,8 @@
           { id: 'suppliers', label: 'সাপ্লায়ার', shortLabel: 'সাপ্লায়ার', icon: ICONS.navBook },
           { id: 'customers', label: 'কাস্টমার', shortLabel: 'কাস্টমার', icon: ICONS.navUsers },
           { id: 'home_expenses', label: 'বাসার খরচ', shortLabel: 'বাসা', icon: ICONS.navHome },
-          { id: 'persons', label: 'মামা ও হিমেল', shortLabel: 'মামা/স্টাফ', icon: ICONS.navStaff },
+          { id: 'persons', label: 'মামা ও হিমেল', shortLabel: 'মামা', icon: ICONS.navStaff },
+          { id: 'personal_finance', label: 'নিজের আয়-খরচ', shortLabel: 'নিজের', icon: ICONS.navWallet },
         ];
 
         const isTabActive = (id) => {
@@ -3367,6 +3691,7 @@
         else if (state.activeTab === 'customers') mainHtml = renderCustomers();
         else if (state.activeTab === 'home_expenses') mainHtml = renderHomeExpenses();
         else if (state.activeTab === 'persons') mainHtml = renderPersons();
+        else if (state.activeTab === 'personal_finance') mainHtml = renderPersonalFinance();
         else mainHtml = renderDashboard();
 
         root.innerHTML = `
@@ -3572,6 +3897,82 @@
 
       function ledgerTotals(l) {
         return { totalBilled: l.totalBilled, totalPaid: l.totalPaid, currentDue: l.currentDue };
+      }
+
+      function buildHomeExpenseSummaryData(monthKey = state.expenseMonthFilter, expensesOverride = state.homeExpenses) {
+        const key = monthKey || getCurrentMonthKey();
+        const filtered = (key === 'all' ? expensesOverride : expensesOverride.filter((e) => e.monthKey === key))
+          .slice()
+          .sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
+        const totalAmount = filtered.reduce((s, e) => s + Math.max(0, Number(e.totalAmount || 0)), 0);
+        const totalByMe = filtered.filter((e) => e.paidBy === 'আমি').reduce((s, e) => s + Math.max(0, Number(e.totalAmount || 0)), 0);
+        const totalByMama = filtered.filter((e) => e.paidBy === 'মাইনু মামা').reduce((s, e) => s + Math.max(0, Number(e.totalAmount || 0)), 0);
+        const totalShared = filtered.filter((e) => e.paidBy !== 'আমি' && e.paidBy !== 'মাইনু মামা').reduce((s, e) => s + Math.max(0, Number(e.totalAmount || 0)), 0);
+        const perPersonAvg = Math.round(totalAmount / 2);
+        const monthLabel = key === 'all' ? 'সব মাস' : formatMonthBn(key);
+        const entries = filtered.slice(0, 250).map((exp) => ({
+          id: clampString(exp.id || '', 128),
+          date: clampString(exp.date || '', 20),
+          title: clampString(exp.title || 'বাসার খরচ', 160),
+          itemsSummary: clampString(
+            (exp.items || [])
+              .map((it) => `${it.name}${it.qtyText ? ` (${it.qtyText})` : ''} — ${formatTaka(it.amount)}`)
+              .join(' · '),
+            400,
+          ),
+          totalAmount: Math.max(0, Number(exp.totalAmount || 0)),
+          paidBy: clampString(exp.paidBy || 'আমি', 60),
+          paymentMethod: clampString(exp.paymentMethod || 'নগদ', 60),
+          note: clampString(exp.note || '', 240),
+        }));
+        return {
+          id: clampString(key, 128),
+          monthKey: clampString(key, 20),
+          monthLabel: clampString(monthLabel, 80) || 'বাসার খরচ',
+          totalAmount,
+          totalByMe,
+          totalByMama,
+          totalShared,
+          perPersonAvg,
+          shareEnabled: true,
+          entries,
+        };
+      }
+
+      async function syncPublicHomeExpenseLedger(monthKey = state.expenseMonthFilter, expensesOverride = state.homeExpenses) {
+        if (!auth.currentUser) return null;
+        const summary = buildHomeExpenseSummaryData(monthKey, expensesOverride);
+        await setDoc(doc(db, 'publicHomeExpenseLedgers', summary.id), {
+          ...summary,
+          ownerUid: auth.currentUser.uid,
+          updatedAt: serverTimestamp(),
+        });
+        return summary;
+      }
+
+      function buildHomeExpenseShareText(monthKey = state.expenseMonthFilter) {
+        const data = buildHomeExpenseSummaryData(monthKey);
+        const lines = [
+          `বাসার খরচ হিসাব — ${data.monthLabel} (এমএস ফ্যাশন)`,
+          `মোট খরচ: ${formatTaka(data.totalAmount)} (${toBn(data.entries.length)} টি এন্ট্রি)`,
+          `আমার খরচ: ${formatTaka(data.totalByMe)}`,
+          `মাইনু মামার খরচ: ${formatTaka(data.totalByMama)}`,
+          ...(data.totalShared > 0 ? [`যৌথ খরচ: ${formatTaka(data.totalShared)}`] : []),
+          `জনপ্রতি গড় (২ জন): ${formatTaka(data.perPersonAvg)}`,
+        ];
+        if (data.entries.length > 0) {
+          lines.push('', 'খরচের তালিকা:');
+          data.entries.slice(0, 40).forEach((e, idx) => {
+            lines.push(
+              `${toBn(idx + 1)}. ${formatDateBn(e.date)} · ${e.title} — ${formatTaka(e.totalAmount)} (${e.paidBy})${e.itemsSummary ? `\n   [${e.itemsSummary}]` : ''}`,
+            );
+          });
+          if (data.entries.length > 40) {
+            lines.push(`...আরো ${toBn(data.entries.length - 40)} টি এন্ট্রি লিংকে দেখুন`);
+          }
+        }
+        lines.push('', `বিস্তারিত অনলাইন স্টেটমেন্ট: ${buildPublicUrl('home', data.id)}`);
+        return lines.join('\n');
       }
 
       function openTxModal(initialType = 'customer_sale', prePartyId = null, editingTxId = null) {
@@ -4104,6 +4505,13 @@
               const ref = doc(db, 'homeExpenses', id);
               if (editing) await updateDoc(ref, { ...payload, updatedAt: serverTimestamp() });
               else await setDoc(ref, { ...payload, ownerUid: uid, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+              const nextExpenses = editing
+                ? state.homeExpenses.map((ex) => (ex.id === id ? payload : ex))
+                : [payload, ...state.homeExpenses];
+              try {
+                await syncPublicHomeExpenseLedger(payload.monthKey, nextExpenses);
+                await syncPublicHomeExpenseLedger('all', nextExpenses);
+              } catch {}
               closeModal();
               showToast('বাসার খরচ সংরক্ষণ করা হয়েছে!');
             } catch (err) {
@@ -4301,6 +4709,164 @@
         };
       }
 
+      function openPersonalFinanceModal(initialType = 'personal_expense', editingId = null) {
+        const editing = editingId
+          ? state.personalFinanceEntries.find((e) => e.id === editingId)
+          : null;
+        let entryType = editing?.type || initialType;
+        let formState = {
+          date: editing?.date || getTodayIsoDate(),
+          title: editing?.title || '',
+          category: editing?.category || '',
+          amount: editing ? String(editing.amount || '') : '',
+          paymentMethod: editing?.paymentMethod || 'ক্যাশ',
+          note: editing?.note || '',
+        };
+
+        const EXPENSE_CATS = [
+          'ব্যক্তিগত হাতখরচ',
+          'খাবার ও নাস্তা',
+          'যাতায়াত / ভাড়া',
+          'মোবাইল ও ইন্টারনেট',
+          'পোশাক / কেনাকাটা',
+          'চিকিৎসা / জরুরি',
+          'পূর্বের ব্যক্তিগত খরচ',
+          'অন্যান্য খরচ',
+        ];
+        const INCOME_CATS = [
+          'বিক্রি থেকে আয়',
+          'ব্যবসা থেকে লাভ উত্তোলন',
+          'অনলাইন / পার্সেল ইনকাম',
+          'আগের জমানো টাকা',
+          'উপহার / বোনাস',
+          'অন্যান্য ইনকাম',
+        ];
+
+        const renderModal = () => {
+          const isIncome = entryType === 'personal_income';
+          const cats = isIncome ? INCOME_CATS : EXPENSE_CATS;
+          const activeCat = cats.includes(formState.category) ? formState.category : cats[0];
+          const mr = document.getElementById('modal-root');
+          mr.innerHTML = `
+            <div class="modal-backdrop" data-action="modal-backdrop">
+              <div class="modal-panel modal-sm">
+                <div class="flex-between" style="margin-bottom:14px;">
+                  <h2 style="margin:0;font-size:18px;font-weight:700;">
+                    ${editing ? 'হিসাব সম্পাদনা' : isIncome ? 'নতুন আয় / ইনকাম যোগ করুন' : 'নতুন ব্যক্তিগত খরচ যোগ করুন'}
+                  </h2>
+                  <button type="button" class="btn btn-soft btn-sm" data-action="close-modal">বন্ধ</button>
+                </div>
+
+                ${
+                  !editing
+                    ? `<div class="pill-group" style="width:100%;display:grid;grid-template-columns:1fr 1fr;margin-bottom:14px;">
+                        <button type="button" class="pill-btn ${!isIncome ? 'active' : ''}" id="pf-mode-exp">ব্যক্তিগত খরচ</button>
+                        <button type="button" class="pill-btn ${isIncome ? 'active' : ''}" id="pf-mode-inc">আয় / ইনকাম</button>
+                      </div>`
+                    : ''
+                }
+
+                <form id="pf-entry-form" class="stack-md">
+                  <div class="grid-2">
+                    <div>
+                      <label class="field-label">তারিখ</label>
+                      <input type="date" class="input" id="pfe-date" required value="${esc(formState.date)}" />
+                    </div>
+                    <div>
+                      <label class="field-label">টাকার পরিমাণ (৳) *</label>
+                      <input type="number" min="1" step="any" class="input mono" id="pfe-amount" required placeholder="0" value="${esc(formState.amount)}" />
+                    </div>
+                  </div>
+                  <div>
+                    <label class="field-label">${isIncome ? 'আয়ের বিবরণ / উৎস *' : 'খরচের বিবরণ *'}</label>
+                    <input class="input" id="pfe-title" required placeholder="${isIncome ? 'যেমন: টি-শার্ট বিক্রি / লাভ / অন্যান্য আয়' : 'যেমন: নাস্তা, রিকশা ভাড়া, রিচার্জ'}" value="${esc(formState.title)}" />
+                  </div>
+                  <div class="grid-2">
+                    <div>
+                      <label class="field-label">খাত / ক্যাটাগরি</label>
+                      <select class="select" id="pfe-category">
+                        ${cats.map((c) => `<option value="${esc(c)}" ${c === activeCat ? 'selected' : ''}>${esc(c)}</option>`).join('')}
+                      </select>
+                    </div>
+                    <div>
+                      <label class="field-label">মাধ্যম</label>
+                      <select class="select" id="pfe-method">
+                        ${EXPENSE_PAYMENT_METHODS.map((m) => `<option value="${esc(m)}" ${m === formState.paymentMethod ? 'selected' : ''}>${esc(m)}</option>`).join('')}
+                      </select>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="field-label">নোট (ঐচ্ছিক)</label>
+                    <textarea class="textarea" id="pfe-note" placeholder="অতিরিক্ত তথ্য...">${esc(formState.note)}</textarea>
+                  </div>
+                  <div class="modal-actions">
+                    <button type="button" class="btn btn-soft" data-action="close-modal">বাতিল</button>
+                    <button type="submit" class="btn btn-primary" id="pfe-submit">সংরক্ষণ করুন</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          `;
+
+          const syncFields = () => {
+            formState.date = document.getElementById('pfe-date')?.value || getTodayIsoDate();
+            formState.amount = document.getElementById('pfe-amount')?.value || '';
+            formState.title = document.getElementById('pfe-title')?.value || '';
+            formState.category = document.getElementById('pfe-category')?.value || '';
+            formState.paymentMethod = document.getElementById('pfe-method')?.value || 'ক্যাশ';
+            formState.note = document.getElementById('pfe-note')?.value || '';
+          };
+
+          document.getElementById('pf-mode-exp')?.addEventListener('click', () => {
+            syncFields();
+            entryType = 'personal_expense';
+            formState.category = EXPENSE_CATS[0];
+            renderModal();
+          });
+          document.getElementById('pf-mode-inc')?.addEventListener('click', () => {
+            syncFields();
+            entryType = 'personal_income';
+            formState.category = INCOME_CATS[0];
+            renderModal();
+          });
+
+          document.getElementById('pf-entry-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('pfe-submit');
+            btn.disabled = true;
+            try {
+              const uid = auth.currentUser.uid;
+              const id = editing?.id || generateDocId('personalFinanceEntries');
+              const date = clampString(document.getElementById('pfe-date').value, BLUEPRINT_LIMITS.DATE_MAX);
+              const amount = Math.max(0, Number(document.getElementById('pfe-amount').value || 0));
+              if (amount <= 0) throw new Error('সঠিক টাকার পরিমাণ দিন।');
+              const title = clampString(document.getElementById('pfe-title').value, 160);
+              if (!title) throw new Error('বিবরণ লিখুন।');
+              const payload = {
+                id,
+                type: entryType,
+                date,
+                monthKey: date.slice(0, 7),
+                title,
+                category: clampString(document.getElementById('pfe-category').value, 80),
+                amount,
+                paymentMethod: clampString(document.getElementById('pfe-method').value, BLUEPRINT_LIMITS.PAYMENT_METHOD_MAX),
+                note: clampString(document.getElementById('pfe-note').value, BLUEPRINT_LIMITS.NOTE_MAX),
+              };
+              const ref = doc(db, 'personalFinanceEntries', id);
+              if (editing) await updateDoc(ref, { ...payload, updatedAt: serverTimestamp() });
+              else await setDoc(ref, { ...payload, ownerUid: uid, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
+              closeModal();
+              showToast(entryType === 'personal_income' ? 'আয় / ইনকাম সংরক্ষণ করা হয়েছে!' : 'ব্যক্তিগত খরচ সংরক্ষণ করা হয়েছে!');
+            } catch (err) {
+              showToast(err.message || 'সংরক্ষণ করা যায়নি।', 'error');
+              btn.disabled = false;
+            }
+          };
+        };
+        renderModal();
+      }
+
       function openConfirmModal(title, message, onConfirm) {
         const mr = document.getElementById('modal-root');
         mr.innerHTML = `
@@ -4345,6 +4911,9 @@
       document.addEventListener('change', (e) => {
         if (e.target && e.target.id === 'expense-month-select') {
           state.expenseMonthFilter = e.target.value;
+          render();
+        } else if (e.target && e.target.id === 'personal-month-select') {
+          state.personalMonthFilter = e.target.value;
           render();
         }
       });
@@ -4396,6 +4965,9 @@
         } else if (action === 'tx-filter') {
           state.txTypeFilter = btn.getAttribute('data-filter') || 'all';
           render();
+        } else if (action === 'pf-filter') {
+          state.personalTypeFilter = btn.getAttribute('data-filter') || 'all';
+          render();
         } else if (action === 'chart-range') {
           state.chartRangeMonths = Number(btn.getAttribute('data-range')) === 12 ? 12 : 6;
           render();
@@ -4438,6 +5010,28 @@
           if (!p) return;
           const msg = `আসসালামু আলাইকুম ${p.name},\nএমএস ফ্যাশন থেকে আপনার হিসাবের বর্তমান ব্যালেন্স: ${formatTaka(p.currentBalance)}\nলিংক: ${buildPublicUrl('person', p.id)}`;
           window.location.assign(buildWhatsAppShareUrl(p.phone, msg));
+        } else if (action === 'copy-home-url') {
+          try {
+            const summary = await syncPublicHomeExpenseLedger(state.expenseMonthFilter);
+            const url = buildPublicUrl('home', summary?.id || state.expenseMonthFilter);
+            await copyText(url, 'বাসার খরচের শেয়ার লিংক কপি করা হয়েছে!');
+          } catch (err) {
+            showToast('শেয়ার লিংক তৈরি করা যায়নি।', 'error');
+          }
+        } else if (action === 'copy-home-text') {
+          try {
+            await syncPublicHomeExpenseLedger(state.expenseMonthFilter);
+          } catch {}
+          await copyText(buildHomeExpenseShareText(state.expenseMonthFilter), 'বাসার খরচের সম্পূর্ণ হিসাব কপি করা হয়েছে!');
+        } else if (action === 'wa-home') {
+          try {
+            await syncPublicHomeExpenseLedger(state.expenseMonthFilter);
+          } catch {}
+          const mama = state.persons.find(
+            (p) => String(p.name || '').includes('মাইনু') || String(p.name || '').includes('মামা'),
+          );
+          const msg = `আসসালামু আলাইকুম মাইনু মামা,\n\n${buildHomeExpenseShareText(state.expenseMonthFilter)}`;
+          window.location.assign(buildWhatsAppShareUrl(mama?.phone || '', msg));
         } else if (action === 'exit-public') {
           window.history.pushState({}, '', window.location.origin + window.location.pathname);
           state.queryParams = readQueryParams();
@@ -4522,8 +5116,14 @@
           openExpenseModal(btn.getAttribute('data-id'));
         } else if (action === 'delete-expense') {
           const id = btn.getAttribute('data-id');
+          const targetExp = state.homeExpenses.find((e) => e.id === id);
           openConfirmModal('খরচ মুছে ফেলবেন?', 'এই বাসার খরচের হিসাবটি স্থায়ীভাবে মুছে যাবে।', async () => {
             await deleteDoc(doc(db, 'homeExpenses', id));
+            const nextExpenses = state.homeExpenses.filter((e) => e.id !== id);
+            try {
+              if (targetExp?.monthKey) await syncPublicHomeExpenseLedger(targetExp.monthKey, nextExpenses);
+              await syncPublicHomeExpenseLedger('all', nextExpenses);
+            } catch {}
             showToast('খরচ মুছে ফেলা হয়েছে।');
           });
         } else if (action === 'select-person') {
@@ -4569,6 +5169,16 @@
             }
             await batch.commit();
             showToast('এন্ট্রি মুছে ফেলা হয়েছে।');
+          });
+        } else if (action === 'new-pf') {
+          openPersonalFinanceModal(btn.getAttribute('data-type') || 'personal_expense');
+        } else if (action === 'edit-pf') {
+          openPersonalFinanceModal('personal_expense', btn.getAttribute('data-id'));
+        } else if (action === 'delete-pf') {
+          const id = btn.getAttribute('data-id');
+          openConfirmModal('এন্ট্রি মুছে ফেলবেন?', 'এই ব্যক্তিগত আয়/খরচের হিসাবটি স্থায়ীভাবে মুছে যাবে।', async () => {
+            await deleteDoc(doc(db, 'personalFinanceEntries', id));
+            showToast('হিসাব মুছে ফেলা হয়েছে।');
           });
         }
       });

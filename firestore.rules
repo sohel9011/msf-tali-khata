@@ -261,6 +261,56 @@ service cloud.firestore {
       && data.updatedAt is timestamp;
     }
 
+    function isValidPublicHomeExpenseLedger(data, ledgerId) {
+      return data.keys().hasAll([
+        'id', 'monthKey', 'monthLabel', 'totalAmount', 'totalByMe', 'totalByMama',
+        'totalShared', 'perPersonAvg', 'shareEnabled', 'entries', 'ownerUid', 'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'id', 'monthKey', 'monthLabel', 'totalAmount', 'totalByMe', 'totalByMama',
+        'totalShared', 'perPersonAvg', 'shareEnabled', 'entries', 'ownerUid', 'updatedAt'
+      ])
+      && data.id == ledgerId
+      && isValidId(data.id)
+      && data.monthKey is string && data.monthKey.size() >= 3 && data.monthKey.size() <= 20
+      && data.monthLabel is string && data.monthLabel.size() >= 1 && data.monthLabel.size() <= 80
+      && data.totalAmount is number && data.totalAmount >= 0
+      && data.totalByMe is number && data.totalByMe >= 0
+      && data.totalByMama is number && data.totalByMama >= 0
+      && data.totalShared is number && data.totalShared >= 0
+      && data.perPersonAvg is number && data.perPersonAvg >= 0
+      && data.shareEnabled is bool
+      && data.entries is list && data.entries.size() <= 250 && (data.entries.size() == 0 || data.entries[0] is map)
+      && data.ownerUid == request.auth.uid
+      && isValidId(data.ownerUid)
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidPersonalFinanceEntry(data, entryId) {
+      return data.keys().hasAll([
+        'id', 'type', 'date', 'monthKey', 'title', 'category', 'amount',
+        'paymentMethod', 'note', 'ownerUid', 'createdAt', 'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'id', 'type', 'date', 'monthKey', 'title', 'category', 'amount',
+        'paymentMethod', 'note', 'ownerUid', 'createdAt', 'updatedAt'
+      ])
+      && data.id == entryId
+      && isValidId(data.id)
+      && data.type in ['personal_expense', 'personal_income']
+      && data.date is string && data.date.size() >= 8 && data.date.size() <= 20
+      && data.monthKey is string && data.monthKey.size() >= 7 && data.monthKey.size() <= 10
+      && data.title is string && data.title.size() >= 1 && data.title.size() <= 160
+      && data.category is string && data.category.size() <= 80
+      && data.amount is number && data.amount >= 0
+      && data.paymentMethod is string && data.paymentMethod.size() <= 60
+      && data.note is string && data.note.size() <= 500
+      && data.ownerUid == request.auth.uid
+      && isValidId(data.ownerUid)
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
     function isValidAdminUser(data, uid) {
       return data.keys().hasAll(['uid', 'email', 'createdAt'])
       && data.keys().hasOnly(['uid', 'email', 'createdAt'])
@@ -469,6 +519,44 @@ service cloud.firestore {
           'dueAmount', 'partyTotalDue', 'paymentMethod', 'note', 'shareEnabled', 'updatedAt'
         ]);
       allow delete: if isAdmin() && isValidId(invoiceId);
+    }
+
+    match /publicHomeExpenseLedgers/{ledgerId} {
+      allow get: if isValidId(ledgerId) && (
+        isAdmin() || (resource != null && existing().shareEnabled == true)
+      );
+      allow list: if isAdmin();
+      allow create: if isAdmin() && isValidId(ledgerId)
+        && isValidPublicHomeExpenseLedger(incoming(), ledgerId)
+        && incoming().updatedAt == request.time;
+      allow update: if isAdmin() && isValidId(ledgerId)
+        && isValidPublicHomeExpenseLedger(incoming(), ledgerId)
+        && incoming().ownerUid == existing().ownerUid
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'monthKey', 'monthLabel', 'totalAmount', 'totalByMe', 'totalByMama',
+          'totalShared', 'perPersonAvg', 'shareEnabled', 'entries', 'updatedAt'
+        ]);
+      allow delete: if isAdmin() && isValidId(ledgerId);
+    }
+
+    match /personalFinanceEntries/{entryId} {
+      allow get: if isValidId(entryId) && isAdmin();
+      allow list: if isAdmin();
+      allow create: if isAdmin() && isValidId(entryId)
+        && isValidPersonalFinanceEntry(incoming(), entryId)
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isAdmin() && isValidId(entryId)
+        && isValidPersonalFinanceEntry(incoming(), entryId)
+        && incoming().ownerUid == existing().ownerUid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'type', 'date', 'monthKey', 'title', 'category', 'amount',
+          'paymentMethod', 'note', 'updatedAt'
+        ]);
+      allow delete: if isAdmin() && isValidId(entryId);
     }
 
     match /admins/{uid} {
