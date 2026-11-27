@@ -1,0 +1,6 @@
+{
+  "name": "এমএস ফ্যাশন — টালি খাতা ও ইনভয়েস",
+  "description": "এমএস ফ্যাশন (MS Fashion)-এর ক্লাউড-সিঙ্কড ডিজিটাল টালি খাতা, সাপ্লায়ার ও কাস্টমার লেজার এবং অনলাইন ইনভয়েস সিস্টেম।",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

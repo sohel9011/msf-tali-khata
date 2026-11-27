@@ -1,0 +1,254 @@
+{
+  "entities": {
+    "Supplier": {
+      "title": "Supplier",
+      "description": "Clothing/fabric supplier account for MS Fashion",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "address": { "type": "string", "maxLength": 240 },
+        "totalBilled": { "type": "number" },
+        "totalPaid": { "type": "number" },
+        "currentDue": { "type": "number" },
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "phone", "address", "totalBilled", "totalPaid", "currentDue", "ownerUid", "createdAt", "updatedAt"]
+    },
+    "Customer": {
+      "title": "Customer",
+      "description": "Wholesale or retail customer account for MS Fashion",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "address": { "type": "string", "maxLength": 240 },
+        "totalBilled": { "type": "number" },
+        "totalPaid": { "type": "number" },
+        "currentDue": { "type": "number" },
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "phone", "address", "totalBilled", "totalPaid", "currentDue", "ownerUid", "createdAt", "updatedAt"]
+    },
+    "Transaction": {
+      "title": "Transaction",
+      "description": "Bookkeeping entry for supplier purchase, supplier payment, customer sale/invoice, or customer payment",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "type": {
+          "type": "string",
+          "enum": ["supplier_purchase", "supplier_payment", "supplier_due_add", "customer_sale", "customer_payment", "customer_due_add"]
+        },
+        "date": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "partyId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "partyName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "partyPhone": { "type": "string", "maxLength": 30 },
+        "partyAddress": { "type": "string", "maxLength": 240 },
+        "invoiceNo": { "type": "string", "maxLength": 40 },
+        "items": { "type": "array", "description": "Line items (up to 50)" },
+        "subtotal": { "type": "number" },
+        "discount": { "type": "number" },
+        "totalAmount": { "type": "number" },
+        "paidAmount": { "type": "number" },
+        "dueAmount": { "type": "number" },
+        "paymentMethod": { "type": "string", "maxLength": 60 },
+        "note": { "type": "string", "maxLength": 500 },
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "type", "date", "partyId", "partyName", "partyPhone", "partyAddress", "invoiceNo", "items", "subtotal", "discount", "totalAmount", "paidAmount", "dueAmount", "paymentMethod", "note", "ownerUid", "createdAt", "updatedAt"]
+    },
+    "HomeExpense": {
+      "title": "HomeExpense",
+      "description": "Home and shared living expense log with itemized purchase breakdown",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "date": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "monthKey": { "type": "string", "minLength": 7, "maxLength": 10 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "items": { "type": "array", "description": "Purchased items (up to 50)" },
+        "totalAmount": { "type": "number" },
+        "paidBy": { "type": "string", "maxLength": 60 },
+        "paymentMethod": { "type": "string", "maxLength": 60 },
+        "note": { "type": "string", "maxLength": 500 },
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "date", "monthKey", "title", "items", "totalAmount", "paidBy", "paymentMethod", "note", "ownerUid", "createdAt", "updatedAt"]
+    },
+    "PersonAccount": {
+      "title": "PersonAccount",
+      "description": "Account for Mainu Mama, moderator Himel, staff, or custom payment recipients",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "role": { "type": "string", "maxLength": 60 },
+        "note": { "type": "string", "maxLength": 240 },
+        "totalPayable": { "type": "number" },
+        "totalGiven": { "type": "number" },
+        "currentBalance": { "type": "number" },
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "phone", "role", "note", "totalPayable", "totalGiven", "currentBalance", "ownerUid", "createdAt", "updatedAt"]
+    },
+    "PersonTransaction": {
+      "title": "PersonTransaction",
+      "description": "Individual payable or payment given entry for Mainu Mama, Himel, or custom recipient",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "personId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "personName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "type": { "type": "string", "enum": ["payable_add", "payment_given"] },
+        "date": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "amount": { "type": "number" },
+        "purpose": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "paymentMethod": { "type": "string", "maxLength": 60 },
+        "note": { "type": "string", "maxLength": 500 },
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "personId", "personName", "type", "date", "amount", "purpose", "paymentMethod", "note", "ownerUid", "createdAt", "updatedAt"]
+    },
+    "PublicLedger": {
+      "title": "PublicLedger",
+      "description": "Read-only shareable statement snapshot for a specific customer or supplier accessed via unguessable ID",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "partyType": { "type": "string", "enum": ["customer", "supplier"] },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "address": { "type": "string", "maxLength": 240 },
+        "totalBilled": { "type": "number" },
+        "totalPaid": { "type": "number" },
+        "currentDue": { "type": "number" },
+        "shareEnabled": { "type": "boolean" },
+        "entries": { "type": "array", "description": "Bounded chronological ledger entries (max 250)" },
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "partyType", "name", "phone", "address", "totalBilled", "totalPaid", "currentDue", "shareEnabled", "entries", "ownerUid", "updatedAt"]
+    },
+    "PublicPersonLedger": {
+      "title": "PublicPersonLedger",
+      "description": "Read-only shareable statement snapshot for staff or personal accounts accessed via unguessable ID",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "phone": { "type": "string", "maxLength": 30 },
+        "role": { "type": "string", "maxLength": 60 },
+        "totalPayable": { "type": "number" },
+        "totalGiven": { "type": "number" },
+        "currentBalance": { "type": "number" },
+        "shareEnabled": { "type": "boolean" },
+        "entries": { "type": "array", "description": "Bounded chronological ledger entries (max 250)" },
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "name", "phone", "role", "totalPayable", "totalGiven", "currentBalance", "shareEnabled", "entries", "ownerUid", "updatedAt"]
+    },
+    "PublicInvoice": {
+      "title": "PublicInvoice",
+      "description": "Read-only shareable digital invoice snapshot accessed via unguessable ID",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "invoiceNo": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "date": { "type": "string", "minLength": 8, "maxLength": 20 },
+        "partyType": { "type": "string", "enum": ["customer", "supplier"] },
+        "partyId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "partyName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "partyPhone": { "type": "string", "maxLength": 30 },
+        "partyAddress": { "type": "string", "maxLength": 240 },
+        "items": { "type": "array", "description": "Bounded line items (max 50)" },
+        "subtotal": { "type": "number" },
+        "discount": { "type": "number" },
+        "totalAmount": { "type": "number" },
+        "paidAmount": { "type": "number" },
+        "dueAmount": { "type": "number" },
+        "partyTotalDue": { "type": "number" },
+        "paymentMethod": { "type": "string", "maxLength": 60 },
+        "note": { "type": "string", "maxLength": 500 },
+        "shareEnabled": { "type": "boolean" },
+        "ownerUid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "invoiceNo", "date", "partyType", "partyId", "partyName", "partyPhone", "partyAddress", "items", "subtotal", "discount", "totalAmount", "paidAmount", "dueAmount", "partyTotalDue", "paymentMethod", "note", "shareEnabled", "ownerUid", "createdAt", "updatedAt"]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Authorized admin UID entry",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "email": { "type": "string", "maxLength": 160 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/suppliers/{supplierId}": {
+      "schema": { "$ref": "#/entities/Supplier" },
+      "description": "MS Fashion suppliers"
+    },
+    "/customers/{customerId}": {
+      "schema": { "$ref": "#/entities/Customer" },
+      "description": "MS Fashion customers"
+    },
+    "/transactions/{txId}": {
+      "schema": { "$ref": "#/entities/Transaction" },
+      "description": "All bookkeeping transactions and invoices"
+    },
+    "/homeExpenses/{expenseId}": {
+      "schema": { "$ref": "#/entities/HomeExpense" },
+      "description": "Monthly home & shared living expenses"
+    },
+    "/persons/{personId}": {
+      "schema": { "$ref": "#/entities/PersonAccount" },
+      "description": "Personal, family, moderator, and staff accounts"
+    },
+    "/personTransactions/{ptxId}": {
+      "schema": { "$ref": "#/entities/PersonTransaction" },
+      "description": "Payable and payment given entries for personal/staff accounts"
+    },
+    "/publicSupplierLedgers/{supplierId}": {
+      "schema": { "$ref": "#/entities/PublicLedger" },
+      "description": "Shareable read-only supplier ledger snapshots"
+    },
+    "/publicCustomerLedgers/{customerId}": {
+      "schema": { "$ref": "#/entities/PublicLedger" },
+      "description": "Shareable read-only customer ledger snapshots"
+    },
+    "/publicPersonLedgers/{personId}": {
+      "schema": { "$ref": "#/entities/PublicPersonLedger" },
+      "description": "Shareable read-only person/staff ledger snapshots"
+    },
+    "/publicInvoices/{invoiceId}": {
+      "schema": { "$ref": "#/entities/PublicInvoice" },
+      "description": "Shareable read-only digital invoices"
+    },
+    "/admins/{uid}": {
+      "schema": { "$ref": "#/entities/AdminUser" },
+      "description": "Admin access registry"
+    }
+  }
+}

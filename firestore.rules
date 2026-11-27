@@ -1,0 +1,484 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global safety net: default deny everything
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Primitive Helpers ---
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdmin() {
+      return isVerified() && (
+        request.auth.token.email == 'sohel901190@gmail.com'
+        || exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // --- Entity Validation Blueprints ---
+    function isValidParty(data, partyId) {
+      return data.keys().hasAll([
+        'id', 'name', 'phone', 'address', 'totalBilled', 'totalPaid', 'currentDue', 'ownerUid', 'createdAt', 'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'id', 'name', 'phone', 'address', 'totalBilled', 'totalPaid', 'currentDue', 'ownerUid', 'createdAt', 'updatedAt'
+      ])
+      && data.id == partyId
+      && isValidId(data.id)
+      && data.name is string && data.name.size() >= 1 && data.name.size() <= 120
+      && data.phone is string && data.phone.size() <= 30
+      && data.address is string && data.address.size() <= 240
+      && data.totalBilled is number
+      && data.totalPaid is number
+      && data.currentDue is number
+      && data.ownerUid == request.auth.uid
+      && isValidId(data.ownerUid)
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidTransaction(data, txId) {
+      return data.keys().hasAll([
+        'id', 'type', 'date', 'partyId', 'partyName', 'partyPhone', 'partyAddress',
+        'invoiceNo', 'items', 'subtotal', 'discount', 'totalAmount', 'paidAmount',
+        'dueAmount', 'paymentMethod', 'note', 'ownerUid', 'createdAt', 'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'id', 'type', 'date', 'partyId', 'partyName', 'partyPhone', 'partyAddress',
+        'invoiceNo', 'items', 'subtotal', 'discount', 'totalAmount', 'paidAmount',
+        'dueAmount', 'paymentMethod', 'note', 'ownerUid', 'createdAt', 'updatedAt'
+      ])
+      && data.id == txId
+      && isValidId(data.id)
+      && data.type in ['supplier_purchase', 'supplier_payment', 'supplier_due_add', 'customer_sale', 'customer_payment', 'customer_due_add']
+      && data.date is string && data.date.size() >= 8 && data.date.size() <= 20
+      && isValidId(data.partyId)
+      && data.partyName is string && data.partyName.size() >= 1 && data.partyName.size() <= 120
+      && data.partyPhone is string && data.partyPhone.size() <= 30
+      && data.partyAddress is string && data.partyAddress.size() <= 240
+      && data.invoiceNo is string && data.invoiceNo.size() <= 40
+      && data.items is list && data.items.size() <= 50 && (data.items.size() == 0 || data.items[0] is map)
+      && data.subtotal is number
+      && data.discount is number
+      && data.totalAmount is number
+      && data.paidAmount is number
+      && data.dueAmount is number
+      && data.paymentMethod is string && data.paymentMethod.size() <= 60
+      && data.note is string && data.note.size() <= 500
+      && data.ownerUid == request.auth.uid
+      && isValidId(data.ownerUid)
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function hasConsistentParty(data) {
+      return (
+        (data.type in ['supplier_purchase', 'supplier_payment', 'supplier_due_add']
+          && existsAfter(/databases/$(database)/documents/suppliers/$(data.partyId)))
+        || (data.type in ['customer_sale', 'customer_payment', 'customer_due_add']
+          && existsAfter(/databases/$(database)/documents/customers/$(data.partyId)))
+      );
+    }
+
+    function isValidHomeExpense(data, expenseId) {
+      return data.keys().hasAll([
+        'id', 'date', 'monthKey', 'title', 'items', 'totalAmount',
+        'paidBy', 'paymentMethod', 'note', 'ownerUid', 'createdAt', 'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'id', 'date', 'monthKey', 'title', 'items', 'totalAmount',
+        'paidBy', 'paymentMethod', 'note', 'ownerUid', 'createdAt', 'updatedAt'
+      ])
+      && data.id == expenseId
+      && isValidId(data.id)
+      && data.date is string && data.date.size() >= 8 && data.date.size() <= 20
+      && data.monthKey is string && data.monthKey.size() >= 7 && data.monthKey.size() <= 10
+      && data.title is string && data.title.size() >= 1 && data.title.size() <= 160
+      && data.items is list && data.items.size() <= 50 && (data.items.size() == 0 || data.items[0] is map)
+      && data.totalAmount is number && data.totalAmount >= 0
+      && data.paidBy is string && data.paidBy.size() <= 60
+      && data.paymentMethod is string && data.paymentMethod.size() <= 60
+      && data.note is string && data.note.size() <= 500
+      && data.ownerUid == request.auth.uid
+      && isValidId(data.ownerUid)
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidPersonAccount(data, personId) {
+      return data.keys().hasAll([
+        'id', 'name', 'phone', 'role', 'note', 'totalPayable',
+        'totalGiven', 'currentBalance', 'ownerUid', 'createdAt', 'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'id', 'name', 'phone', 'role', 'note', 'totalPayable',
+        'totalGiven', 'currentBalance', 'ownerUid', 'createdAt', 'updatedAt'
+      ])
+      && data.id == personId
+      && isValidId(data.id)
+      && data.name is string && data.name.size() >= 1 && data.name.size() <= 120
+      && data.phone is string && data.phone.size() <= 30
+      && data.role is string && data.role.size() <= 60
+      && data.note is string && data.note.size() <= 240
+      && data.totalPayable is number
+      && data.totalGiven is number
+      && data.currentBalance is number
+      && data.ownerUid == request.auth.uid
+      && isValidId(data.ownerUid)
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidPersonTransaction(data, ptxId) {
+      return data.keys().hasAll([
+        'id', 'personId', 'personName', 'type', 'date', 'amount',
+        'purpose', 'paymentMethod', 'note', 'ownerUid', 'createdAt', 'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'id', 'personId', 'personName', 'type', 'date', 'amount',
+        'purpose', 'paymentMethod', 'note', 'ownerUid', 'createdAt', 'updatedAt'
+      ])
+      && data.id == ptxId
+      && isValidId(data.id)
+      && isValidId(data.personId)
+      && data.personName is string && data.personName.size() >= 1 && data.personName.size() <= 120
+      && data.type in ['payable_add', 'payment_given']
+      && data.date is string && data.date.size() >= 8 && data.date.size() <= 20
+      && data.amount is number && data.amount >= 0
+      && data.purpose is string && data.purpose.size() >= 1 && data.purpose.size() <= 200
+      && data.paymentMethod is string && data.paymentMethod.size() <= 60
+      && data.note is string && data.note.size() <= 500
+      && data.ownerUid == request.auth.uid
+      && isValidId(data.ownerUid)
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidPublicLedger(data, ledgerId, expectedPartyType) {
+      return data.keys().hasAll([
+        'id', 'partyType', 'name', 'phone', 'address', 'totalBilled', 'totalPaid',
+        'currentDue', 'shareEnabled', 'entries', 'ownerUid', 'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'id', 'partyType', 'name', 'phone', 'address', 'totalBilled', 'totalPaid',
+        'currentDue', 'shareEnabled', 'entries', 'ownerUid', 'updatedAt'
+      ])
+      && data.id == ledgerId
+      && isValidId(data.id)
+      && data.partyType == expectedPartyType
+      && data.name is string && data.name.size() >= 1 && data.name.size() <= 120
+      && data.phone is string && data.phone.size() <= 30
+      && data.address is string && data.address.size() <= 240
+      && data.totalBilled is number
+      && data.totalPaid is number
+      && data.currentDue is number
+      && data.shareEnabled is bool
+      && data.entries is list && data.entries.size() <= 250 && (data.entries.size() == 0 || data.entries[0] is map)
+      && data.ownerUid == request.auth.uid
+      && isValidId(data.ownerUid)
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidPublicPersonLedger(data, personId) {
+      return data.keys().hasAll([
+        'id', 'name', 'phone', 'role', 'totalPayable', 'totalGiven',
+        'currentBalance', 'shareEnabled', 'entries', 'ownerUid', 'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'id', 'name', 'phone', 'role', 'totalPayable', 'totalGiven',
+        'currentBalance', 'shareEnabled', 'entries', 'ownerUid', 'updatedAt'
+      ])
+      && data.id == personId
+      && isValidId(data.id)
+      && data.name is string && data.name.size() >= 1 && data.name.size() <= 120
+      && data.phone is string && data.phone.size() <= 30
+      && data.role is string && data.role.size() <= 60
+      && data.totalPayable is number
+      && data.totalGiven is number
+      && data.currentBalance is number
+      && data.shareEnabled is bool
+      && data.entries is list && data.entries.size() <= 250 && (data.entries.size() == 0 || data.entries[0] is map)
+      && data.ownerUid == request.auth.uid
+      && isValidId(data.ownerUid)
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidPublicInvoice(data, invoiceId) {
+      return data.keys().hasAll([
+        'id', 'invoiceNo', 'date', 'partyType', 'partyId', 'partyName', 'partyPhone',
+        'partyAddress', 'items', 'subtotal', 'discount', 'totalAmount', 'paidAmount',
+        'dueAmount', 'partyTotalDue', 'paymentMethod', 'note', 'shareEnabled',
+        'ownerUid', 'createdAt', 'updatedAt'
+      ])
+      && data.keys().hasOnly([
+        'id', 'invoiceNo', 'date', 'partyType', 'partyId', 'partyName', 'partyPhone',
+        'partyAddress', 'items', 'subtotal', 'discount', 'totalAmount', 'paidAmount',
+        'dueAmount', 'partyTotalDue', 'paymentMethod', 'note', 'shareEnabled',
+        'ownerUid', 'createdAt', 'updatedAt'
+      ])
+      && data.id == invoiceId
+      && isValidId(data.id)
+      && data.invoiceNo is string && data.invoiceNo.size() >= 1 && data.invoiceNo.size() <= 40
+      && data.date is string && data.date.size() >= 8 && data.date.size() <= 20
+      && data.partyType in ['customer', 'supplier']
+      && isValidId(data.partyId)
+      && data.partyName is string && data.partyName.size() >= 1 && data.partyName.size() <= 120
+      && data.partyPhone is string && data.partyPhone.size() <= 30
+      && data.partyAddress is string && data.partyAddress.size() <= 240
+      && data.items is list && data.items.size() <= 50 && (data.items.size() == 0 || data.items[0] is map)
+      && data.subtotal is number
+      && data.discount is number
+      && data.totalAmount is number
+      && data.paidAmount is number
+      && data.dueAmount is number
+      && data.partyTotalDue is number
+      && data.paymentMethod is string && data.paymentMethod.size() <= 60
+      && data.note is string && data.note.size() <= 500
+      && data.shareEnabled is bool
+      && data.ownerUid == request.auth.uid
+      && isValidId(data.ownerUid)
+      && data.createdAt is timestamp
+      && data.updatedAt is timestamp;
+    }
+
+    function isValidAdminUser(data, uid) {
+      return data.keys().hasAll(['uid', 'email', 'createdAt'])
+      && data.keys().hasOnly(['uid', 'email', 'createdAt'])
+      && data.uid == uid
+      && isValidId(data.uid)
+      && data.email is string && data.email.size() >= 3 && data.email.size() <= 160
+      && data.createdAt is timestamp;
+    }
+
+    // --- Collection Rules ---
+
+    match /suppliers/{supplierId} {
+      allow get: if isValidId(supplierId) && isAdmin();
+      allow list: if isAdmin();
+      allow create: if isAdmin() && isValidId(supplierId)
+        && isValidParty(incoming(), supplierId)
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isAdmin() && isValidId(supplierId)
+        && isValidParty(incoming(), supplierId)
+        && incoming().ownerUid == existing().ownerUid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'name', 'phone', 'address', 'totalBilled', 'totalPaid', 'currentDue', 'updatedAt'
+        ]);
+      allow delete: if isAdmin() && isValidId(supplierId);
+    }
+
+    match /customers/{customerId} {
+      allow get: if isValidId(customerId) && isAdmin();
+      allow list: if isAdmin();
+      allow create: if isAdmin() && isValidId(customerId)
+        && isValidParty(incoming(), customerId)
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isAdmin() && isValidId(customerId)
+        && isValidParty(incoming(), customerId)
+        && incoming().ownerUid == existing().ownerUid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'name', 'phone', 'address', 'totalBilled', 'totalPaid', 'currentDue', 'updatedAt'
+        ]);
+      allow delete: if isAdmin() && isValidId(customerId);
+    }
+
+    match /transactions/{txId} {
+      allow get: if isValidId(txId) && isAdmin();
+      allow list: if isAdmin();
+      allow create: if isAdmin() && isValidId(txId)
+        && isValidTransaction(incoming(), txId)
+        && hasConsistentParty(incoming())
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isAdmin() && isValidId(txId)
+        && isValidTransaction(incoming(), txId)
+        && hasConsistentParty(incoming())
+        && incoming().ownerUid == existing().ownerUid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'type', 'date', 'partyId', 'partyName', 'partyPhone', 'partyAddress',
+          'invoiceNo', 'items', 'subtotal', 'discount', 'totalAmount', 'paidAmount',
+          'dueAmount', 'paymentMethod', 'note', 'updatedAt'
+        ]);
+      allow delete: if isAdmin() && isValidId(txId);
+    }
+
+    match /homeExpenses/{expenseId} {
+      allow get: if isValidId(expenseId) && isAdmin();
+      allow list: if isAdmin();
+      allow create: if isAdmin() && isValidId(expenseId)
+        && isValidHomeExpense(incoming(), expenseId)
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isAdmin() && isValidId(expenseId)
+        && isValidHomeExpense(incoming(), expenseId)
+        && incoming().ownerUid == existing().ownerUid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'date', 'monthKey', 'title', 'items', 'totalAmount',
+          'paidBy', 'paymentMethod', 'note', 'updatedAt'
+        ]);
+      allow delete: if isAdmin() && isValidId(expenseId);
+    }
+
+    match /persons/{personId} {
+      allow get: if isValidId(personId) && isAdmin();
+      allow list: if isAdmin();
+      allow create: if isAdmin() && isValidId(personId)
+        && isValidPersonAccount(incoming(), personId)
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isAdmin() && isValidId(personId)
+        && isValidPersonAccount(incoming(), personId)
+        && incoming().ownerUid == existing().ownerUid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'name', 'phone', 'role', 'note', 'totalPayable',
+          'totalGiven', 'currentBalance', 'updatedAt'
+        ]);
+      allow delete: if isAdmin() && isValidId(personId);
+    }
+
+    match /personTransactions/{ptxId} {
+      allow get: if isValidId(ptxId) && isAdmin();
+      allow list: if isAdmin();
+      allow create: if isAdmin() && isValidId(ptxId)
+        && isValidPersonTransaction(incoming(), ptxId)
+        && existsAfter(/databases/$(database)/documents/persons/$(incoming().personId))
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isAdmin() && isValidId(ptxId)
+        && isValidPersonTransaction(incoming(), ptxId)
+        && existsAfter(/databases/$(database)/documents/persons/$(incoming().personId))
+        && incoming().ownerUid == existing().ownerUid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'personId', 'personName', 'type', 'date', 'amount',
+          'purpose', 'paymentMethod', 'note', 'updatedAt'
+        ]);
+      allow delete: if isAdmin() && isValidId(ptxId);
+    }
+
+    match /publicSupplierLedgers/{supplierId} {
+      allow get: if isValidId(supplierId) && (
+        isAdmin() || (resource != null && existing().shareEnabled == true)
+      );
+      allow list: if isAdmin();
+      allow create: if isAdmin() && isValidId(supplierId)
+        && isValidPublicLedger(incoming(), supplierId, 'supplier')
+        && existsAfter(/databases/$(database)/documents/suppliers/$(supplierId))
+        && incoming().updatedAt == request.time;
+      allow update: if isAdmin() && isValidId(supplierId)
+        && isValidPublicLedger(incoming(), supplierId, 'supplier')
+        && incoming().ownerUid == existing().ownerUid
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'name', 'phone', 'address', 'totalBilled', 'totalPaid', 'currentDue',
+          'shareEnabled', 'entries', 'updatedAt'
+        ]);
+      allow delete: if isAdmin() && isValidId(supplierId);
+    }
+
+    match /publicCustomerLedgers/{customerId} {
+      allow get: if isValidId(customerId) && (
+        isAdmin() || (resource != null && existing().shareEnabled == true)
+      );
+      allow list: if isAdmin();
+      allow create: if isAdmin() && isValidId(customerId)
+        && isValidPublicLedger(incoming(), customerId, 'customer')
+        && existsAfter(/databases/$(database)/documents/customers/$(customerId))
+        && incoming().updatedAt == request.time;
+      allow update: if isAdmin() && isValidId(customerId)
+        && isValidPublicLedger(incoming(), customerId, 'customer')
+        && incoming().ownerUid == existing().ownerUid
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'name', 'phone', 'address', 'totalBilled', 'totalPaid', 'currentDue',
+          'shareEnabled', 'entries', 'updatedAt'
+        ]);
+      allow delete: if isAdmin() && isValidId(customerId);
+    }
+
+    match /publicPersonLedgers/{personId} {
+      allow get: if isValidId(personId) && (
+        isAdmin() || (resource != null && existing().shareEnabled == true)
+      );
+      allow list: if isAdmin();
+      allow create: if isAdmin() && isValidId(personId)
+        && isValidPublicPersonLedger(incoming(), personId)
+        && existsAfter(/databases/$(database)/documents/persons/$(personId))
+        && incoming().updatedAt == request.time;
+      allow update: if isAdmin() && isValidId(personId)
+        && isValidPublicPersonLedger(incoming(), personId)
+        && incoming().ownerUid == existing().ownerUid
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'name', 'phone', 'role', 'totalPayable', 'totalGiven',
+          'currentBalance', 'shareEnabled', 'entries', 'updatedAt'
+        ]);
+      allow delete: if isAdmin() && isValidId(personId);
+    }
+
+    match /publicInvoices/{invoiceId} {
+      allow get: if isValidId(invoiceId) && (
+        isAdmin() || (resource != null && existing().shareEnabled == true)
+      );
+      allow list: if isAdmin();
+      allow create: if isAdmin() && isValidId(invoiceId)
+        && isValidPublicInvoice(incoming(), invoiceId)
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isAdmin() && isValidId(invoiceId)
+        && isValidPublicInvoice(incoming(), invoiceId)
+        && incoming().ownerUid == existing().ownerUid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'invoiceNo', 'date', 'partyType', 'partyId', 'partyName', 'partyPhone',
+          'partyAddress', 'items', 'subtotal', 'discount', 'totalAmount', 'paidAmount',
+          'dueAmount', 'partyTotalDue', 'paymentMethod', 'note', 'shareEnabled', 'updatedAt'
+        ]);
+      allow delete: if isAdmin() && isValidId(invoiceId);
+    }
+
+    match /admins/{uid} {
+      allow get: if isValidId(uid) && (isAdmin() || (isVerified() && request.auth.uid == uid));
+      allow list: if isAdmin();
+      allow create: if isAdmin() && isValidId(uid)
+        && isValidAdminUser(incoming(), uid)
+        && incoming().createdAt == request.time;
+      allow update: if false;
+      allow delete: if isAdmin() && isValidId(uid);
+    }
+  }
+}
