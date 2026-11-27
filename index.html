@@ -56,6 +56,8 @@
       html {
         font-family: var(--font-sans);
         scroll-behavior: smooth;
+        -webkit-text-size-adjust: 100%;
+        overflow-x: hidden;
       }
 
       body {
@@ -65,6 +67,7 @@
         font-family: var(--font-sans);
         -webkit-font-smoothing: antialiased;
         line-height: 1.5;
+        overflow-x: hidden;
       }
 
       button,
@@ -72,6 +75,7 @@
       select,
       textarea {
         font-family: inherit;
+        touch-action: manipulation;
       }
 
       .mono {
@@ -82,7 +86,7 @@
       .container {
         max-width: 1280px;
         margin: 0 auto;
-        padding: 0 16px;
+        padding: 0 12px;
       }
 
       @media (min-width: 640px) {
@@ -101,11 +105,20 @@
       }
 
       .header-inner {
-        height: 64px;
+        min-height: 58px;
+        padding: 6px 0;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 12px;
+        gap: 8px;
+      }
+
+      @media (min-width: 640px) {
+        .header-inner {
+          height: 64px;
+          padding: 0;
+          gap: 12px;
+        }
       }
 
       .brand-btn {
@@ -117,6 +130,7 @@
         gap: 12px;
         cursor: pointer;
         text-align: left;
+        flex-shrink: 0;
       }
 
       .brand-logo {
@@ -125,6 +139,21 @@
         max-height: 44px;
         object-fit: contain;
         display: block;
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0;
+      }
+
+      @media (max-width: 390px) {
+        .header-actions .btn-sm {
+          padding: 6px 9px;
+          font-size: 11.5px;
+          gap: 4px;
+        }
       }
 
       .brand-sub {
@@ -183,36 +212,53 @@
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
       }
 
-      .mobile-nav {
-        display: flex;
-        gap: 4px;
-        padding-bottom: 10px;
-        overflow-x: auto;
+      /* Mobile Fixed Bottom Navigation Bar (matching original bottom thumb-zone design) */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 40;
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-top: 1px solid var(--border);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
       }
 
       @media (min-width: 768px) {
-        .mobile-nav {
+        .bottom-nav {
           display: none;
         }
       }
 
-      .mobile-tab {
-        flex: 1;
-        min-width: max-content;
-        padding: 8px 12px;
-        border: none;
-        border-radius: 10px;
-        font-size: 12px;
-        font-weight: 600;
-        background: #f5f5f5;
-        color: #404040;
-        cursor: pointer;
-        white-space: nowrap;
+      .bottom-nav-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        height: 62px;
+        align-items: center;
       }
 
-      .mobile-tab.active {
-        background: #000000;
-        color: #ffffff;
+      .bottom-nav-btn {
+        border: none;
+        background: transparent;
+        height: 100%;
+        padding: 4px 2px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 3px;
+        color: var(--text-muted);
+        cursor: pointer;
+        font-size: 10.5px;
+        font-weight: 600;
+        transition: color 0.15s;
+      }
+
+      .bottom-nav-btn.active {
+        color: var(--brand);
+        font-weight: 700;
       }
 
       /* Buttons */
@@ -317,22 +363,59 @@
 
       /* Layout Cards & Grids */
       .main-content {
-        padding: 24px 0 64px;
+        padding: 16px 0 calc(84px + env(safe-area-inset-bottom, 0px));
+      }
+
+      @media (min-width: 768px) {
+        .main-content {
+          padding: 24px 0 64px;
+        }
       }
 
       .stack-lg > * + * {
-        margin-top: 24px;
+        margin-top: 16px;
+      }
+
+      @media (min-width: 640px) {
+        .stack-lg > * + * {
+          margin-top: 24px;
+        }
       }
 
       .stack-md > * + * {
-        margin-top: 16px;
+        margin-top: 14px;
+      }
+
+      @media (min-width: 640px) {
+        .stack-md > * + * {
+          margin-top: 16px;
+        }
+      }
+
+      .page-title {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.3;
+      }
+
+      @media (min-width: 640px) {
+        .page-title {
+          font-size: 25px;
+        }
       }
 
       .card {
         background: var(--surface);
         border: 1px solid var(--border);
         border-radius: 16px;
-        padding: 20px;
+        padding: 15px;
+      }
+
+      @media (min-width: 640px) {
+        .card {
+          padding: 20px;
+        }
       }
 
       .card-flush {
@@ -344,43 +427,52 @@
 
       .kpi-grid {
         display: grid;
-        grid-template-columns: repeat(1, 1fr);
-        gap: 16px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      @media (max-width: 340px) {
+        .kpi-grid {
+          grid-template-columns: 1fr;
+        }
       }
 
       @media (min-width: 640px) {
         .kpi-grid {
-          grid-template-columns: repeat(2, 1fr);
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 16px;
         }
       }
 
       @media (min-width: 1024px) {
         .kpi-grid {
-          grid-template-columns: repeat(4, 1fr);
+          grid-template-columns: repeat(4, minmax(0, 1fr));
         }
       }
 
       .grid-2 {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 12px;
       }
 
       @media (min-width: 768px) {
         .grid-2 {
           grid-template-columns: repeat(2, 1fr);
+          gap: 16px;
         }
       }
 
       .grid-3 {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 16px;
+        gap: 12px;
       }
 
       @media (min-width: 640px) {
         .grid-3 {
           grid-template-columns: repeat(3, 1fr);
+          gap: 16px;
         }
       }
 
@@ -399,23 +491,124 @@
         gap: 8px;
       }
 
-      .kpi-label {
+      .action-grid-mobile {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+        width: 100%;
+      }
+
+      .action-grid-mobile .btn {
+        width: 100%;
+        padding: 8px 10px;
         font-size: 12px;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.25;
+      }
+
+      .action-grid-mobile .btn-span-2 {
+        grid-column: span 2;
+      }
+
+      @media (min-width: 640px) {
+        .action-grid-mobile {
+          display: flex;
+          flex-wrap: wrap;
+          align-items: center;
+          width: auto;
+          gap: 8px;
+        }
+        .action-grid-mobile .btn {
+          width: auto;
+          padding: 8px 14px;
+          font-size: 13px;
+          white-space: nowrap;
+        }
+        .action-grid-mobile .btn-span-2 {
+          grid-column: auto;
+        }
+      }
+
+      .item-row-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr auto;
+        gap: 8px;
+        align-items: center;
+        padding: 10px;
+        background: var(--surface-muted);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+      }
+
+      .item-row-grid .item-name-field {
+        grid-column: 1 / -1;
+      }
+
+      @media (min-width: 640px) {
+        .item-row-grid {
+          grid-template-columns: 2fr 1fr 1fr auto;
+          padding: 0;
+          background: transparent;
+          border: none;
+          border-radius: 0;
+        }
+        .item-row-grid .item-name-field {
+          grid-column: auto;
+        }
+      }
+
+      .modal-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
+
+      @media (min-width: 640px) {
+        .modal-actions {
+          display: flex;
+          justify-content: flex-end;
+          gap: 8px;
+        }
+      }
+
+      .kpi-label {
+        font-size: 11.5px;
         font-weight: 600;
         color: var(--text-muted);
         margin: 0;
       }
 
+      @media (min-width: 640px) {
+        .kpi-label {
+          font-size: 12px;
+        }
+      }
+
       .kpi-val {
-        font-size: 24px;
+        font-size: clamp(16px, 4.4vw, 24px);
         font-weight: 700;
-        margin: 8px 0 0;
+        margin: 6px 0 0;
+        overflow-wrap: anywhere;
+      }
+
+      @media (min-width: 640px) {
+        .kpi-val {
+          margin-top: 8px;
+        }
       }
 
       .kpi-sub {
-        font-size: 12px;
+        font-size: 11px;
         color: var(--text-muted);
-        margin: 6px 0 0;
+        margin: 4px 0 0;
+      }
+
+      @media (min-width: 640px) {
+        .kpi-sub {
+          font-size: 12px;
+          margin-top: 6px;
+        }
       }
 
       .text-red {
@@ -445,9 +638,17 @@
         border-radius: 12px;
         background: var(--surface-muted);
         color: var(--text);
-        font-size: 14px;
+        font-size: 16px;
         outline: none;
         transition: border-color 0.15s, background 0.15s;
+      }
+
+      @media (min-width: 640px) {
+        .input,
+        .select,
+        .textarea {
+          font-size: 14px;
+        }
       }
 
       .input:focus,
@@ -473,7 +674,15 @@
       .search-wrap {
         position: relative;
         width: 100%;
-        max-width: 360px;
+      }
+
+      @media (min-width: 640px) {
+        .search-wrap {
+          max-width: 360px;
+        }
+        .search-wrap.search-compact-desktop {
+          max-width: 260px;
+        }
       }
 
       .search-wrap svg {
@@ -496,22 +705,123 @@
       }
 
       .party-row {
-        padding: 16px 20px;
+        padding: 14px 14px;
         display: flex;
         flex-direction: column;
-        gap: 14px;
+        gap: 12px;
         transition: background 0.15s;
+      }
+
+      @media (min-width: 640px) {
+        .party-row {
+          padding: 16px 20px;
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+          gap: 14px;
+        }
       }
 
       .party-row:hover {
         background: var(--surface-muted);
       }
 
+      .party-row-right {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        width: 100%;
+        border-top: 1px solid var(--border);
+        padding-top: 10px;
+      }
+
       @media (min-width: 640px) {
-        .party-row {
-          flex-direction: row;
-          align-items: center;
-          justify-content: space-between;
+        .party-row-right {
+          width: auto;
+          justify-content: flex-end;
+          border-top: none;
+          padding-top: 0;
+          gap: 14px;
+        }
+      }
+
+      .party-due-box {
+        text-align: left;
+      }
+
+      @media (min-width: 640px) {
+        .party-due-box {
+          text-align: right;
+        }
+      }
+
+      /* Mobile Stacked Ledger Cards */
+      .mobile-card-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .mobile-tx-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 13px 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .mobile-tx-metrics {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+        background: var(--surface-muted);
+        border-radius: 10px;
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+
+      .mobile-tx-metric-label {
+        font-size: 10.5px;
+        color: var(--text-muted);
+      }
+
+      /* Invoice Responsive */
+      .invoice-card {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 16px;
+      }
+
+      @media (min-width: 640px) {
+        .invoice-card {
+          padding: 32px;
+        }
+      }
+
+      .invoice-meta-right {
+        text-align: left;
+      }
+
+      @media (min-width: 768px) {
+        .invoice-meta-right {
+          text-align: right;
+        }
+      }
+
+      .invoice-totals-box {
+        width: 100%;
+        font-size: 13.5px;
+        border-top: 1px solid var(--border);
+        padding-top: 12px;
+      }
+
+      @media (min-width: 640px) {
+        .invoice-totals-box {
+          max-width: 300px;
         }
       }
 
@@ -526,6 +836,7 @@
       .table-wrap {
         width: 100%;
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
       }
 
       table.ledger-table {
@@ -568,12 +879,18 @@
         border-radius: 12px;
         overflow-x: auto;
         max-width: 100%;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .pill-group::-webkit-scrollbar {
+        display: none;
       }
 
       .pill-btn {
         border: none;
         background: transparent;
-        padding: 6px 12px;
+        padding: 7px 12px;
         border-radius: 8px;
         font-size: 12px;
         font-weight: 600;
@@ -594,7 +911,13 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 16px;
+        padding: 12px;
+      }
+
+      @media (min-width: 640px) {
+        .login-shell {
+          padding: 16px;
+        }
       }
 
       .login-card {
@@ -615,13 +938,31 @@
       }
 
       .login-left {
-        padding: 36px;
+        padding: 20px;
         border-bottom: 1px solid #e5e5e5;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        gap: 28px;
-        min-height: 360px;
+        gap: 16px;
+        min-height: auto;
+      }
+
+      .login-hero-img {
+        width: 100%;
+        max-width: 240px;
+        max-height: 120px;
+        object-fit: contain;
+      }
+
+      @media (min-width: 640px) {
+        .login-left {
+          padding: 36px;
+          gap: 28px;
+        }
+        .login-hero-img {
+          max-width: 340px;
+          max-height: 240px;
+        }
       }
 
       @media (min-width: 900px) {
@@ -633,10 +974,16 @@
       }
 
       .login-right {
-        padding: 36px;
+        padding: 22px 20px;
         display: flex;
         flex-direction: column;
         justify-content: center;
+      }
+
+      @media (min-width: 640px) {
+        .login-right {
+          padding: 36px;
+        }
       }
 
       /* Modals */
@@ -663,15 +1010,17 @@
         max-width: 720px;
         max-height: 92vh;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
         background: #ffffff;
         border-radius: 20px 20px 0 0;
-        padding: 20px 24px 28px;
+        padding: 18px 16px calc(24px + env(safe-area-inset-bottom, 0px));
         box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
       }
 
       @media (min-width: 640px) {
         .modal-panel {
           border-radius: 20px;
+          padding: 20px 24px 28px;
         }
       }
 
@@ -682,8 +1031,8 @@
       /* Toast */
       .toast {
         position: fixed;
-        bottom: 20px;
-        right: 20px;
+        bottom: calc(74px + env(safe-area-inset-bottom, 0px));
+        right: 14px;
         z-index: 70;
         padding: 12px 18px;
         border-radius: 12px;
@@ -691,7 +1040,15 @@
         font-size: 13px;
         font-weight: 600;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        max-width: calc(100vw - 40px);
+        max-width: calc(100vw - 28px);
+      }
+
+      @media (min-width: 768px) {
+        .toast {
+          bottom: 20px;
+          right: 20px;
+          max-width: calc(100vw - 40px);
+        }
       }
 
       .toast.success {
@@ -855,6 +1212,7 @@
       const EXPENSE_PAYMENT_METHODS = [
         'নগদ',
         'ক্যাশ',
+        'পূর্বের হিসাব',
         'বিকাশ',
         'নগদ ও ব্যাংক',
         'ব্যাংক',
@@ -1024,6 +1382,11 @@
         print: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>`,
         wa: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>`,
         chevron: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>`,
+        navDashboard: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>`,
+        navBook: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+        navUsers: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+        navHome: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+        navStaff: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>`,
       };
 
       // --- Application State ---
@@ -1615,7 +1978,7 @@
           bodyHtml = `
             <div class="chart-wrap" id="monthly-chart-wrap">
               <div class="chart-tooltip" id="chart-tooltip"></div>
-              <svg viewBox="0 0 ${svgW} ${svgH}" style="width:100%;min-width:${count === 12 ? 680 : 480}px;height:270px;display:block;">
+              <svg viewBox="0 0 ${svgW} ${svgH}" style="width:100%;min-width:${count === 12 ? 560 : 320}px;height:250px;display:block;">
                 ${gridLines}
                 ${bars}
               </svg>
@@ -1865,19 +2228,19 @@
             <div class="login-card">
               <div class="login-left">
                 <div style="flex:1;display:flex;align-items:center;justify-content:center;">
-                  <img src="${LOGO_URL}" alt="এমএস ফ্যাশন লোগো" referrerpolicy="no-referrer" style="width:100%;max-width:340px;max-height:240px;object-fit:contain;" />
+                  <img src="${LOGO_URL}" alt="এমএস ফ্যাশন লোগো" referrerpolicy="no-referrer" class="login-hero-img" />
                 </div>
-                <div style="border-top:1px solid #e5e5e5;padding-top:20px;color:#000000;">
-                  <p style="margin:0 0 6px;font-size:12px;font-weight:600;color:#262626;">ডিজিটাল হিসাবরক্ষণ ও ইনভয়েস পোর্টাল</p>
-                  <h2 style="margin:0;font-size:26px;font-weight:700;color:#000000;">এমএস ফ্যাশন (MS Fashion)</h2>
-                  <p style="margin:8px 0 0;font-size:14px;color:#262626;">সাপ্লায়ার বাকি, কাস্টমার পাওনা, বাসার খরচ, মাইনু মামা ও মডারেটর হিমেলের হিসাব — সবকিছু এক খাতায়।</p>
+                <div style="border-top:1px solid #e5e5e5;padding-top:16px;color:#000000;">
+                  <p style="margin:0 0 4px;font-size:12px;font-weight:600;color:#262626;">ডিজিটাল হিসাবরক্ষণ ও ইনভয়েস পোর্টাল</p>
+                  <h2 style="margin:0;font-size:22px;font-weight:700;color:#000000;">এমএস ফ্যাশন (MS Fashion)</h2>
+                  <p style="margin:6px 0 0;font-size:13.5px;color:#262626;">সাপ্লায়ার বাকি, কাস্টমার পাওনা, বাসার খরচ, মাইনু মামা ও মডারেটর হিমেলের হিসাব — সবকিছু এক খাতায়।</p>
                 </div>
               </div>
               <div class="login-right">
                 <div style="max-width:360px;width:100%;margin:0 auto;">
-                  <img src="${LOGO_URL}" alt="এমএস ফ্যাশন" referrerpolicy="no-referrer" style="width:120px;height:auto;max-height:54px;object-fit:contain;margin-bottom:18px;display:block;" />
-                  <h1 style="margin:0;font-size:26px;font-weight:700;color:#000000;">টালি খাতায় স্বাগতম</h1>
-                  <p style="margin:8px 0 24px;font-size:14px;color:#525252;">মালিক হিসেবে আপনার ব্যবসা ও ব্যক্তিগত সব হিসাব নিরাপদে ক্লাউডে সংরক্ষণ করতে Google অ্যাকাউন্ট দিয়ে প্রবেশ করুন।</p>
+                  <img src="${LOGO_URL}" alt="এমএস ফ্যাশন" referrerpolicy="no-referrer" style="width:120px;height:auto;max-height:54px;object-fit:contain;margin-bottom:14px;display:block;" />
+                  <h1 style="margin:0;font-size:24px;font-weight:700;color:#000000;">টালি খাতায় স্বাগতম</h1>
+                  <p style="margin:8px 0 20px;font-size:13.5px;color:#525252;">মালিক হিসেবে আপনার ব্যবসা ও ব্যক্তিগত সব হিসাব নিরাপদে ক্লাউডে সংরক্ষণ করতে Google অ্যাকাউন্ট দিয়ে প্রবেশ করুন।</p>
                   ${
                     unauthorized
                       ? `<div class="alert-error" style="margin-bottom:16px;">
@@ -1913,47 +2276,61 @@
           )
           .join('');
 
+        const mobileInvoiceItemsHtml = (inv.items || [])
+          .map(
+            (it, idx) => `
+            <div style="padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px;">
+              <div class="flex-between" style="align-items:flex-start;gap:8px;">
+                <div><strong>${toBn(idx + 1)}. ${esc(it.name)}</strong>${it.details ? `<div style="font-size:11.5px;color:var(--text-muted);">${esc(it.details)}</div>` : ''}</div>
+                <strong class="mono">${esc(formatTaka(it.lineTotal))}</strong>
+              </div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">${toBn(it.qty)} পিস × ${esc(formatTaka(it.unitPrice))}</div>
+            </div>
+          `,
+          )
+          .join('');
+
         return `
           <div class="stack-md">
             <div class="card flex-between no-print">
               <div class="flex-wrap">
-                ${!isPublic ? `<button type="button" class="btn btn-soft" data-action="close-invoice">${ICONS.back} ফিরে যান</button>` : ''}
+                ${!isPublic ? `<button type="button" class="btn btn-soft btn-sm" data-action="close-invoice">${ICONS.back} ফিরে যান</button>` : ''}
                 <span style="font-size:13px;font-weight:600;color:var(--text-muted);">ইনভয়েস #${esc(inv.invoiceNo)}</span>
               </div>
-              <div class="flex-wrap">
+              <div class="action-grid-mobile">
                 <button type="button" class="btn btn-soft" data-action="copy-url" data-param="invoice" data-id="${esc(inv.id)}">${ICONS.copy} লিংক কপি</button>
-                ${!isPublic ? `<button type="button" class="btn btn-whatsapp" data-action="wa-invoice" data-id="${esc(inv.id)}">${ICONS.wa} WhatsApp-এ পাঠান</button>` : ''}
-                <button type="button" class="btn btn-primary" data-action="print">${ICONS.print} প্রিন্ট / PDF ডাউনলোড</button>
+                ${!isPublic ? `<button type="button" class="btn btn-whatsapp" data-action="wa-invoice" data-id="${esc(inv.id)}">${ICONS.wa} WhatsApp</button>` : ''}
+                <button type="button" class="btn btn-primary btn-span-2" data-action="print">${ICONS.print} প্রিন্ট / PDF ডাউনলোড</button>
               </div>
             </div>
 
-            <div class="card print-container" style="max-width:860px;margin:0 auto;padding:32px;">
-              <div class="flex-between" style="border-bottom:2px solid #111815;padding-bottom:18px;margin-bottom:20px;">
+            <div class="card print-container invoice-card">
+              <div class="flex-between" style="border-bottom:2px solid #111815;padding-bottom:14px;margin-bottom:16px;">
                 <div>
-                  <h1 style="margin:0;font-size:22px;font-weight:700;">এমএস ফ্যাশন (MS Fashion)</h1>
+                  <h1 style="margin:0;font-size:20px;font-weight:700;">এমএস ফ্যাশন (MS Fashion)</h1>
                   <p style="margin:2px 0 0;font-size:12.5px;color:var(--text-muted);">ডিজিটাল ইনভয়েস ও ক্যাশ মেমো</p>
                 </div>
-                <div style="text-align:right;">
+                <div class="invoice-meta-right">
                   <div class="mono" style="font-size:14px;font-weight:700;color:var(--brand);">#${esc(inv.invoiceNo)}</div>
                   <div style="font-size:12.5px;color:var(--text-muted);">তারিখ: ${esc(formatDateBn(inv.date))}</div>
                 </div>
               </div>
 
-              <div class="grid-2" style="margin-bottom:20px;font-size:13.5px;">
+              <div class="grid-2" style="margin-bottom:16px;font-size:13.5px;">
                 <div>
                   <div style="font-size:11px;font-weight:700;color:var(--text-muted);">${inv.partyType === 'supplier' ? 'সাপ্লায়ার' : 'কাস্টমার'}</div>
                   <div style="font-size:16px;font-weight:700;">${esc(inv.partyName)}</div>
                   ${inv.partyPhone ? `<div class="mono" style="font-size:12.5px;color:var(--text-muted);">${esc(inv.partyPhone)}</div>` : ''}
                   ${inv.partyAddress ? `<div style="font-size:12.5px;color:var(--text-muted);">${esc(inv.partyAddress)}</div>` : ''}
                 </div>
-                <div style="text-align:right;">
+                <div class="invoice-meta-right">
                   <div style="font-size:11px;font-weight:700;color:var(--text-muted);">পেমেন্ট মাধ্যম</div>
                   <div style="font-weight:600;">${esc(inv.paymentMethod || 'নগদ')}</div>
                   ${inv.note ? `<div style="font-size:12px;color:var(--text-muted);margin-top:4px;">নোট: ${esc(inv.note)}</div>` : ''}
                 </div>
               </div>
 
-              <div class="table-wrap">
+              <div class="desktop-only table-wrap">
                 <table class="ledger-table">
                   <thead>
                     <tr style="background:var(--surface-pill);">
@@ -1968,8 +2345,12 @@
                 </table>
               </div>
 
-              <div style="margin-top:20px;display:flex;justify-content:flex-end;">
-                <div style="width:100%;max-width:300px;font-size:13.5px;border-top:1px solid var(--border);padding-top:12px;">
+              <div class="mobile-only" style="border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+                ${mobileInvoiceItemsHtml}
+              </div>
+
+              <div style="margin-top:16px;display:flex;justify-content:flex-end;">
+                <div class="invoice-totals-box">
                   <div class="flex-between" style="padding:3px 0;"><span class="text-muted">সাবটোটাল</span><span class="mono">${esc(formatTaka(inv.subtotal))}</span></div>
                   ${inv.discount > 0 ? `<div class="flex-between" style="padding:3px 0;"><span class="text-muted">ছাড়</span><span class="mono text-red">-${esc(formatTaka(inv.discount))}</span></div>` : ''}
                   <div class="flex-between" style="padding:6px 0;font-size:15px;font-weight:700;border-top:1px solid var(--border);margin-top:4px;"><span>সর্বমোট বিল</span><span class="mono">${esc(formatTaka(inv.totalAmount))}</span></div>
@@ -1978,7 +2359,7 @@
                   <div class="flex-between" style="padding:6px 0 0;border-top:1px dashed var(--border);margin-top:6px;font-weight:700;"><span>মোট বকেয়া</span><span class="mono ${inv.partyTotalDue > 0 ? 'text-red' : 'text-green'}">${esc(formatTaka(inv.partyTotalDue))}</span></div>
                 </div>
               </div>
-              <p style="margin:24px 0 0;font-size:11px;color:var(--text-muted);text-align:center;">শেয়ার লিংক: ${esc(publicUrl)}</p>
+              <p style="margin:20px 0 0;font-size:11px;color:var(--text-muted);text-align:center;word-break:break-all;">শেয়ার লিংক: ${esc(publicUrl)}</p>
             </div>
           </div>
         `;
@@ -2020,6 +2401,29 @@
           })
           .join('');
 
+        const mobilePublicCards = entries
+          .map((e) => {
+            const debit = isPerson ? e.payableAmount : e.debit;
+            const credit = isPerson ? e.givenAmount : e.credit;
+            return `
+              <div class="mobile-tx-card">
+                <div class="flex-between" style="gap:8px;">
+                  <span style="font-size:12px;color:var(--text-muted);">${esc(formatDateBn(e.date))}</span>
+                  <strong class="mono ${e.runningBalance > 0 ? 'text-red' : 'text-green'}" style="font-size:13px;">ব্যালেন্স: ${esc(formatTaka(e.runningBalance))}</strong>
+                </div>
+                <div>
+                  <div style="font-weight:700;font-size:14px;">${esc(isPerson ? e.purpose : e.summary)}</div>
+                  ${e.note ? `<div style="font-size:12px;color:var(--text-muted);margin-top:2px;">${esc(e.note)}</div>` : ''}
+                </div>
+                <div class="mobile-tx-metrics" style="grid-template-columns:1fr 1fr;">
+                  <div><div class="mobile-tx-metric-label">${isPerson ? 'প্রাপ্য' : 'বিল'}</div><strong class="mono">${debit > 0 ? esc(formatTaka(debit)) : '—'}</strong></div>
+                  <div><div class="mobile-tx-metric-label">${isPerson ? 'প্রদান' : 'জমা'}</div><strong class="mono text-green">${credit > 0 ? esc(formatTaka(credit)) : '—'}</strong></div>
+                </div>
+              </div>
+            `;
+          })
+          .join('');
+
         const totalA = isPerson ? data.totalPayable : data.totalBilled;
         const totalB = isPerson ? data.totalGiven : data.totalPaid;
         const bal = isPerson ? data.currentBalance : data.currentDue;
@@ -2037,20 +2441,20 @@
               <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:14px;">
                 <div>
                   <div style="font-size:12px;color:var(--text-muted);">এমএস ফ্যাশন — ডিজিটাল স্টেটমেন্ট</div>
-                  <h1 style="margin:2px 0 0;font-size:22px;font-weight:700;">${esc(data.name)}</h1>
+                  <h1 class="page-title" style="margin-top:2px;">${esc(data.name)}</h1>
                   ${data.phone ? `<div class="mono" style="font-size:13px;color:var(--text-muted);">${esc(data.phone)}</div>` : ''}
                 </div>
-                <div style="text-align:right;">
+                <div class="party-due-box">
                   <div style="font-size:12px;color:var(--text-muted);">বর্তমান ব্যালেন্স / বাকি</div>
-                  <div class="mono ${bal > 0 ? 'text-red' : 'text-green'}" style="font-size:24px;font-weight:700;">${esc(formatTaka(bal))}</div>
+                  <div class="mono ${bal > 0 ? 'text-red' : 'text-green'}" style="font-size:22px;font-weight:700;">${esc(formatTaka(bal))}</div>
                 </div>
               </div>
               <div class="grid-3">
                 <div class="card" style="background:var(--surface-muted);"><div class="kpi-label">${isPerson ? 'মোট প্রাপ্য' : 'মোট বিল'}</div><div class="kpi-val mono">${esc(formatTaka(totalA))}</div></div>
-                <div class="card" style="background:var(--surface-muted);"><div class="kpi-label">${isPerson ? 'মোট প্রদান' : 'মোট পরিশোধ'}</div><div class="kpi-val mono text-green">${esc(formatTaka(totalB))}</div></div>
+                <div class="card" style="background:var(--surface-muted);"><div class="kpi-label">${isPerson ? 'মোট পরিশোধ' : 'মোট পরিশোধ'}</div><div class="kpi-val mono text-green">${esc(formatTaka(totalB))}</div></div>
                 <div class="card" style="background:var(--surface-muted);"><div class="kpi-label">বর্তমান বাকি</div><div class="kpi-val mono ${bal > 0 ? 'text-red' : 'text-green'}">${esc(formatTaka(bal))}</div></div>
               </div>
-              <div class="table-wrap">
+              <div class="desktop-only table-wrap">
                 <table class="ledger-table">
                   <thead>
                     <tr>
@@ -2064,6 +2468,9 @@
                   <tbody>${rows || `<tr><td colspan="5" style="text-align:center;color:var(--text-muted);">কোনো লেনদেন নেই</td></tr>`}</tbody>
                 </table>
               </div>
+              <div class="mobile-only">
+                ${entries.length === 0 ? `<div class="empty-box">কোনো লেনদেন নেই</div>` : `<div class="mobile-card-list">${mobilePublicCards}</div>`}
+              </div>
             </div>
           </div>
         `;
@@ -2075,8 +2482,8 @@
         const ledger = computePartyLedger(partyTxs);
         const param = isSup ? 'supplier' : 'customer';
 
-        const rows = [...ledger.entries]
-          .reverse()
+        const reversedEntries = [...ledger.entries].reverse();
+        const rows = reversedEntries
           .map((e) => {
             const tx = state.transactions.find((t) => t.id === e.txId);
             const isBill = e.type === 'customer_sale' || e.type === 'supplier_purchase';
@@ -2105,16 +2512,46 @@
           })
           .join('');
 
+        const mobileCards = reversedEntries
+          .map((e) => {
+            const tx = state.transactions.find((t) => t.id === e.txId);
+            const isBill = e.type === 'customer_sale' || e.type === 'supplier_purchase';
+            return `
+              <div class="mobile-tx-card">
+                <div class="flex-between" style="gap:8px;">
+                  <div style="font-size:12px;color:var(--text-muted);">
+                    <span>${esc(formatDateBn(e.date))}</span> · <span class="mono">${esc(e.invoiceNo)}</span>
+                  </div>
+                  <strong class="mono ${e.runningBalance > 0 ? 'text-red' : 'text-green'}" style="font-size:12.5px;">ব্যালেন্স: ${esc(formatTaka(e.runningBalance))}</strong>
+                </div>
+                <div>
+                  <div style="font-weight:700;font-size:14px;">${esc(getTxTypeLabel(e.type))}</div>
+                  <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">${esc(e.summary)}</div>
+                </div>
+                <div class="mobile-tx-metrics" style="grid-template-columns:1fr 1fr;">
+                  <div><div class="mobile-tx-metric-label">${isSup ? 'বিল / বাকি' : 'বিক্রি / বিল'}</div><strong class="mono">${e.debit > 0 ? esc(formatTaka(e.debit)) : '—'}</strong></div>
+                  <div><div class="mobile-tx-metric-label">${isSup ? 'পরিশোধ' : 'আদায়'}</div><strong class="mono text-green">${e.credit > 0 ? esc(formatTaka(e.credit)) : '—'}</strong></div>
+                </div>
+                <div class="flex-wrap no-print" style="justify-content:flex-end;">
+                  ${isBill ? `<button type="button" class="btn btn-brand-soft btn-sm" data-action="view-invoice" data-id="${esc(e.txId)}">ইনভয়েস</button>` : ''}
+                  ${tx ? `<button type="button" class="btn btn-soft btn-icon" data-action="edit-tx" data-id="${esc(e.txId)}">${ICONS.edit}</button>` : ''}
+                  ${tx ? `<button type="button" class="btn btn-danger-soft btn-icon" data-action="delete-tx" data-id="${esc(e.txId)}">${ICONS.trash}</button>` : ''}
+                </div>
+              </div>
+            `;
+          })
+          .join('');
+
         return `
           <div class="stack-md">
             <div class="card flex-between no-print">
-              <button type="button" class="btn btn-soft" data-action="close-party">${ICONS.back} ফিরে যান</button>
-              <div class="flex-wrap">
+              <button type="button" class="btn btn-soft btn-sm" data-action="close-party">${ICONS.back} ফিরে যান</button>
+              <div class="action-grid-mobile">
                 <button type="button" class="btn btn-soft" data-action="copy-url" data-param="${param}" data-id="${esc(party.id)}">${ICONS.copy} শেয়ার লিংক</button>
                 <button type="button" class="btn btn-whatsapp" data-action="wa-party" data-type="${partyType}" data-id="${esc(party.id)}">${ICONS.wa} WhatsApp</button>
                 <button type="button" class="btn btn-secondary" data-action="print">${ICONS.print} প্রিন্ট</button>
                 <button type="button" class="btn btn-secondary" data-action="edit-party" data-type="${partyType}" data-id="${esc(party.id)}">${ICONS.edit} তথ্য</button>
-                <button type="button" class="btn btn-danger-soft" data-action="delete-party" data-type="${partyType}" data-id="${esc(party.id)}">${ICONS.trash}</button>
+                <button type="button" class="btn btn-danger-soft btn-span-2" data-action="delete-party" data-type="${partyType}" data-id="${esc(party.id)}">${ICONS.trash} খাতা মুছুন</button>
               </div>
             </div>
 
@@ -2122,25 +2559,25 @@
               <div class="flex-between">
                 <div>
                   <span style="font-size:12px;font-weight:600;color:var(--brand);">${isSup ? 'সাপ্লায়ার খাতা' : 'কাস্টমার খাতা'}</span>
-                  <h1 style="margin:2px 0 0;font-size:24px;font-weight:700;">${esc(party.name)}</h1>
+                  <h1 class="page-title" style="margin-top:2px;">${esc(party.name)}</h1>
                   <div style="font-size:13px;color:var(--text-muted);margin-top:4px;">
                     ${party.phone ? `<span class="mono">${esc(party.phone)}</span>` : ''}
                     ${party.phone && party.address ? ' · ' : ''}
                     ${party.address ? esc(party.address) : ''}
                   </div>
                 </div>
-                <div class="flex-wrap no-print">
+                <div class="action-grid-mobile no-print">
                   ${
                     isSup
                       ? `
                         <button type="button" class="btn btn-danger-soft" data-action="new-tx" data-type="supplier_due_add" data-party="${esc(party.id)}">${ICONS.plus} আগের বাকি</button>
                         <button type="button" class="btn btn-brand-soft" data-action="new-tx" data-type="supplier_payment" data-party="${esc(party.id)}">${ICONS.plus} পেমেন্ট দিন</button>
-                        <button type="button" class="btn btn-primary" data-action="new-tx" data-type="supplier_purchase" data-party="${esc(party.id)}">${ICONS.plus} মাল ক্রয়</button>
+                        <button type="button" class="btn btn-primary btn-span-2" data-action="new-tx" data-type="supplier_purchase" data-party="${esc(party.id)}">${ICONS.plus} মাল ক্রয়</button>
                       `
                       : `
                         <button type="button" class="btn btn-danger-soft" data-action="new-tx" data-type="customer_due_add" data-party="${esc(party.id)}">${ICONS.plus} আগের বাকি</button>
                         <button type="button" class="btn btn-brand-soft" data-action="new-tx" data-type="customer_payment" data-party="${esc(party.id)}">${ICONS.plus} টাকা আদায়</button>
-                        <button type="button" class="btn btn-primary" data-action="new-tx" data-type="customer_sale" data-party="${esc(party.id)}">${ICONS.plus} নতুন ইনভয়েস</button>
+                        <button type="button" class="btn btn-primary btn-span-2" data-action="new-tx" data-type="customer_sale" data-party="${esc(party.id)}">${ICONS.plus} নতুন ইনভয়েস</button>
                       `
                   }
                 </div>
@@ -2152,7 +2589,7 @@
                 <div class="card" style="background:var(--surface-muted);"><div class="kpi-label">${isSup ? 'বর্তমান বাকি' : 'বর্তমান পাওনা'}</div><div class="kpi-val mono ${ledger.currentDue > 0 ? 'text-red' : 'text-green'}">${esc(formatTaka(ledger.currentDue))}</div></div>
               </div>
 
-              <div class="table-wrap">
+              <div class="desktop-only table-wrap">
                 <table class="ledger-table">
                   <thead>
                     <tr>
@@ -2166,6 +2603,10 @@
                   </thead>
                   <tbody>${rows || `<tr><td colspan="6" style="text-align:center;padding:28px;color:var(--text-muted);">কোনো লেনদেন পাওয়া যায়নি।</td></tr>`}</tbody>
                 </table>
+              </div>
+
+              <div class="mobile-only">
+                ${reversedEntries.length === 0 ? `<div class="empty-box">কোনো লেনদেন পাওয়া যায়নি।</div>` : `<div class="mobile-card-list">${mobileCards}</div>`}
               </div>
             </div>
           </div>
@@ -2196,8 +2637,8 @@
           { id: 'supplier_payment', label: 'পরিশোধ' },
         ];
 
-        const rowsHtml = filteredTxs
-          .slice(0, 60)
+        const recentSlice = filteredTxs.slice(0, 60);
+        const rowsHtml = recentSlice
           .map((tx) => {
             const isSup =
               tx.type === 'supplier_purchase' ||
@@ -2236,20 +2677,58 @@
           })
           .join('');
 
+        const mobileDashCards = recentSlice
+          .map((tx) => {
+            const isSup =
+              tx.type === 'supplier_purchase' ||
+              tx.type === 'supplier_payment' ||
+              tx.type === 'supplier_due_add';
+            const isBill = tx.type === 'customer_sale' || tx.type === 'supplier_purchase';
+            const isDueAdd = tx.type === 'supplier_due_add' || tx.type === 'customer_due_add';
+            const desc =
+              isBill && tx.items && tx.items.length > 0
+                ? tx.items.map((it) => `${it.name} (${toBn(it.qty)} পিস)`).join(', ')
+                : `${tx.paymentMethod || 'নগদ'}${tx.note ? ` · ${tx.note}` : ''}`;
+
+            return `
+              <div class="mobile-tx-card">
+                <div class="flex-between" style="gap:8px;">
+                  <div style="font-size:12px;color:var(--text-muted);">${esc(formatDateBn(tx.date))} · <span class="mono">${esc(tx.invoiceNo)}</span></div>
+                  <span style="font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--surface-pill);color:var(--text-muted);">${esc(getTxTypeLabel(tx.type))}</span>
+                </div>
+                <div>
+                  <button type="button" style="background:none;border:none;padding:0;font-weight:700;font-size:15px;color:var(--text);cursor:pointer;text-align:left;" data-action="open-party" data-type="${isSup ? 'supplier' : 'customer'}" data-id="${esc(tx.partyId)}">${esc(tx.partyName)}</button>
+                  <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">${esc(desc)}</div>
+                </div>
+                <div class="mobile-tx-metrics">
+                  <div><div class="mobile-tx-metric-label">মোট বিল</div><strong class="mono">${isBill || isDueAdd ? esc(formatTaka(tx.totalAmount)) : '—'}</strong></div>
+                  <div><div class="mobile-tx-metric-label">জমা / প্রদান</div><strong class="mono text-green">${isDueAdd ? '—' : esc(formatTaka(tx.paidAmount))}</strong></div>
+                  <div><div class="mobile-tx-metric-label">বাকি</div><strong class="mono ${tx.dueAmount > 0 ? 'text-red' : 'text-green'}">${isBill || isDueAdd ? esc(formatTaka(tx.dueAmount)) : '—'}</strong></div>
+                </div>
+                <div class="flex-wrap" style="justify-content:flex-end;">
+                  ${isBill ? `<button type="button" class="btn btn-brand-soft btn-sm" data-action="view-invoice" data-id="${esc(tx.id)}">ইনভয়েস</button>` : ''}
+                  <button type="button" class="btn btn-soft btn-icon" data-action="edit-tx" data-id="${esc(tx.id)}">${ICONS.edit}</button>
+                  <button type="button" class="btn btn-danger-soft btn-icon" data-action="delete-tx" data-id="${esc(tx.id)}">${ICONS.trash}</button>
+                </div>
+              </div>
+            `;
+          })
+          .join('');
+
         return `
           <div class="stack-lg">
             <div class="flex-between">
               <div>
-                <h1 style="margin:0;font-size:26px;font-weight:700;">ড্যাশবোর্ড ও সারসংক্ষেপ</h1>
-                <p style="margin:4px 0 0;font-size:13.5px;color:var(--text-muted);">এমএস ফ্যাশন ব্যবসা, বাসার খরচ এবং মামা ও মডারেটরের দৈনিক হিসাব</p>
+                <h1 class="page-title">ড্যাশবোর্ড ও সারসংক্ষেপ</h1>
+                <p style="margin:4px 0 0;font-size:13px;color:var(--text-muted);">এমএস ফ্যাশন ব্যবসা, বাসার খরচ এবং মামা ও মডারেটরের দৈনিক হিসাব</p>
               </div>
-              <div class="flex-wrap">
-                <button type="button" class="btn btn-primary" data-action="new-tx" data-type="customer_sale">${ICONS.plus} নতুন হিসাব যোগ করুন</button>
+              <div class="action-grid-mobile">
+                <button type="button" class="btn btn-primary" data-action="new-tx" data-type="customer_sale">${ICONS.plus} নতুন হিসাব</button>
+                <button type="button" class="btn btn-dark" data-action="download-pdf" ${state.pdfExporting || state.dataLoading ? 'disabled' : ''}>${ICONS.pdf} ${state.pdfExporting ? 'তৈরি হচ্ছে...' : 'মাসিক PDF'}</button>
                 <button type="button" class="btn btn-secondary" data-action="switch-tab" data-tab="suppliers">সাপ্লায়ার খাতা</button>
                 <button type="button" class="btn btn-secondary" data-action="switch-tab" data-tab="customers">কাস্টমার ও ইনভয়েস</button>
                 <button type="button" class="btn btn-secondary" data-action="switch-tab" data-tab="home_expenses">বাসার খরচ</button>
                 <button type="button" class="btn btn-secondary" data-action="switch-tab" data-tab="persons">মামা ও হিমেল</button>
-                <button type="button" class="btn btn-dark" data-action="download-pdf" ${state.pdfExporting || state.dataLoading ? 'disabled' : ''}>${ICONS.pdf} ${state.pdfExporting ? 'তৈরি হচ্ছে...' : 'মাসিক রিপোর্ট PDF'}</button>
               </div>
             </div>
 
@@ -2257,22 +2736,22 @@
               <div class="card">
                 <p class="kpi-label">মোট সাপ্লায়ার বাকি</p>
                 <p class="kpi-val mono text-red">${esc(formatTaka(sum.totalSupplierDue))}</p>
-                <p class="kpi-sub">সাপ্লায়ারদের পরিশোধযোগ্য দেনা · ${toBn(state.suppliers.length)} জন</p>
+                <p class="kpi-sub">দেনা · ${toBn(state.suppliers.length)} জন</p>
               </div>
               <div class="card">
                 <p class="kpi-label">মোট কাস্টমার পাওনা</p>
                 <p class="kpi-val mono text-brand">${esc(formatTaka(sum.totalCustomerDue))}</p>
-                <p class="kpi-sub">কাস্টমারদের কাছ থেকে আদায়যোগ্য · ${toBn(state.customers.length)} জন</p>
+                <p class="kpi-sub">আদায়যোগ্য · ${toBn(state.customers.length)} জন</p>
               </div>
               <div class="card">
                 <p class="kpi-label">মোট কেনাকাটা</p>
                 <p class="kpi-val mono">${esc(formatTaka(sum.totalPurchases))}</p>
-                <p class="kpi-sub">সাপ্লায়ার থেকে মোট ক্রয়কৃত পণ্য</p>
+                <p class="kpi-sub">মোট ক্রয়কৃত পণ্য</p>
               </div>
               <div class="card">
                 <p class="kpi-label">মোট বিক্রি</p>
                 <p class="kpi-val mono text-green">${esc(formatTaka(sum.totalSales))}</p>
-                <p class="kpi-sub">কাস্টমারদের কাছে মোট বিক্রয় মূল্য</p>
+                <p class="kpi-sub">মোট বিক্রয় মূল্য</p>
               </div>
             </div>
 
@@ -2300,12 +2779,12 @@
 
             <div class="card stack-md">
               <div class="flex-between">
-                <h2 style="margin:0;font-size:18px;font-weight:700;">সাম্প্রতিক ব্যবসায়িক লেনদেন (${toBn(filteredTxs.length)})</h2>
-                <div class="flex-wrap">
-                  <div class="pill-group">
+                <h2 style="margin:0;font-size:17px;font-weight:700;">সাম্প্রতিক ব্যবসায়িক লেনদেন (${toBn(filteredTxs.length)})</h2>
+                <div class="flex-wrap" style="width:100%;">
+                  <div class="pill-group" style="flex:1;">
                     ${filters.map((f) => `<button type="button" class="pill-btn ${state.txTypeFilter === f.id ? 'active' : ''}" data-action="tx-filter" data-filter="${f.id}">${f.label}</button>`).join('')}
                   </div>
-                  <div class="search-wrap" style="max-width:240px;">
+                  <div class="search-wrap search-compact-desktop">
                     ${ICONS.search}
                     <input type="search" class="input" id="global-search" value="${esc(state.searchQuery)}" placeholder="নাম, পণ্য বা ইনভয়েস খুঁজুন..." />
                   </div>
@@ -2315,7 +2794,7 @@
               ${
                 filteredTxs.length === 0
                   ? `<div class="empty-box">কোনো লেনদেন পাওয়া যায়নি। নতুন হিসাব যোগ করে শুরু করুন।</div>`
-                  : `<div class="table-wrap"><table class="ledger-table">
+                  : `<div class="desktop-only table-wrap"><table class="ledger-table">
                       <thead>
                         <tr>
                           <th>তারিখ ও নং</th>
@@ -2328,7 +2807,8 @@
                         </tr>
                       </thead>
                       <tbody>${rowsHtml}</tbody>
-                    </table></div>`
+                    </table></div>
+                    <div class="mobile-only mobile-card-list">${mobileDashCards}</div>`
               }
             </div>
           </div>
@@ -2380,8 +2860,8 @@
                     <span>সর্বশেষ লেনদেন: <strong style="color:var(--text);">${lastDate ? esc(formatDateBn(lastDate)) : 'নেই'}</strong></span>
                   </div>
                 </button>
-                <div class="flex-wrap" style="justify-content:flex-end;gap:14px;">
-                  <div style="text-align:right;">
+                <div class="party-row-right">
+                  <div class="party-due-box">
                     <div style="font-size:11px;color:var(--text-muted);display:inline-flex;align-items:center;gap:6px;">
                       <span class="status-dot" style="background:${dotColor};"></span> বর্তমান বাকি
                     </div>
@@ -2401,12 +2881,12 @@
           <div class="stack-lg">
             <div class="flex-between">
               <div>
-                <h1 style="margin:0;font-size:24px;font-weight:700;">সাপ্লায়ার খাতা (${toBn(state.suppliers.length)})</h1>
+                <h1 class="page-title">সাপ্লায়ার খাতা (${toBn(state.suppliers.length)})</h1>
                 <p style="margin:4px 0 0;font-size:13.5px;color:var(--text-muted);">মোট সাপ্লায়ার বাকি: <strong class="mono text-red">${esc(formatTaka(sum.totalSupplierDue))}</strong></p>
               </div>
-              <div class="flex-wrap">
+              <div class="action-grid-mobile">
                 <button type="button" class="btn btn-secondary" data-action="new-party" data-type="supplier">${ICONS.plus} নতুন সাপ্লায়ার</button>
-                <button type="button" class="btn btn-danger-soft" data-action="new-tx" data-type="supplier_due_add">${ICONS.plus} আগের বাকি / টাকা নেওয়া</button>
+                <button type="button" class="btn btn-danger-soft" data-action="new-tx" data-type="supplier_due_add">${ICONS.plus} আগের বাকি / টাকা</button>
                 <button type="button" class="btn btn-brand-soft" data-action="new-tx" data-type="supplier_payment">${ICONS.plus} পেমেন্ট পরিশোধ</button>
                 <button type="button" class="btn btn-primary" data-action="new-tx" data-type="supplier_purchase">${ICONS.plus} মাল ক্রয় এন্ট্রি</button>
               </div>
@@ -2459,8 +2939,8 @@
                         মোট বিক্রি: <span class="mono">${esc(formatTaka(c.totalBilled))}</span>
                       </div>
                     </button>
-                    <div class="flex-wrap" style="justify-content:flex-end;gap:14px;">
-                      <div style="text-align:right;">
+                    <div class="party-row-right">
+                      <div class="party-due-box">
                         <div style="font-size:11px;color:var(--text-muted);">বর্তমান পাওনা</div>
                         <div class="mono ${c.currentDue > 0 ? 'text-red' : 'text-green'}" style="font-size:16px;font-weight:700;">${esc(formatTaka(c.currentDue))}</div>
                       </div>
@@ -2483,8 +2963,8 @@
                       <div style="font-size:12px;color:var(--text-muted);"><span class="mono text-brand" style="font-weight:700;">${esc(inv.invoiceNo)}</span> · ${esc(formatDateBn(inv.date))} · ${toBn((inv.items || []).length)} টি আইটেম</div>
                       <strong style="font-size:16px;">${esc(inv.partyName)}</strong>
                     </div>
-                    <div class="flex-wrap" style="justify-content:flex-end;gap:14px;">
-                      <div style="text-align:right;font-size:12px;">
+                    <div class="party-row-right">
+                      <div class="party-due-box" style="font-size:12px;">
                         <div class="mono" style="font-weight:700;font-size:14px;">মোট: ${esc(formatTaka(inv.totalAmount))}</div>
                         <div class="mono ${inv.dueAmount > 0 ? 'text-red' : 'text-green'}">বাকি: ${esc(formatTaka(inv.dueAmount))}</div>
                       </div>
@@ -2502,13 +2982,13 @@
           <div class="stack-lg">
             <div class="flex-between">
               <div>
-                <h1 style="margin:0;font-size:24px;font-weight:700;">কাস্টমার খাতা ও ইনভয়েস</h1>
+                <h1 class="page-title">কাস্টমার খাতা ও ইনভয়েস</h1>
                 <p style="margin:4px 0 0;font-size:13.5px;color:var(--text-muted);">মোট কাস্টমার পাওনা: <strong class="mono text-brand">${esc(formatTaka(sum.totalCustomerDue))}</strong></p>
               </div>
-              <div class="flex-wrap">
+              <div class="action-grid-mobile">
                 <button type="button" class="btn btn-secondary" data-action="new-party" data-type="customer">${ICONS.plus} নতুন কাস্টমার</button>
                 <button type="button" class="btn btn-danger-soft" data-action="new-tx" data-type="customer_due_add">${ICONS.plus} আগের বাকি যোগ</button>
-                <button type="button" class="btn btn-primary" data-action="new-tx" data-type="customer_sale">${ICONS.plus} নতুন ইনভয়েস তৈরি</button>
+                <button type="button" class="btn btn-primary btn-span-2" data-action="new-tx" data-type="customer_sale">${ICONS.plus} নতুন ইনভয়েস তৈরি</button>
               </div>
             </div>
             <div class="flex-between">
@@ -2516,7 +2996,7 @@
                 <button type="button" class="pill-btn ${state.customerSubTab === 'customers' ? 'active' : ''}" data-action="cust-subtab" data-sub="customers">কাস্টমার তালিকা (${toBn(state.customers.length)})</button>
                 <button type="button" class="pill-btn ${state.customerSubTab === 'invoices' ? 'active' : ''}" data-action="cust-subtab" data-sub="invoices">সব ইনভয়েস (${toBn(state.transactions.filter((t) => t.type === 'customer_sale').length)})</button>
               </div>
-              <div class="search-wrap" style="max-width:280px;">
+              <div class="search-wrap search-compact-desktop">
                 ${ICONS.search}
                 <input type="search" class="input" id="global-search" value="${esc(state.searchQuery)}" placeholder="নাম, মোবাইল বা ইনভয়েস নং..." />
               </div>
@@ -2531,10 +3011,26 @@
           new Set([getCurrentMonthKey(), ...state.homeExpenses.map((e) => e.monthKey).filter(Boolean)]),
         ).sort((a, b) => b.localeCompare(a));
 
-        const list = state.homeExpenses.filter((e) => e.monthKey === state.expenseMonthFilter);
-        const total = list.reduce((s, e) => s + Number(e.totalAmount || 0), 0);
-        const byMe = list.filter((e) => e.paidBy === 'আমি').reduce((s, e) => s + Number(e.totalAmount || 0), 0);
-        const byMama = list.filter((e) => e.paidBy === 'মাইনু মামা').reduce((s, e) => s + Number(e.totalAmount || 0), 0);
+        const monthFiltered =
+          state.expenseMonthFilter === 'all'
+            ? state.homeExpenses
+            : state.homeExpenses.filter((e) => e.monthKey === state.expenseMonthFilter);
+
+        const q = state.searchQuery.trim().toLowerCase();
+        const list = q
+          ? monthFiltered.filter(
+              (ex) =>
+                String(ex.title || '').toLowerCase().includes(q) ||
+                String(ex.paidBy || '').toLowerCase().includes(q) ||
+                String(ex.note || '').toLowerCase().includes(q) ||
+                (ex.items || []).some((it) => String(it.name || '').toLowerCase().includes(q)),
+            )
+          : monthFiltered;
+
+        const total = monthFiltered.reduce((s, e) => s + Number(e.totalAmount || 0), 0);
+        const byMe = monthFiltered.filter((e) => e.paidBy === 'আমি').reduce((s, e) => s + Number(e.totalAmount || 0), 0);
+        const byMama = monthFiltered.filter((e) => e.paidBy === 'মাইনু মামা').reduce((s, e) => s + Number(e.totalAmount || 0), 0);
+        const perPersonAvg = Math.round(total / 2);
 
         const cardsHtml = list
           .map((exp) => {
@@ -2549,10 +3045,12 @@
                   <div style="font-size:12.5px;color:var(--text-muted);margin-top:4px;">${esc(itemsList)}</div>
                   ${exp.note ? `<div style="font-size:12px;color:var(--text-muted);margin-top:2px;">নোট: ${esc(exp.note)}</div>` : ''}
                 </div>
-                <div class="flex-wrap" style="justify-content:flex-end;">
-                  <strong class="mono" style="font-size:17px;margin-right:8px;">${esc(formatTaka(exp.totalAmount))}</strong>
-                  <button type="button" class="btn btn-soft btn-icon" data-action="edit-expense" data-id="${esc(exp.id)}">${ICONS.edit}</button>
-                  <button type="button" class="btn btn-danger-soft btn-icon" data-action="delete-expense" data-id="${esc(exp.id)}">${ICONS.trash}</button>
+                <div class="party-row-right">
+                  <strong class="mono text-red" style="font-size:17px;">${esc(formatTaka(exp.totalAmount))}</strong>
+                  <div class="flex-wrap">
+                    <button type="button" class="btn btn-soft btn-icon" data-action="edit-expense" data-id="${esc(exp.id)}">${ICONS.edit}</button>
+                    <button type="button" class="btn btn-danger-soft btn-icon" data-action="delete-expense" data-id="${esc(exp.id)}">${ICONS.trash}</button>
+                  </div>
                 </div>
               </div>
             `;
@@ -2563,25 +3061,64 @@
           <div class="stack-lg">
             <div class="flex-between">
               <div>
-                <h1 style="margin:0;font-size:24px;font-weight:700;">বাসার মাসিক খরচ</h1>
-                <p style="margin:4px 0 0;font-size:13.5px;color:var(--text-muted);">আমি ও মাইনু মামা — বাজার ও বাসার দৈনন্দিন খরচের হিসাব</p>
+                <h1 class="page-title">বাসার খরচ খাতা (আমি ও মাইনু মামা)</h1>
+                <p style="margin:4px 0 0;font-size:13.5px;color:var(--text-muted);">প্রতিদিনের বাজার, আগের বকেয়া ও মাসিক বাসার খরচের পূর্ণাঙ্গ হিসাব</p>
               </div>
-              <div class="flex-wrap">
-                <select class="select" id="expense-month-select" style="width:auto;">
-                  ${months.map((m) => `<option value="${esc(m)}" ${m === state.expenseMonthFilter ? 'selected' : ''}>${esc(formatMonthBn(m))}</option>`).join('')}
-                </select>
-                <button type="button" class="btn btn-primary" data-action="new-expense">${ICONS.plus} নতুন খরচ যোগ</button>
+              <div class="action-grid-mobile">
+                <button type="button" class="btn btn-danger-soft" data-action="new-prev-expense">${ICONS.plus} আগের টাকা যোগ</button>
+                <button type="button" class="btn btn-primary" data-action="new-expense">${ICONS.plus} নতুন বাজার / খরচ</button>
               </div>
             </div>
 
-            <div class="grid-3">
-              <div class="card"><p class="kpi-label">মাসিক মোট খরচ</p><p class="kpi-val mono">${esc(formatTaka(total))}</p></div>
-              <div class="card"><p class="kpi-label">আমি পরিশোধ করেছি</p><p class="kpi-val mono text-brand">${esc(formatTaka(byMe))}</p></div>
-              <div class="card"><p class="kpi-label">মাইনু মামা পরিশোধ করেছেন</p><p class="kpi-val mono">${esc(formatTaka(byMama))}</p></div>
+            <div class="kpi-grid">
+              <div class="card">
+                <p class="kpi-label">${state.expenseMonthFilter === 'all' ? 'সর্বমোট বাসার খরচ' : `${esc(formatMonthBn(state.expenseMonthFilter))}-এর মোট খরচ`}</p>
+                <p class="kpi-val mono text-red">${esc(formatTaka(total))}</p>
+                <p class="kpi-sub">মোট এন্ট্রি: ${toBn(monthFiltered.length)} টি</p>
+              </div>
+              <div class="card">
+                <p class="kpi-label">আমার খরচ</p>
+                <p class="kpi-val mono">${esc(formatTaka(byMe))}</p>
+                <p class="kpi-sub">নিজ থেকে পরিশোধিত</p>
+              </div>
+              <div class="card">
+                <p class="kpi-label">মাইনু মামার খরচ</p>
+                <p class="kpi-val mono text-brand">${esc(formatTaka(byMama))}</p>
+                <p class="kpi-sub">মামা থেকে পরিশোধিত</p>
+              </div>
+              <div class="card">
+                <p class="kpi-label">জনপ্রতি গড় (২ জন)</p>
+                <p class="kpi-val mono">${esc(formatTaka(perPersonAvg))}</p>
+                <p class="kpi-sub">আমি ও মাইনু মামা (অর্ধেক)</p>
+              </div>
+            </div>
+
+            <div class="flex-between">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <label class="field-label" style="margin:0;white-space:nowrap;">মাস বাছাই:</label>
+                <select class="select" id="expense-month-select" style="width:auto;min-width:150px;">
+                  <option value="all" ${state.expenseMonthFilter === 'all' ? 'selected' : ''}>সব মাস</option>
+                  ${months.map((m) => `<option value="${esc(m)}" ${m === state.expenseMonthFilter ? 'selected' : ''}>${esc(formatMonthBn(m))}</option>`).join('')}
+                </select>
+              </div>
+              <div class="search-wrap search-compact-desktop">
+                ${ICONS.search}
+                <input type="search" class="input" id="global-search" value="${esc(state.searchQuery)}" placeholder="কেনা জিনিস বা বাজার খুঁজুন..." />
+              </div>
             </div>
 
             <div class="card-flush">
-              ${list.length === 0 ? `<div class="empty-box" style="margin:16px;">এই মাসে এখনো কোনো বাসার খরচ যোগ করা হয়নি।</div>` : `<div class="list-divide">${cardsHtml}</div>`}
+              ${
+                list.length === 0
+                  ? `<div class="empty-box" style="margin:16px;">
+                      <p style="margin:0 0 12px;">এই মাসে এখনো কোনো বাসার খরচ তোলা হয়নি।</p>
+                      <div class="flex-wrap" style="justify-content:center;">
+                        <button type="button" class="btn btn-danger-soft btn-sm" data-action="new-prev-expense">${ICONS.plus} আগের টাকা যোগ</button>
+                        <button type="button" class="btn btn-primary btn-sm" data-action="new-expense">${ICONS.plus} প্রথম খরচ যোগ করুন</button>
+                      </div>
+                    </div>`
+                  : `<div class="list-divide">${cardsHtml}</div>`
+              }
             </div>
           </div>
         `;
@@ -2596,7 +3133,7 @@
           return `
             <div class="stack-lg">
               <div class="flex-between">
-                <h1 style="margin:0;font-size:24px;font-weight:700;">মামা, মডারেটর ও ব্যক্তিগত হিসাব</h1>
+                <h1 class="page-title">মামা, মডারেটর ও ব্যক্তিগত হিসাব</h1>
                 <button type="button" class="btn btn-primary" data-action="new-person">${ICONS.plus} নতুন ব্যক্তি যোগ করুন</button>
               </div>
               <div class="empty-box">তালিকা লোড হচ্ছে অথবা নতুন ব্যক্তি যোগ করুন।</div>
@@ -2617,8 +3154,8 @@
           )
           .join('');
 
-        const rows = [...ledger.entries]
-          .reverse()
+        const reversedPersonEntries = [...ledger.entries].reverse();
+        const rows = reversedPersonEntries
           .map(
             (e) => `
           <tr>
@@ -2641,11 +3178,36 @@
           )
           .join('');
 
+        const mobilePersonCards = reversedPersonEntries
+          .map(
+            (e) => `
+          <div class="mobile-tx-card">
+            <div class="flex-between" style="gap:8px;">
+              <span style="font-size:12px;color:var(--text-muted);">${esc(formatDateBn(e.date))}</span>
+              <strong class="mono ${e.runningBalance > 0 ? 'text-red' : 'text-green'}" style="font-size:12.5px;">ব্যালেন্স: ${esc(formatTaka(e.runningBalance))}</strong>
+            </div>
+            <div>
+              <div style="font-weight:700;font-size:14px;">${esc(e.purpose)}</div>
+              <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">${e.type === 'payable_add' ? 'প্রাপ্য যোগ' : 'টাকা প্রদান'} · ${esc(e.paymentMethod)}${e.note ? ` · ${esc(e.note)}` : ''}</div>
+            </div>
+            <div class="mobile-tx-metrics" style="grid-template-columns:1fr 1fr;">
+              <div><div class="mobile-tx-metric-label">প্রাপ্য</div><strong class="mono">${e.payableAmount > 0 ? esc(formatTaka(e.payableAmount)) : '—'}</strong></div>
+              <div><div class="mobile-tx-metric-label">প্রদান</div><strong class="mono text-green">${e.givenAmount > 0 ? esc(formatTaka(e.givenAmount)) : '—'}</strong></div>
+            </div>
+            <div class="flex-wrap" style="justify-content:flex-end;">
+              <button type="button" class="btn btn-soft btn-icon" data-action="edit-person-tx" data-id="${esc(e.ptxId)}">${ICONS.edit}</button>
+              <button type="button" class="btn btn-danger-soft btn-icon" data-action="delete-person-tx" data-id="${esc(e.ptxId)}">${ICONS.trash}</button>
+            </div>
+          </div>
+        `,
+          )
+          .join('');
+
         return `
           <div class="stack-lg">
             <div class="flex-between">
               <div>
-                <h1 style="margin:0;font-size:24px;font-weight:700;">মামা, মডারেটর ও ব্যক্তিগত হিসাব</h1>
+                <h1 class="page-title">মামা, মডারেটর ও ব্যক্তিগত হিসাব</h1>
                 <p style="margin:4px 0 0;font-size:13.5px;color:var(--text-muted);">মাইনু মামা, মডারেটর হিমেল এবং অন্যান্য প্রাপকের হিসাব-নিকাশ</p>
               </div>
               <button type="button" class="btn btn-primary" data-action="new-person">${ICONS.plus} নতুন ব্যক্তি যোগ করুন</button>
@@ -2657,15 +3219,15 @@
               <div class="flex-between">
                 <div>
                   <span style="font-size:12px;font-weight:600;color:var(--brand);">${esc(selected.role || 'ব্যক্তিগত')}</span>
-                  <h2 style="margin:2px 0 0;font-size:22px;font-weight:700;">${esc(selected.name)}</h2>
+                  <h2 style="margin:2px 0 0;font-size:21px;font-weight:700;">${esc(selected.name)}</h2>
                   ${selected.phone ? `<div class="mono" style="font-size:13px;color:var(--text-muted);">${esc(selected.phone)}</div>` : ''}
                 </div>
-                <div class="flex-wrap">
+                <div class="action-grid-mobile">
                   <button type="button" class="btn btn-soft" data-action="copy-url" data-param="person" data-id="${esc(selected.id)}">${ICONS.copy} লিংক কপি</button>
                   <button type="button" class="btn btn-whatsapp" data-action="wa-person" data-id="${esc(selected.id)}">${ICONS.wa} WhatsApp</button>
                   <button type="button" class="btn btn-secondary" data-action="edit-person" data-id="${esc(selected.id)}">${ICONS.edit} তথ্য</button>
                   <button type="button" class="btn btn-brand-soft" data-action="new-person-tx" data-person="${esc(selected.id)}" data-type="payable_add">${ICONS.plus} প্রাপ্য যোগ</button>
-                  <button type="button" class="btn btn-primary" data-action="new-person-tx" data-person="${esc(selected.id)}" data-type="payment_given">${ICONS.plus} টাকা দিন</button>
+                  <button type="button" class="btn btn-primary btn-span-2" data-action="new-person-tx" data-person="${esc(selected.id)}" data-type="payment_given">${ICONS.plus} টাকা দিন</button>
                 </div>
               </div>
 
@@ -2675,7 +3237,7 @@
                 <div class="card" style="background:var(--surface-muted);"><div class="kpi-label">বর্তমান বাকি প্রাপ্য</div><div class="kpi-val mono ${ledger.currentBalance > 0 ? 'text-red' : 'text-green'}">${esc(formatTaka(ledger.currentBalance))}</div></div>
               </div>
 
-              <div class="table-wrap">
+              <div class="desktop-only table-wrap">
                 <table class="ledger-table">
                   <thead>
                     <tr>
@@ -2689,6 +3251,10 @@
                   </thead>
                   <tbody>${rows || `<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-muted);">কোনো এন্ট্রি নেই।</td></tr>`}</tbody>
                 </table>
+              </div>
+
+              <div class="mobile-only">
+                ${reversedPersonEntries.length === 0 ? `<div class="empty-box">কোনো এন্ট্রি নেই।</div>` : `<div class="mobile-card-list">${mobilePersonCards}</div>`}
               </div>
             </div>
           </div>
@@ -2745,12 +3311,21 @@
         }
 
         const navItems = [
-          { id: 'dashboard', label: 'ড্যাশবোর্ড' },
-          { id: 'suppliers', label: 'সাপ্লায়ার' },
-          { id: 'customers', label: 'কাস্টমার' },
-          { id: 'home_expenses', label: 'বাসার খরচ' },
-          { id: 'persons', label: 'মামা ও হিমেল' },
+          { id: 'dashboard', label: 'ড্যাশবোর্ড', shortLabel: 'ড্যাশবোর্ড', icon: ICONS.navDashboard },
+          { id: 'suppliers', label: 'সাপ্লায়ার', shortLabel: 'সাপ্লায়ার', icon: ICONS.navBook },
+          { id: 'customers', label: 'কাস্টমার', shortLabel: 'কাস্টমার', icon: ICONS.navUsers },
+          { id: 'home_expenses', label: 'বাসার খরচ', shortLabel: 'বাসা', icon: ICONS.navHome },
+          { id: 'persons', label: 'মামা ও হিমেল', shortLabel: 'মামা/স্টাফ', icon: ICONS.navStaff },
         ];
+
+        const isTabActive = (id) => {
+          if (activeInvoice) return false;
+          if (activeParty) {
+            return (id === 'suppliers' && state.selectedParty?.type === 'supplier') ||
+              (id === 'customers' && state.selectedParty?.type === 'customer');
+          }
+          return state.activeTab === id;
+        };
 
         let mainHtml = '';
         if (activeInvoice) mainHtml = renderInvoiceView(activeInvoice, false);
@@ -2772,25 +3347,27 @@
                 <nav class="nav-tabs">
                   ${navItems
                     .map(
-                      (item) => `<button type="button" class="nav-tab ${state.activeTab === item.id && !activeParty && !activeInvoice ? 'active' : ''}" data-action="switch-tab" data-tab="${item.id}">${item.label}</button>`,
+                      (item) => `<button type="button" class="nav-tab ${isTabActive(item.id) ? 'active' : ''}" data-action="switch-tab" data-tab="${item.id}">${item.label}</button>`,
                     )
                     .join('')}
                 </nav>
-                <div class="flex-wrap">
+                <div class="header-actions">
                   <button type="button" class="btn btn-primary btn-sm" data-action="new-tx" data-type="customer_sale">${ICONS.plus} নতুন হিসাব</button>
                   <button type="button" class="btn btn-soft btn-icon" title="লগআউট" data-action="sign-out">${ICONS.logout}</button>
                 </div>
               </div>
-              <div class="mobile-nav">
-                ${navItems
-                  .map(
-                    (item) => `<button type="button" class="mobile-tab ${state.activeTab === item.id && !activeParty && !activeInvoice ? 'active' : ''}" data-action="switch-tab" data-tab="${item.id}">${item.label}</button>`,
-                  )
-                  .join('')}
-              </div>
             </div>
           </header>
           <main class="container main-content">${mainHtml}</main>
+          <nav class="bottom-nav no-print" aria-label="মোবাইল ন্যাভিগেশন">
+            <div class="bottom-nav-grid">
+              ${navItems
+                .map(
+                  (item) => `<button type="button" class="bottom-nav-btn ${isTabActive(item.id) ? 'active' : ''}" data-action="switch-tab" data-tab="${item.id}">${item.icon}<span>${item.shortLabel}</span></button>`,
+                )
+                .join('')}
+            </div>
+          </nav>
         `;
 
         bindChartTooltip();
@@ -2843,7 +3420,7 @@
         const mr = document.getElementById('modal-root');
         mr.innerHTML = `
           <div class="modal-backdrop" data-action="modal-backdrop">
-            <div class="modal-panel modal-sm" onclick="event.stopPropagation()">
+            <div class="modal-panel modal-sm">
               <div class="flex-between" style="margin-bottom:16px;">
                 <h2 style="margin:0;font-size:18px;font-weight:700;">${editing ? (isSup ? 'সাপ্লায়ার তথ্য সম্পাদনা' : 'কাস্টমার তথ্য সম্পাদনা') : (isSup ? 'নতুন সাপ্লায়ার যোগ করুন' : 'নতুন কাস্টমার যোগ করুন')}</h2>
                 <button type="button" class="btn btn-soft btn-sm" data-action="close-modal">বন্ধ</button>
@@ -2860,7 +3437,7 @@
                       </div>`
                     : ''
                 }
-                <div class="flex-wrap" style="justify-content:flex-end;">
+                <div class="modal-actions">
                   <button type="button" class="btn btn-soft" data-action="close-modal">বাতিল</button>
                   <button type="submit" class="btn btn-primary" id="pf-submit">সংরক্ষণ করুন</button>
                 </div>
@@ -2971,7 +3548,7 @@
           const mr = document.getElementById('modal-root');
           mr.innerHTML = `
             <div class="modal-backdrop" data-action="modal-backdrop">
-              <div class="modal-panel" onclick="event.stopPropagation()">
+              <div class="modal-panel">
                 <div class="flex-between" style="margin-bottom:16px;">
                   <h2 style="margin:0;font-size:18px;font-weight:700;">${editing ? 'হিসাব সম্পাদনা' : 'নতুন হিসাব এন্ট্রি'}</h2>
                   <button type="button" class="btn btn-soft btn-sm" data-action="close-modal">বন্ধ</button>
@@ -3020,8 +3597,8 @@
                         ${items
                           .map(
                             (it, i) => `
-                          <div class="grid-3" style="grid-template-columns:2fr 1fr 1fr auto;gap:8px;align-items:center;">
-                            <input class="input tx-item-name" data-i="${i}" placeholder="পণ্যের নাম *" value="${esc(it.name)}" required />
+                          <div class="item-row-grid">
+                            <input class="input item-name-field tx-item-name" data-i="${i}" placeholder="পণ্যের নাম *" value="${esc(it.name)}" required />
                             <input type="number" min="1" class="input tx-item-qty" data-i="${i}" placeholder="পিস" value="${it.qty}" required />
                             <input type="number" min="0" class="input tx-item-price" data-i="${i}" placeholder="দর ৳" value="${it.unitPrice}" required />
                             ${items.length > 1 ? `<button type="button" class="btn btn-danger-soft btn-icon tx-rem-item" data-i="${i}">${ICONS.trash}</button>` : '<span></span>'}
@@ -3058,7 +3635,7 @@
                     <div><label class="field-label">নোট / মন্তব্য</label><input class="input" id="tx-note" value="${esc(editing?.note || '')}" placeholder="ঐচ্ছিক বিবরণ..." /></div>
                   </div>
 
-                  <div class="flex-wrap" style="justify-content:flex-end;">
+                  <div class="modal-actions">
                     <button type="button" class="btn btn-soft" data-action="close-modal">বাতিল</button>
                     <button type="submit" class="btn btn-primary" id="tx-submit">সংরক্ষণ করুন</button>
                   </div>
@@ -3271,50 +3848,93 @@
         renderModal();
       }
 
-      function openExpenseModal(editingId = null) {
+      function openExpenseModal(editingId = null, initialMode = 'detailed') {
         const editing = editingId ? state.homeExpenses.find((e) => e.id === editingId) : null;
+        let mode = editing
+          ? (editing.paymentMethod === 'পূর্বের হিসাব' || (editing.items && editing.items.length === 1 && editing.items[0].qtyText === 'আগের / সরাসরি হিসাব') ? 'direct' : 'detailed')
+          : initialMode;
+        let formDate = editing?.date || getTodayIsoDate();
+        let formTitle = editing?.title || (mode === 'direct' ? 'পূর্বের বাসার খরচ' : 'দৈনিক বাজার ও বাসার খরচ');
+        let formPaidBy = editing?.paidBy || 'আমি';
+        let formMethod = editing?.paymentMethod || (mode === 'direct' ? 'পূর্বের হিসাব' : 'নগদ');
+        let formNote = editing?.note || '';
+        let directAmount = editing ? Number(editing.totalAmount || 0) : '';
         let items = editing?.items?.length ? editing.items.map((it) => ({ ...it })) : [{ name: '', qtyText: '', amount: 0 }];
 
         const renderModal = () => {
           const mr = document.getElementById('modal-root');
+          const totalItems = items.reduce((s, it) => s + (Number(it.amount) || 0), 0);
           mr.innerHTML = `
             <div class="modal-backdrop" data-action="modal-backdrop">
-              <div class="modal-panel" onclick="event.stopPropagation()">
-                <div class="flex-between" style="margin-bottom:16px;">
-                  <h2 style="margin:0;font-size:18px;font-weight:700;">${editing ? 'বাসার খরচ সম্পাদনা' : 'নতুন বাসার খরচ যোগ'}</h2>
+              <div class="modal-panel">
+                <div class="flex-between" style="margin-bottom:14px;">
+                  <h2 style="margin:0;font-size:18px;font-weight:700;">${editing ? 'বাসার খরচ সম্পাদনা' : 'বাসার খরচ যোগ করুন'}</h2>
                   <button type="button" class="btn btn-soft btn-sm" data-action="close-modal">বন্ধ</button>
                 </div>
+
+                <div class="pill-group" style="margin-bottom:14px;width:100%;">
+                  <button type="button" class="pill-btn ${mode === 'detailed' ? 'active' : ''}" id="ef-mode-detailed" style="flex:1;">বাজারের তালিকা</button>
+                  <button type="button" class="pill-btn ${mode === 'direct' ? 'active' : ''}" id="ef-mode-direct" style="flex:1;">আগের টাকা / সরাসরি খরচ</button>
+                </div>
+
                 <form id="exp-form" class="stack-md">
                   <div class="grid-2">
-                    <div><label class="field-label">তারিখ</label><input type="date" class="input" id="ef-date" required value="${esc(editing?.date || getTodayIsoDate())}" /></div>
-                    <div><label class="field-label">শিরোনাম *</label><input class="input" id="ef-title" required placeholder="যেমন: দৈনিক বাজার" value="${esc(editing?.title || '')}" /></div>
+                    <div><label class="field-label">তারিখ *</label><input type="date" class="input" id="ef-date" required value="${esc(formDate)}" /></div>
+                    <div><label class="field-label">খরচের শিরোনাম *</label><input class="input" id="ef-title" required placeholder="${mode === 'direct' ? 'যেমন: পূর্বের বাসার খরচ / মেসের বকেয়া' : 'যেমন: দৈনিক বাজার, গ্যাস বিল'}" value="${esc(formTitle)}" /></div>
                   </div>
-                  <div>
-                    <div class="flex-between" style="margin-bottom:8px;">
-                      <label class="field-label" style="margin:0;">কী কী কেনা হয়েছে</label>
-                      <button type="button" class="btn btn-brand-soft btn-sm" id="ef-add-item">${ICONS.plus} আইটেম যোগ</button>
-                    </div>
-                    <div class="stack-md">
-                      ${items
-                        .map(
-                          (it, i) => `
-                        <div class="grid-3" style="grid-template-columns:2fr 1fr 1fr auto;gap:8px;align-items:center;">
-                          <input class="input ef-name" data-i="${i}" placeholder="জিনিসের নাম *" value="${esc(it.name)}" required />
-                          <input class="input ef-qty" data-i="${i}" placeholder="পরিমাণ" value="${esc(it.qtyText)}" />
-                          <input type="number" min="0" class="input ef-amt" data-i="${i}" placeholder="টাকা ৳ *" value="${it.amount || ''}" required />
-                          ${items.length > 1 ? `<button type="button" class="btn btn-danger-soft btn-icon ef-rem" data-i="${i}">${ICONS.trash}</button>` : '<span></span>'}
-                        </div>
-                      `,
-                        )
-                        .join('')}
-                    </div>
-                  </div>
+
+                  ${
+                    mode === 'direct'
+                      ? `<div style="background:var(--red-bg);border:1px solid var(--red-border);border-radius:12px;padding:12px;">
+                          <label class="field-label" style="color:var(--red);">আগের খরচ বা সরাসরি টাকার পরিমাণ (৳) *</label>
+                          <input type="number" min="1" step="any" class="input" id="ef-direct-amt" required placeholder="যেমন: 5000" value="${esc(directAmount)}" style="background:#ffffff;" />
+                          <p style="margin:6px 0 0;font-size:11.5px;color:#7f1d1d;">পণ্য বা বাজারের আলাদা লিস্ট না লিখেই সরাসরি আগের মাসের বা পূর্বের মোট বাসার খরচের টাকা এখানে যোগ করতে পারবেন।</p>
+                        </div>`
+                      : `<div>
+                          <div class="flex-between" style="margin-bottom:8px;">
+                            <label class="field-label" style="margin:0;">কী কী কেনা হয়েছে</label>
+                            <button type="button" class="btn btn-brand-soft btn-sm" id="ef-add-item">${ICONS.plus} আইটেম যোগ</button>
+                          </div>
+                          <div class="stack-md">
+                            ${items
+                              .map(
+                                (it, i) => `
+                              <div class="item-row-grid">
+                                <input class="input item-name-field ef-name" data-i="${i}" placeholder="জিনিসের নাম *" value="${esc(it.name)}" required />
+                                <input class="input ef-qty" data-i="${i}" placeholder="পরিমাণ" value="${esc(it.qtyText)}" />
+                                <input type="number" min="0" step="any" class="input ef-amt" data-i="${i}" placeholder="টাকা ৳ *" value="${it.amount || ''}" required />
+                                ${items.length > 1 ? `<button type="button" class="btn btn-danger-soft btn-icon ef-rem" data-i="${i}">${ICONS.trash}</button>` : '<span></span>'}
+                              </div>
+                            `,
+                              )
+                              .join('')}
+                          </div>
+                          <div class="flex-between" style="margin-top:10px;padding:10px 12px;background:var(--surface-pill);border-radius:10px;font-size:13.5px;font-weight:700;">
+                            <span>সর্বমোট খরচ</span>
+                            <span class="mono text-red" id="ef-live-total">${esc(formatTaka(totalItems))}</span>
+                          </div>
+                        </div>`
+                  }
+
                   <div class="grid-3">
-                    <div><label class="field-label">কে দিয়েছেন</label><select class="select" id="ef-paidby"><option value="আমি" ${(editing?.paidBy || 'আমি') === 'আমি' ? 'selected' : ''}>আমি</option><option value="মাইনু মামা" ${editing?.paidBy === 'মাইনু মামা' ? 'selected' : ''}>মাইনু মামা</option></select></div>
-                    <div><label class="field-label">মাধ্যম</label><select class="select" id="ef-method">${EXPENSE_PAYMENT_METHODS.map((m) => `<option value="${m}" ${(editing?.paymentMethod || 'নগদ') === m ? 'selected' : ''}>${m}</option>`).join('')}</select></div>
-                    <div><label class="field-label">নোট</label><input class="input" id="ef-note" value="${esc(editing?.note || '')}" /></div>
+                    <div>
+                      <label class="field-label">কে দিয়েছেন</label>
+                      <select class="select" id="ef-paidby">
+                        <option value="আমি" ${formPaidBy === 'আমি' ? 'selected' : ''}>আমি</option>
+                        <option value="মাইনু মামা" ${formPaidBy === 'মাইনু মামা' ? 'selected' : ''}>মাইনু মামা</option>
+                        <option value="যৌথ" ${formPaidBy === 'যৌথ' ? 'selected' : ''}>যৌথ</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="field-label">মাধ্যম</label>
+                      <select class="select" id="ef-method">${EXPENSE_PAYMENT_METHODS.map((m) => `<option value="${m}" ${formMethod === m ? 'selected' : ''}>${m}</option>`).join('')}</select>
+                    </div>
+                    <div>
+                      <label class="field-label">নোট (ঐচ্ছিক)</label>
+                      <input class="input" id="ef-note" value="${esc(formNote)}" placeholder="যেমন: আগের হিসাব" />
+                    </div>
                   </div>
-                  <div class="flex-wrap" style="justify-content:flex-end;">
+                  <div class="modal-actions">
                     <button type="button" class="btn btn-soft" data-action="close-modal">বাতিল</button>
                     <button type="submit" class="btn btn-primary" id="ef-submit">সংরক্ষণ করুন</button>
                   </div>
@@ -3322,12 +3942,40 @@
               </div>
             </div>
           `;
-          document.getElementById('ef-add-item').onclick = () => {
-            items.push({ name: '', qtyText: '', amount: 0 });
+
+          const syncCommon = () => {
+            formDate = document.getElementById('ef-date')?.value || formDate;
+            formTitle = document.getElementById('ef-title')?.value ?? formTitle;
+            formPaidBy = document.getElementById('ef-paidby')?.value || formPaidBy;
+            formMethod = document.getElementById('ef-method')?.value || formMethod;
+            formNote = document.getElementById('ef-note')?.value ?? formNote;
+            const dInp = document.getElementById('ef-direct-amt');
+            if (dInp) directAmount = dInp.value;
+          };
+
+          document.getElementById('ef-mode-detailed').onclick = () => {
+            syncCommon();
+            mode = 'detailed';
+            if (formTitle === 'পূর্বের বাসার খরচ') formTitle = 'দৈনিক বাজার ও বাসার খরচ';
+            if (formMethod === 'পূর্বের হিসাব') formMethod = 'নগদ';
             renderModal();
           };
+          document.getElementById('ef-mode-direct').onclick = () => {
+            syncCommon();
+            mode = 'direct';
+            if (formTitle === 'দৈনিক বাজার ও বাসার খরচ') formTitle = 'পূর্বের বাসার খরচ';
+            if (!editing) formMethod = 'পূর্বের হিসাব';
+            renderModal();
+          };
+
+          document.getElementById('ef-add-item')?.addEventListener('click', () => {
+            syncCommon();
+            items.push({ name: '', qtyText: '', amount: 0 });
+            renderModal();
+          });
           document.querySelectorAll('.ef-rem').forEach((b) => {
             b.onclick = () => {
+              syncCommon();
               items.splice(Number(b.getAttribute('data-i')), 1);
               renderModal();
             };
@@ -3338,8 +3986,11 @@
               if (inp.classList.contains('ef-name')) items[i].name = inp.value;
               if (inp.classList.contains('ef-qty')) items[i].qtyText = inp.value;
               if (inp.classList.contains('ef-amt')) items[i].amount = Math.max(0, Number(inp.value) || 0);
+              const live = document.getElementById('ef-live-total');
+              if (live) live.textContent = formatTaka(items.reduce((s, it) => s + (Number(it.amount) || 0), 0));
             };
           });
+
           document.getElementById('exp-form').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('ef-submit');
@@ -3348,22 +3999,42 @@
               const uid = auth.currentUser.uid;
               const id = editing?.id || generateDocId('homeExpenses');
               const date = clampString(document.getElementById('ef-date').value, BLUEPRINT_LIMITS.DATE_MAX);
-              const cleanItems = items
-                .filter((it) => String(it.name || '').trim())
-                .slice(0, BLUEPRINT_LIMITS.ITEMS_MAX)
-                .map((it) => ({
-                  name: clampString(it.name, 120),
-                  qtyText: clampString(it.qtyText, 60),
-                  amount: Math.max(0, Number(it.amount) || 0),
-                }));
-              if (cleanItems.length === 0) throw new Error('কমপক্ষে একটি আইটেম দিন।');
+              const title = clampString(document.getElementById('ef-title').value, BLUEPRINT_LIMITS.TITLE_MAX) || 'বাসার খরচ';
+
+              let cleanItems = [];
+              let totalAmount = 0;
+
+              if (mode === 'direct') {
+                const amt = Math.max(0, Number(document.getElementById('ef-direct-amt')?.value || 0));
+                if (amt <= 0) throw new Error('সঠিক টাকার পরিমাণ লিখুন।');
+                totalAmount = amt;
+                cleanItems = [
+                  {
+                    name: clampString(title, 120),
+                    qtyText: 'আগের / সরাসরি হিসাব',
+                    amount: amt,
+                  },
+                ];
+              } else {
+                cleanItems = items
+                  .filter((it) => String(it.name || '').trim())
+                  .slice(0, BLUEPRINT_LIMITS.ITEMS_MAX)
+                  .map((it) => ({
+                    name: clampString(it.name, 120),
+                    qtyText: clampString(it.qtyText, 60),
+                    amount: Math.max(0, Number(it.amount) || 0),
+                  }));
+                if (cleanItems.length === 0) throw new Error('কমপক্ষে একটি আইটেম দিন।');
+                totalAmount = cleanItems.reduce((s, it) => s + it.amount, 0);
+              }
+
               const payload = {
                 id,
                 date,
                 monthKey: date.slice(0, 7),
-                title: clampString(document.getElementById('ef-title').value, BLUEPRINT_LIMITS.TITLE_MAX),
+                title,
                 items: cleanItems,
-                totalAmount: cleanItems.reduce((s, it) => s + it.amount, 0),
+                totalAmount,
                 paidBy: clampString(document.getElementById('ef-paidby').value, 60),
                 paymentMethod: clampString(document.getElementById('ef-method').value, BLUEPRINT_LIMITS.PAYMENT_METHOD_MAX),
                 note: clampString(document.getElementById('ef-note').value, BLUEPRINT_LIMITS.NOTE_MAX),
@@ -3387,7 +4058,7 @@
         const mr = document.getElementById('modal-root');
         mr.innerHTML = `
           <div class="modal-backdrop" data-action="modal-backdrop">
-            <div class="modal-panel modal-sm" onclick="event.stopPropagation()">
+            <div class="modal-panel modal-sm">
               <div class="flex-between" style="margin-bottom:16px;">
                 <h2 style="margin:0;font-size:18px;font-weight:700;">${editing ? 'ব্যক্তির তথ্য সম্পাদনা' : 'নতুন ব্যক্তি যোগ করুন'}</h2>
                 <button type="button" class="btn btn-soft btn-sm" data-action="close-modal">বন্ধ</button>
@@ -3404,7 +4075,7 @@
                       </div>`
                     : ''
                 }
-                <div class="flex-wrap" style="justify-content:flex-end;">
+                <div class="modal-actions">
                   <button type="button" class="btn btn-soft" data-action="close-modal">বাতিল</button>
                   <button type="submit" class="btn btn-primary" id="per-submit">সংরক্ষণ করুন</button>
                 </div>
@@ -3481,7 +4152,7 @@
         const mr = document.getElementById('modal-root');
         mr.innerHTML = `
           <div class="modal-backdrop" data-action="modal-backdrop">
-            <div class="modal-panel modal-sm" onclick="event.stopPropagation()">
+            <div class="modal-panel modal-sm">
               <div class="flex-between" style="margin-bottom:16px;">
                 <h2 style="margin:0;font-size:18px;font-weight:700;">${esc(person.name)} — ${editing ? 'হিসাব সম্পাদনা' : 'নতুন হিসাব'}</h2>
                 <button type="button" class="btn btn-soft btn-sm" data-action="close-modal">বন্ধ</button>
@@ -3503,7 +4174,7 @@
                 </div>
                 <div><label class="field-label">কী জন্য / বিবরণ *</label><input class="input" id="ptx-purpose" required value="${esc(editing?.purpose || '')}" placeholder="যেমন: বাজার বাবদ / বেতন" /></div>
                 <div><label class="field-label">নোট</label><input class="input" id="ptx-note" value="${esc(editing?.note || '')}" /></div>
-                <div class="flex-wrap" style="justify-content:flex-end;">
+                <div class="modal-actions">
                   <button type="button" class="btn btn-soft" data-action="close-modal">বাতিল</button>
                   <button type="submit" class="btn btn-primary" id="ptx-submit">সংরক্ষণ করুন</button>
                 </div>
@@ -3572,10 +4243,10 @@
         const mr = document.getElementById('modal-root');
         mr.innerHTML = `
           <div class="modal-backdrop" data-action="modal-backdrop">
-            <div class="modal-panel modal-sm" onclick="event.stopPropagation()">
+            <div class="modal-panel modal-sm">
               <h2 style="margin:0 0 8px;font-size:18px;font-weight:700;">${esc(title)}</h2>
               <p style="margin:0 0 18px;font-size:13.5px;color:var(--text-muted);">${esc(message)}</p>
-              <div class="flex-wrap" style="justify-content:flex-end;">
+              <div class="modal-actions">
                 <button type="button" class="btn btn-soft" data-action="close-modal">বাতিল</button>
                 <button type="button" class="btn btn-danger" id="confirm-yes">হ্যাঁ, মুছে ফেলুন</button>
               </div>
@@ -3616,6 +4287,10 @@
         }
       });
 
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+      });
+
       document.addEventListener('click', async (e) => {
         const btn = e.target.closest('[data-action]');
         if (!btn) return;
@@ -3651,6 +4326,7 @@
           state.selectedParty = null;
           state.activeInvoiceId = null;
           state.searchQuery = '';
+          window.scrollTo({ top: 0, behavior: 'smooth' });
           render();
         } else if (action === 'cust-subtab') {
           state.customerSubTab = btn.getAttribute('data-sub') || 'customers';
@@ -3664,15 +4340,19 @@
         } else if (action === 'open-party') {
           state.selectedParty = { id: btn.getAttribute('data-id'), type: btn.getAttribute('data-type') };
           state.activeInvoiceId = null;
+          window.scrollTo({ top: 0, behavior: 'smooth' });
           render();
         } else if (action === 'close-party') {
           state.selectedParty = null;
+          window.scrollTo({ top: 0, behavior: 'smooth' });
           render();
         } else if (action === 'view-invoice') {
           state.activeInvoiceId = btn.getAttribute('data-id');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
           render();
         } else if (action === 'close-invoice') {
           state.activeInvoiceId = null;
+          window.scrollTo({ top: 0, behavior: 'smooth' });
           render();
         } else if (action === 'print') {
           window.print();
@@ -3703,8 +4383,10 @@
           render();
         } else if (action === 'download-pdf') {
           await exportMonthlyPdf();
-        } else if (action === 'close-modal' || action === 'modal-backdrop') {
+        } else if (action === 'close-modal') {
           closeModal();
+        } else if (action === 'modal-backdrop') {
+          if (e.target === btn) closeModal();
         } else if (action === 'new-party') {
           openPartyModal(btn.getAttribute('data-type'));
         } else if (action === 'edit-party') {
@@ -3771,7 +4453,9 @@
             render();
           });
         } else if (action === 'new-expense') {
-          openExpenseModal();
+          openExpenseModal(null, 'detailed');
+        } else if (action === 'new-prev-expense') {
+          openExpenseModal(null, 'direct');
         } else if (action === 'edit-expense') {
           openExpenseModal(btn.getAttribute('data-id'));
         } else if (action === 'delete-expense') {
