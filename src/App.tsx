@@ -362,6 +362,10 @@ function BookkeepingApp() {
           : 'Google লগইন সম্পন্ন হয়নি।';
       if (msg.includes('popup-closed-by-user')) {
         setAuthError('লগইন উইন্ডোটি বন্ধ করা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');
+      } else if (msg.includes('unauthorized-domain')) {
+        setAuthError(
+          `এই ডোমেইনটি (${window.location.hostname}) এখনো Firebase-এ অনুমোদিত নয়। Firebase Console > Authentication > Settings > Authorized domains-এ গিয়ে "${window.location.hostname}" যোগ করুন।`,
+        );
       } else {
         setAuthError('লগইন করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');
       }
