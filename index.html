@@ -833,6 +833,29 @@
         flex-shrink: 0;
       }
 
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 2px 8px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1.4;
+        border: 1px solid transparent;
+        flex-shrink: 0;
+      }
+      .status-badge--active {
+        background: #f0fdf4;
+        color: #15803d;
+        border-color: #bbf7d0;
+      }
+      .status-badge--overdue {
+        background: #fef2f2;
+        color: #b91c1c;
+        border-color: #fecaca;
+      }
+
       .table-wrap {
         width: 100%;
         overflow-x: auto;
@@ -2843,21 +2866,30 @@
         const cardsHtml = list
           .map((sup) => {
             const lastDate = lastDateMap[sup.id];
-            const dotColor =
-              sup.currentDue > 0 ? '#dc2626' : sup.currentDue < 0 ? '#d97706' : '#16a34a';
+            const isOverdue = Number(sup.currentDue || 0) > 0;
+            const dotColor = isOverdue ? '#dc2626' : '#16a34a';
+            const badgeClass = isOverdue ? 'status-badge--overdue' : 'status-badge--active';
+            const statusText = isOverdue ? 'Overdue' : 'Active';
+            const statusTitle = isOverdue ? 'বকেয়া আছে' : 'হিসাব সক্রিয় / পরিশোধিত';
+            const lastDateText = lastDate ? esc(formatDateBn(String(lastDate).slice(0, 10))) : 'নেই';
             return `
               <div class="party-row">
                 <button type="button" style="background:none;border:none;padding:0;text-align:left;flex:1;min-width:0;cursor:pointer;" data-action="open-party" data-type="supplier" data-id="${esc(sup.id)}">
-                  <div style="display:flex;align-items:center;gap:6px;">
+                  <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
                     <strong style="font-size:16px;color:var(--text);">${esc(sup.name)}</strong>
+                    <span style="display:inline-flex;align-items:center;gap:6px;flex-shrink:0;">
+                      <span class="status-dot" aria-hidden="true" style="width:7px;height:7px;background:${dotColor};opacity:0.85;"></span>
+                      <span class="status-badge ${badgeClass}" title="${statusTitle}">${statusText}</span>
+                    </span>
                     ${ICONS.chevron}
+                  </div>
+                  <div style="font-size:11.5px;color:#6b7280;margin-top:3px;line-height:1.4;">
+                    সর্বশেষ লেনদেন: ${lastDateText}
                   </div>
                   <div style="font-size:12px;color:var(--text-muted);margin-top:3px;display:flex;flex-wrap:wrap;gap:6px;">
                     ${sup.phone ? `<span class="mono">${esc(sup.phone)}</span><span>·</span>` : ''}
                     ${sup.address ? `<span>${esc(sup.address)}</span><span>·</span>` : ''}
                     <span>মোট কেনাকাটা: <span class="mono">${esc(formatTaka(sup.totalBilled))}</span></span>
-                    <span>·</span>
-                    <span>সর্বশেষ লেনদেন: <strong style="color:var(--text);">${lastDate ? esc(formatDateBn(lastDate)) : 'নেই'}</strong></span>
                   </div>
                 </button>
                 <div class="party-row-right">

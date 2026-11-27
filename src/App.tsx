@@ -960,18 +960,17 @@ function BookkeepingApp() {
                 <div className="divide-y divide-[#E5E8E3]">
                   {filteredSuppliers.map((sup) => {
                     const lastTxDate = lastTxDateBySupplier[sup.id];
-                    const dueDotColor =
-                      sup.currentDue > 0
-                        ? 'bg-[#DC2626]'
-                        : sup.currentDue < 0
-                          ? 'bg-[#D97706]'
-                          : 'bg-[#16A34A]';
-                    const dueStatusLabel =
-                      sup.currentDue > 0
-                        ? 'বাকি আছে'
-                        : sup.currentDue < 0
-                          ? 'অগ্রিম দেওয়া'
-                          : 'পরিশোধিত';
+                    const isOverdue = sup.currentDue > 0;
+                    const dueDotColor = isOverdue
+                      ? 'bg-[#DC2626]'
+                      : 'bg-[#16A34A]';
+                    const statusBadgeClasses = isOverdue
+                      ? 'bg-[#FEF2F2] text-[#B91C1C] border-[#FECACA]'
+                      : 'bg-[#F0FDF4] text-[#15803D] border-[#BBF7D0]';
+                    const statusLabel = isOverdue ? 'Overdue' : 'Active';
+                    const statusTitle = isOverdue
+                      ? 'বকেয়া আছে'
+                      : 'হিসাব সক্রিয় / পরিশোধিত';
 
                     return (
                       <div
@@ -985,11 +984,29 @@ function BookkeepingApp() {
                           }
                           className="text-left flex-1 min-w-0 cursor-pointer"
                         >
-                          <div className="flex items-center gap-2">
+                          <div className="flex flex-wrap items-center gap-2">
                             <span className="font-bold text-base text-[#111815] truncate">
                               {sup.name}
                             </span>
+                            <span className="inline-flex items-center gap-1.5 shrink-0">
+                              <span
+                                aria-hidden="true"
+                                className={`w-2 h-2 rounded-full shrink-0 opacity-85 ${dueDotColor}`}
+                              />
+                              <span
+                                title={statusTitle}
+                                className={`inline-flex items-center px-2 py-0.5 rounded-md border text-[11px] font-semibold shrink-0 ${statusBadgeClasses}`}
+                              >
+                                {statusLabel}
+                              </span>
+                            </span>
                             <ChevronRight className="w-4 h-4 text-[#4B554E] shrink-0" />
+                          </div>
+                          <div className="text-xs text-gray-500 mt-1">
+                            সর্বশেষ লেনদেন:{' '}
+                            {lastTxDate
+                              ? formatDateBn(String(lastTxDate).slice(0, 10))
+                              : 'নেই'}
                           </div>
                           <div className="text-xs text-[#4B554E] mt-0.5 flex flex-wrap items-center gap-x-2">
                             {sup.phone && (
@@ -1008,13 +1025,6 @@ function BookkeepingApp() {
                                 {formatTaka(sup.totalBilled)}
                               </span>
                             </span>
-                            <span aria-hidden="true">·</span>
-                            <span>
-                              সর্বশেষ লেনদেন:{' '}
-                              <span className="font-medium text-[#111815]">
-                                {lastTxDate ? formatDateBn(lastTxDate) : 'নেই'}
-                              </span>
-                            </span>
                           </div>
                         </button>
 
@@ -1022,8 +1032,8 @@ function BookkeepingApp() {
                           <div className="sm:text-right">
                             <p className="text-[11px] text-[#4B554E] inline-flex items-center sm:justify-end gap-1.5">
                               <span
-                                aria-label={dueStatusLabel}
-                                title={dueStatusLabel}
+                                aria-label={statusLabel}
+                                title={statusLabel}
                                 className={`w-2 h-2 rounded-full shrink-0 ${dueDotColor}`}
                               />
                               বর্তমান বাকি
