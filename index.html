@@ -2344,7 +2344,7 @@
                   <div style="font-size:11px;font-weight:700;color:var(--text-muted);">${inv.partyType === 'supplier' ? 'সাপ্লায়ার' : 'কাস্টমার'}</div>
                   <div style="font-size:16px;font-weight:700;">${esc(inv.partyName)}</div>
                   ${inv.partyPhone ? `<div class="mono" style="font-size:12.5px;color:var(--text-muted);">${esc(inv.partyPhone)}</div>` : ''}
-                  ${inv.partyAddress ? `<div style="font-size:12.5px;color:var(--text-muted);">${esc(inv.partyAddress)}</div>` : ''}
+                  ${inv.partyAddress ? `<div style="font-size:12.5px;color:var(--text-muted);margin-top:2px;">ঠিকানা: ${esc(inv.partyAddress)}</div>` : ''}
                 </div>
                 <div class="invoice-meta-right">
                   <div style="font-size:11px;font-weight:700;color:var(--text-muted);">পেমেন্ট মাধ্যম</div>
@@ -2463,9 +2463,10 @@
             <div class="card print-container stack-md">
               <div class="flex-between" style="border-bottom:1px solid var(--border);padding-bottom:14px;">
                 <div>
-                  <div style="font-size:12px;color:var(--text-muted);">এমএস ফ্যাশন — ডিজিটাল স্টেটমেন্ট</div>
+                  <div style="font-size:12px;color:var(--text-muted);">এমএস ফ্যাশন — ${kind === 'ledger' ? (data.partyType === 'supplier' ? 'সাপ্লায়ার স্টেটমেন্ট' : 'কাস্টমার স্টেটমেন্ট') : 'ডিজিটাল স্টেটমেন্ট'}</div>
                   <h1 class="page-title" style="margin-top:2px;">${esc(data.name)}</h1>
-                  ${data.phone ? `<div class="mono" style="font-size:13px;color:var(--text-muted);">${esc(data.phone)}</div>` : ''}
+                  ${data.phone ? `<div class="mono" style="font-size:13px;color:var(--text-muted);margin-top:2px;">${esc(data.phone)}</div>` : ''}
+                  ${data.address ? `<div style="font-size:13px;color:var(--text-muted);margin-top:2px;">ঠিকানা: ${esc(data.address)}</div>` : ''}
                 </div>
                 <div class="party-due-box">
                   <div style="font-size:12px;color:var(--text-muted);">বর্তমান ব্যালেন্স / বাকি</div>
@@ -2583,10 +2584,10 @@
                 <div>
                   <span style="font-size:12px;font-weight:600;color:var(--brand);">${isSup ? 'সাপ্লায়ার খাতা' : 'কাস্টমার খাতা'}</span>
                   <h1 class="page-title" style="margin-top:2px;">${esc(party.name)}</h1>
-                  <div style="font-size:13px;color:var(--text-muted);margin-top:4px;">
+                  <div style="font-size:13px;color:var(--text-muted);margin-top:4px;display:flex;flex-wrap:wrap;gap:6px;">
                     ${party.phone ? `<span class="mono">${esc(party.phone)}</span>` : ''}
-                    ${party.phone && party.address ? ' · ' : ''}
-                    ${party.address ? esc(party.address) : ''}
+                    ${party.phone && party.address ? '<span>·</span>' : ''}
+                    ${party.address ? `<span>ঠিকানা: ${esc(party.address)}</span>` : ''}
                   </div>
                 </div>
                 <div class="action-grid-mobile no-print">
@@ -3520,6 +3521,14 @@
             const partyRef = doc(db, colName, id);
             if (editing) {
               batch.update(partyRef, { name, phone, address, ...ledgerTotals(ledger), updatedAt: serverTimestamp() });
+              for (const tx of existingTxs.slice(0, 100)) {
+                batch.update(doc(db, 'transactions', tx.id), {
+                  partyName: name,
+                  partyPhone: phone,
+                  partyAddress: address,
+                  updatedAt: serverTimestamp(),
+                });
+              }
             } else {
               batch.set(partyRef, { id, name, phone, address, ...ledgerTotals(ledger), ownerUid: uid, createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
             }
@@ -3539,6 +3548,19 @@
               updatedAt: serverTimestamp(),
             });
             await batch.commit();
+            if (editing) {
+              const billTxs = existingTxs.filter((t) => t.type === 'customer_sale' || t.type === 'supplier_purchase').slice(0, 50);
+              for (const btx of billTxs) {
+                try {
+                  await updateDoc(doc(db, 'publicInvoices', btx.id), {
+                    partyName: name,
+                    partyPhone: phone,
+                    partyAddress: address,
+                    updatedAt: serverTimestamp(),
+                  });
+                } catch {}
+              }
+            }
             closeModal();
             showToast('তথ্য সংরক্ষণ করা হয়েছে!');
           } catch (err) {
@@ -3609,11 +3631,19 @@
                         <option value="">নির্বাচন করুন...</option>
                         ${partyList.map((p) => `<option value="${esc(p.id)}" ${p.id === partyId ? 'selected' : ''}>${esc(p.name)} (বাকি: ${esc(formatTaka(p.currentDue))})</option>`).join('')}
                       </select>
-                      ${selectedParty ? `<div style="font-size:12px;color:var(--text-muted);margin-top:6px;">বর্তমান বাকি: <strong class="mono ${selectedParty.currentDue > 0 ? 'text-red' : 'text-green'}">${esc(formatTaka(selectedParty.currentDue))}</strong></div>` : ''}
+                      ${
+                        selectedParty
+                          ? `<div style="font-size:12px;color:var(--text-muted);margin-top:6px;display:flex;flex-wrap:wrap;gap:8px;">
+                              <span>বর্তমান বাকি: <strong class="mono ${selectedParty.currentDue > 0 ? 'text-red' : 'text-green'}">${esc(formatTaka(selectedParty.currentDue))}</strong></span>
+                              ${selectedParty.address ? `<span>· ঠিকানা: ${esc(selectedParty.address)}</span>` : ''}
+                            </div>`
+                          : ''
+                      }
                     </div>
                     <div id="tx-new-party-wrap" style="display:none;margin-top:8px;" class="grid-2">
                       <input class="input" id="tx-new-name" placeholder="নাম *" />
                       <input class="input" id="tx-new-phone" placeholder="মোবাইল নম্বর" />
+                      <input class="input" id="tx-new-address" placeholder="ঠিকানা (ঐচ্ছিক)" style="grid-column:1 / -1;" />
                     </div>
                   </div>
 
@@ -3749,7 +3779,7 @@
               if (isNew) {
                 partyName = clampString(document.getElementById('tx-new-name').value, BLUEPRINT_LIMITS.NAME_MAX);
                 partyPhone = clampString(document.getElementById('tx-new-phone').value, BLUEPRINT_LIMITS.PHONE_MAX);
-                partyAddress = '';
+                partyAddress = clampString(document.getElementById('tx-new-address')?.value || '', BLUEPRINT_LIMITS.ADDRESS_MAX);
                 if (!partyName) throw new Error('নাম দিন।');
                 finalPartyId = generateDocId(partyCol);
                 existingParty = null;
